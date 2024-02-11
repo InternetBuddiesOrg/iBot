@@ -1,0 +1,26 @@
+{
+  "name": "ibo-t",
+  "version": "1.0.0",
+  "description": "Discord bot for iBo",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zaappy/iBo-t.git"
+  },
+  "author": "ProtoZappy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Zaappy/iBo-t/issues"
+  },
+  "homepage": "https://github.com/Zaappy/iBo-t#readme",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
+}

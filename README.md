@@ -1,2 +1,6 @@
-# iBo-t-
-stupid dumb stupid discord bot for iBo
+# iBo(t)
+iBo is a discord server in need of a bot
+
+it's iBo + t
+not i + Bot
+that would be unoriginal.
