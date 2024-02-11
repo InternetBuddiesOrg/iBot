@@ -1,8 +1,7 @@
 // Require classes
-const { 
+const {
   Client,
   Collection,
-  Events,
   GatewayIntentBits,
 } = require('discord.js');
 const fs = require('node:fs');
