@@ -1,6 +1,6 @@
 const {
   REST,
-  Routes
+  Routes,
 } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -8,7 +8,7 @@ require('dotenv').config();
 const {
   token,
   clientId,
-  guildId
+  guildId,
 } = process.env;
 
 const commands = [];
@@ -23,7 +23,8 @@ for (const folder of commandFolders) {
     const command = require(filePath);
     if ('data' in command && 'execute' in command) {
       commands.push(command.data.toJSON());
-    } else {
+    }
+    else {
       console.warn(`[WARN] The command at ${filePath} is missing a required 'data' or 'execute' property`);
     }
   }
@@ -33,15 +34,16 @@ const rest = new REST().setToken(token);
 
 (async () => {
   try {
-    console.log(`[ OK ] Started reloading ${commands.length} application commands`);
+    console.log(`[INFO] Started reloading ${commands.length} application commands`);
 
     const data = await rest.put(
       Routes.applicationGuildCommands(clientId, guildId),
       { body: commands },
     );
 
-    console.log(`[ OK ] Successfully reloaded ${data.length} application commands`);
-  } catch (error) {
+    console.log(`[INFO] Successfully reloaded ${data.length} application commands`);
+  }
+  catch (error) {
     console.error(`[ERR!] ${error}`);
   }
 })();

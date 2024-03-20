@@ -1,3 +1,5 @@
 .env
 .eslintrc.json
 node_modules
+._.DS_Store
+.DS_Store
