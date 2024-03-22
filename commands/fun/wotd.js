@@ -20,14 +20,14 @@ module.exports = {
       const items = [];
       const fileName = 'wotdLatest.json';
       if (fs.existsSync(fileName)) {
-        fs.rmSync(fileName);
+        // fs.rmSync(fileName);
       }
       await Promise.all(feed.items.map(async currentItem => {
         if (items.filter(item => item === currentItem).length <= 1) {
           items.push(currentItem);
         }
       }));
-      fs.writeFileSync(`${iBotDir}/commands/fun/${fileName}`, JSON.stringify(items));
+      // fs.writeFileSync(`${iBotDir}/commands/fun/${fileName}`, JSON.stringify(items));
     })();
     const wotdJson = require('./wotdLatest.json');
 
@@ -122,23 +122,29 @@ module.exports = {
           full[ind] = 'abbreviation';
         }
         defNum++;
-        if (senses[defNum - 1][0] !== '') {
-          let senseNum = 0;
-          const fieldObj = [];
-          senses[defNum - 1].forEach(sense => {
-            senseNum++;
-            fieldObj.push({ name: full[ind], value: `${senseNum}. ${sense}` });
-          });
-          return fieldObj;
+        if (senses.every(sense => sense[0] === '')) {
+          let senseNum = 1;
+          return {
+            name: full[ind],
+            value: senses.map((arr, senseInd) => {
+              return `${senseNum++}. ${arr[senseInd]}`;
+            }).join('\n'),
+          };
         }
         else {
           let senseNum = 0;
-          const fieldObj = [];
-          senses[defNum - 1].forEach(sense => {
-            senseNum++;
-            fieldObj.push({ name: full[ind], value: `${senseNum}. ${sense}` });
-          });
-          return fieldObj;
+          return {
+            name: full[ind],
+            value: senses.map((arr, senseInd) => {
+              senseNum++;
+              if (senseInd === 0) {
+                return arr[0];
+              }
+              else {
+                return `${senseNum}. ${arr[senseInd]}`;
+              }
+            }).join('\n'),
+          };
         }
       }
       else {
@@ -154,6 +160,7 @@ module.exports = {
     console.log(fields);
     const reply = new EmbedBuilder()
       .setColor('#F0CD40')
+      .setAuthor('The word of the day is:')
       .setTitle(word)
       .setDescription('hy • phe • na • tion   /pro.nun.ci.a.tion/')
       .addFields(fields)

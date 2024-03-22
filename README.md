@@ -6,7 +6,3 @@ it's iBo + t
 not i + Bot
 
 that would be unoriginal.
-
-iBo.../
-
-iBo.../
