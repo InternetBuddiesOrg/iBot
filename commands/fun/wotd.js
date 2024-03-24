@@ -20,14 +20,14 @@ module.exports = {
       const items = [];
       const fileName = 'wotdLatest.json';
       if (fs.existsSync(fileName)) {
-        // fs.rmSync(fileName);
+        fs.rmSync(fileName);
       }
       await Promise.all(feed.items.map(async currentItem => {
         if (items.filter(item => item === currentItem).length <= 1) {
           items.push(currentItem);
         }
       }));
-      // fs.writeFileSync(`${iBotDir}/commands/fun/${fileName}`, JSON.stringify(items));
+      fs.writeFileSync(`${iBotDir}/commands/fun/${fileName}`, JSON.stringify(items));
     })();
     const wotdJson = require('./wotdLatest.json');
 
@@ -40,11 +40,11 @@ module.exports = {
     // WoTD variables
     const wotd = wotdJson[9].content.split('"')[17]; // word of the day
     const word = toTitleCase(wotd); // Word Of The Day
-    let defs = wotdJson[9].content.split(/<i>(n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|symbol|letter)<\/i>/g);
-    defs = defs.map(str => str.replace(/<[^>]+>/gim, '').trim());
-    const full = defs.map(str => str.replace(/\n/g, ''));
+    let rss = wotdJson[9].content.split(/<i>(n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|symbol|letter)<\/i>/g);
+    rss = rss.map(str => str.replace(/<[^>]+>/gim, '').trim());
+    const full = rss.map(str => str.replace(/\n/g, ''));
     const snippet = [];
-    const senses = [];
+    const definitions = [];
     const contentSnippet = wotdJson[9].contentSnippet.split('\n');
 
     contentSnippet.forEach(el => {
@@ -66,21 +66,22 @@ module.exports = {
       if (snippet[i].startsWith(wotd)) {
         const match = snippet[i].match(/\(([^)]+)\)/);
         if (match) {
-          senses.push([`(*${match[1]}*)`]);
+          definitions.push([`(*${match[1]}*)`]);
         }
         else {
-          senses.push(['']);
+          definitions.push(['']);
         }
         foundWotd = true;
       }
       else if (foundWotd) {
-        senses[senses.length - 1].push(snippet[i]);
+        definitions[definitions.length - 1].push(snippet[i]);
       }
     }
 
     // Create fields
     let defNum = 0;
-    let fields = defs.map((pos, ind) => {
+    const defGroups = {};
+    rss.map((pos, ind) => {
       if (ind % 2 !== 0) {
         if (pos === 'n') {
           full[ind] = 'noun';
@@ -121,46 +122,47 @@ module.exports = {
         else if (pos === 'abbr') {
           full[ind] = 'abbreviation';
         }
+
+        const defArr = definitions[defNum];
+        defArr.forEach((sense, senseInd) => {
+          const partOfSpeech = full[ind];
+          if (!defGroups[partOfSpeech]) {
+            defGroups[partOfSpeech] = [];
+          }
+
+          if (sense !== '' && senseInd !== 0) {
+            defGroups[partOfSpeech].push(`${senseInd}. ${sense}`);
+          }
+          else if (sense !== '' && senseInd === 0) {
+            defGroups[partOfSpeech].push(sense);
+          }
+          else if (sense === '') {
+            return;
+          }
+          else {
+            defGroups[partOfSpeech].push(`${senseInd + 1}. ${sense}`);
+          }
+        });
         defNum++;
-        if (senses.every(sense => sense[0] === '')) {
-          let senseNum = 1;
-          return {
-            name: full[ind],
-            value: senses.map((arr, senseInd) => {
-              return `${senseNum++}. ${arr[senseInd]}`;
-            }).join('\n'),
-          };
-        }
-        else {
-          let senseNum = 0;
-          return {
-            name: full[ind],
-            value: senses.map((arr, senseInd) => {
-              senseNum++;
-              if (senseInd === 0) {
-                return arr[0];
-              }
-              else {
-                return `${senseNum}. ${arr[senseInd]}`;
-              }
-            }).join('\n'),
-          };
-        }
       }
       else {
         return null;
       }
     }).filter(item => item !== null);
+    let fields = Object.entries(defGroups).map(([name, defs]) => ({
+      name,
+      value: defs.join('\n'),
+    }));
     fields = [].concat(...fields);
 
     // Complete interaction
     console.log(full);
     console.log(snippet);
-    console.log(senses);
+    console.log(definitions);
     console.log(fields);
     const reply = new EmbedBuilder()
       .setColor('#F0CD40')
-      .setAuthor('The word of the day is:')
+      .setAuthor({ name: 'The word of the day is:' })
       .setTitle(word)
       .setDescription('hy • phe • na • tion   /pro.nun.ci.a.tion/')
       .addFields(fields)
