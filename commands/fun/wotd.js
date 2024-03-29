@@ -5,6 +5,8 @@ const {
 const { iBotDir } = process.env;
 const fs = require('fs');
 const Parser = require('rss-parser');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,7 +15,7 @@ module.exports = {
 
   async execute(interaction) {
     // Parse RSS function
-    (async function main() {
+    (async function parse() {
       const parser = new Parser();
       const feed = await parser.parseURL('https://en.wiktionary.org/w/api.php?action=featuredfeed&feed=wotd');
 
@@ -31,6 +33,12 @@ module.exports = {
     })();
     const wotdJson = require('./wotdLatest.json');
 
+    // Fetch HTML elements
+    async function fetchHTML(url) {
+      const { data } = await axios.get(url);
+      return cheerio.load(data);
+    }
+
     function toTitleCase(str) {
       return str.split(' ').map(function(word) {
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
@@ -45,7 +53,9 @@ module.exports = {
     const full = rss.map(str => str.replace(/\n/g, ''));
     const snippet = [];
     const definitions = [];
+    let footer = '';
     const contentSnippet = wotdJson[9].contentSnippet.split('\n');
+    let footerSnippet = wotdJson[9].contentSnippet.split('.\n\n ');
 
     contentSnippet.forEach(el => {
       if (el.startsWith('edit')) {
@@ -77,6 +87,36 @@ module.exports = {
         definitions[definitions.length - 1].push(snippet[i]);
       }
     }
+
+    footerSnippet.shift();
+    footerSnippet = footerSnippet[0].split('\n');
+    footerSnippet.forEach(el => {
+      if (el === '' || el.startsWith('←')) {
+        return;
+      }
+      else {
+        footer = footer.concat(`${el} `);
+        definitions[definitions.length - 1].pop();
+      }
+    });
+
+    // Set pronunciation
+    async function pro() {
+      const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+      const pronuns = [];
+      $('div[lang="en"] ul li ul li span.IPA').filter(function() {
+        // eslint-disable-next-line quotes
+        return $(this).siblings().find(":contains('General American')").length > 0;
+      }).each((_, elem) => {
+        pronuns.push($(elem).text());
+      });
+      return pronuns;
+    }
+
+    (async function() {
+      const pronuns = await pro();
+      console.log(pronuns);
+    })();
 
     // Create fields
     let defNum = 0;
@@ -125,6 +165,9 @@ module.exports = {
 
         const defArr = definitions[defNum];
         defArr.forEach((sense, senseInd) => {
+          if (sense.startsWith('(') && senseInd !== 0) {
+            sense = sense.replace('(', '(*').replace(')', '*)');
+          }
           const partOfSpeech = full[ind];
           if (!defGroups[partOfSpeech]) {
             defGroups[partOfSpeech] = [];
@@ -160,13 +203,15 @@ module.exports = {
     console.log(snippet);
     console.log(definitions);
     console.log(fields);
+    console.log(footerSnippet);
+    console.log(footer);
     const reply = new EmbedBuilder()
       .setColor('#F0CD40')
       .setAuthor({ name: 'The word of the day is:' })
       .setTitle(word)
       .setDescription('hy • phe • na • tion   /pro.nun.ci.a.tion/')
       .addFields(fields)
-      .setFooter({ text: 'footer text from wiktionary' })
+      .setFooter({ text: footer })
       .setTimestamp();
     await interaction.reply({ embeds: [reply] });
   },
