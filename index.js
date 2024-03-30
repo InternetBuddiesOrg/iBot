@@ -10,7 +10,11 @@ require('dotenv').config();
 const { token } = process.env;
 
 // Create client
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [
+  GatewayIntentBits.Guilds,
+  GatewayIntentBits.MessageContent,
+  GatewayIntentBits.GuildMessages,
+] });
 
 // Command handler
 client.commands = new Collection();
@@ -48,5 +52,5 @@ for (const file of eventFiles) {
   }
 }
 
-// Login n stuff
+// Log in
 client.login(token);

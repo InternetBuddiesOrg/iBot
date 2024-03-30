@@ -1,11 +1,29 @@
-const { SlashCommandBuilder } = require('discord.js');
+const {
+  SlashCommandBuilder,
+  EmbedBuilder,
+} = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Ping test command'),
+    .setDescription('Shows your client ping'),
 
   async execute(interaction) {
-    await interaction.reply('ping\'d');
+    const message = await interaction.deferReply({ fetchReply: true });
+    const embed = new EmbedBuilder()
+      .setColor('#F0CD40')
+      .setTitle('Pong!')
+      .setAuthor({
+        name: interaction.user.username,
+        iconURL: interaction.user.displayAvatarURL(),
+      })
+      .addFields([
+        {
+          name: 'Client Ping',
+          value: `${message.createdTimestamp - interaction.createdTimestamp} ms`,
+        },
+      ])
+      .setTimestamp();
+    await interaction.editReply({ embeds: [embed] });
   },
-}
+};
