@@ -3,4 +3,4 @@
 node_modules
 ._.DS_Store
 .DS_Store
-commands/fun/wotdLatest.json
+events/wotdLatest.json
