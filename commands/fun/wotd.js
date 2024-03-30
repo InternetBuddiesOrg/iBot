@@ -15,7 +15,7 @@ module.exports = {
 
   async execute(interaction) {
     // Parse RSS function
-    (async function parse() {
+    async function parse() {
       const parser = new Parser();
       const feed = await parser.parseURL('https://en.wiktionary.org/w/api.php?action=featuredfeed&feed=wotd');
 
@@ -30,7 +30,8 @@ module.exports = {
         }
       }));
       fs.writeFileSync(`${iBotDir}/commands/fun/${fileName}`, JSON.stringify(items));
-    })();
+    }
+    await parse();
     const wotdJson = require('./wotdLatest.json');
 
     // Fetch HTML elements
@@ -101,22 +102,53 @@ module.exports = {
     });
 
     // Set pronunciation
-    async function pro() {
+    // IPA
+    async function ipaMulti() {
       const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
-      const pronuns = [];
+      let ipaString = '';
       $('div[lang="en"] ul li ul li span.IPA').filter(function() {
         // eslint-disable-next-line quotes
         return $(this).siblings().find(":contains('General American')").length > 0;
-      }).each((_, elem) => {
-        pronuns.push($(elem).text());
+      }).each((_, el) => {
+        const pronunciation = $(el).text();
+        const siblingAText = $(el).closest('ul').siblings('a').text();
+        ipaString = ipaString.concat(`(*${siblingAText.toLowerCase()}*) ${pronunciation}\n`);
       });
-      return pronuns;
+      return ipaString.trimEnd();
+    }
+    async function ipaSingle() {
+      const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+      let ipaString = '';
+      $('div[lang="en"] ul li span.IPA').filter(function() {
+        // eslint-disable-next-line quotes
+        return $(this).siblings().find(":contains('General American')").length > 0;
+      }).each((_, el) => {
+        ipaString = $(el).text();
+      });
+      return ipaString;
+    }
+    const ipaM = await ipaMulti();
+    const ipaS = await ipaSingle();
+    let ipa = '';
+    if (!ipaM) {
+      ipa = ipaS;
+    }
+    else {
+      ipa = ipaM;
     }
 
-    (async function() {
-      const pronuns = await pro();
-      console.log(pronuns);
-    })();
+    // Hyphenation
+    async function hyp() {
+      const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+      let hyphenString = '';
+      $('div[lang="en"] ul li span.Latn').filter(function() {
+        return $(this).parent('li').text().includes('Hyphenation: ');
+      }).each((_, el) => {
+        hyphenString = $(el).text();
+      });
+      return hyphenString.replace(/‧/g, ' • ');
+    }
+    const hyphen = await hyp();
 
     // Create fields
     let defNum = 0;
@@ -205,11 +237,15 @@ module.exports = {
     console.log(fields);
     console.log(footerSnippet);
     console.log(footer);
+    console.log('ipaM: ' + ipaM);
+    console.log('ipaS: ' + ipaS);
+    console.log('ipa: ' + ipa);
+    console.log('hyphen: ' + hyphen);
     const reply = new EmbedBuilder()
       .setColor('#F0CD40')
       .setAuthor({ name: 'The word of the day is:' })
       .setTitle(word)
-      .setDescription('hy • phe • na • tion   /pro.nun.ci.a.tion/')
+      .setDescription(`${hyphen}\n${ipa}`)
       .addFields(fields)
       .setFooter({ text: footer })
       .setTimestamp();
