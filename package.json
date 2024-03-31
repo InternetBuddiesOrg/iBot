@@ -4,7 +4,7 @@
   "description": "Discord bot for iBo",
   "main": "index.js",
   "scripts": {
-    "test": "node ."
+    "start": "node ."
   },
   "repository": {
     "type": "git",
