@@ -13,7 +13,7 @@ module.exports = {
   name: Events.ClientReady,
   once: true,
   async execute(client) {
-    cron.schedule('00 05 * * *', async function() {
+    cron.schedule('00 07 * * *', async function() {
       // Parse RSS function
       async function parse() {
         const parser = new Parser();
