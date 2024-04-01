@@ -7,11 +7,11 @@ const fs = require('fs');
 const Parser = require('rss-parser');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { trendId, iBotDir } = process.env;
+const { iBotDir } = process.env;
 
 module.exports = {
   name: Events.ClientReady,
-  once: true,
+
   async execute(client) {
     cron.schedule('00 07 * * *', async function() {
       // Parse RSS function
@@ -103,7 +103,7 @@ module.exports = {
 
       // Set pronunciation
       // IPA
-      async function ipaMulti() {
+      async function ipaMulti1() {
         const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
         let ipaString = '';
         $('div[lang="en"] ul li ul li span.IPA').filter(function() {
@@ -111,10 +111,22 @@ module.exports = {
           return $(this).siblings().find(":contains('General American')").length > 0;
         }).each((_, el) => {
           const pronunciation = $(el).text();
-          const siblingAText = $(el).closest('ul').siblings('a').text();
-          ipaString = ipaString.concat(`(*${siblingAText.toLowerCase()}*) ${pronunciation}\n`);
+          const posLabel = $(el).closest('ul').siblings('a').text();
+          ipaString = ipaString.concat(`(*${posLabel.toLowerCase()}*) ${pronunciation}\n`);
         });
         return ipaString.trimEnd();
+      }
+      async function ipaMulti2() {
+        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+        let ipaString = '';
+        $('div[lang="en"] ul li span.IPA').filter(function() {
+          // eslint-disable-next-line quotes
+          return $(this).siblings().find(":contains('General American')").length > 0;
+        }).each((_, el) => {
+          const pronunciation = $(el).text();
+          ipaString = ipaString.concat(`${pronunciation}, `);
+        });
+        return ipaString.trimEnd().replace(/,$/, '');
       }
       async function ipaSingle() {
         const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
@@ -127,14 +139,20 @@ module.exports = {
         });
         return ipaString;
       }
-      const ipaM = await ipaMulti();
-      const ipaS = await ipaSingle();
       let ipa = '';
-      if (!ipaM) {
-        ipa = ipaS;
+      const ipaM1 = await ipaMulti1();
+      const ipaM2 = await ipaMulti2();
+      const ipaS = await ipaSingle();
+      if (!ipaM1) {
+        if (!ipaM2) {
+          ipa = ipaS;
+        }
+        else {
+          ipa = ipaM2;
+        }
       }
       else {
-        ipa = ipaM;
+        ipa = ipaM1;
       }
 
       // Hyphenation
@@ -239,7 +257,7 @@ module.exports = {
         .addFields(fields)
         .setFooter({ text: footer })
         .setTimestamp();
-      const trendingChannel = client.channels.cache.get(trendId);
+      const trendingChannel = client.channels.cache.get('1149549485928747120');
       console.log('[EVNT] Word of The Day message sent');
       trendingChannel.send({ embeds: [reply] });
     });

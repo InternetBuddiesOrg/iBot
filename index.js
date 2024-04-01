@@ -13,7 +13,6 @@ const { token } = process.env;
 const client = new Client({ intents: [
   GatewayIntentBits.Guilds,
   GatewayIntentBits.MessageContent,
-  GatewayIntentBits.GuildMessages,
 ] });
 
 // Command handler
