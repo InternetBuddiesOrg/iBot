@@ -56,7 +56,7 @@ module.exports = {
       const definitions = [];
       let footer = '';
       const contentSnippet = wotdJson[9].contentSnippet.split('\n');
-      let footerSnippet = wotdJson[9].contentSnippet.split('.\n\n ');
+      let footerSnippet = wotdJson[9].contentSnippet.split('\n\n ');
 
       contentSnippet.forEach(el => {
         if (el.startsWith('edit')) {
