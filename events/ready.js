@@ -1,6 +1,7 @@
 const {
   ActivityType,
   Events,
+  EmbedBuilder,
 } = require('discord.js');
 
 module.exports = {
@@ -11,6 +12,10 @@ module.exports = {
     console.log(`[INFO] Logged in as ${client.user.tag}`);
     client.user.setActivity('the Word of the Day', { type: ActivityType.Watching });
     const devChannel = client.channels.cache.get('1099564476698726401');
-    devChannel.send('✅ iBot is now online');
+    const embed = new EmbedBuilder()
+      .setColor('#68AB3F')
+      .setTitle(`Logged in as ${client.user.tag}`)
+      .setTimestamp();
+    devChannel.send({ embeds: [embed] });
   },
 };
