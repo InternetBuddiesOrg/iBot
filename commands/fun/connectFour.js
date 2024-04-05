@@ -1,6 +1,5 @@
 const {
   SlashCommandBuilder,
-  EmbedBuilder,
 } = require('discord.js');
 
 module.exports = {
@@ -9,11 +8,13 @@ module.exports = {
     .setDescription('Play the classic "Fun Game" of connecting the Four'),
 
   async execute(interaction) {
-    const reply = new EmbedBuilder()
-      .setAuthor({
-        name: interaction.user.username,
-        iconURL: interaction.user.displayAvatarURL(),
-      });
-    await interaction.reply({ embeds: [reply] });
+    const b = ':black_circle:';
+    const blank = `# ${b}   ${b}   ${b}   ${b}   ${b}   ${b}   ${b}\n# ${b}   ${b}   ${b}   ${b}   ${b}   ${b}   ${b}\n# ${b}   ${b}   ${b}   ${b}   ${b}   ${b}   ${b}\n# ${b}   ${b}   ${b}   ${b}   ${b}   ${b}   ${b}\n# ${b}   ${b}   ${b}   ${b}   ${b}   ${b}   ${b}\n# ${b}   ${b}   ${b}   ${b}   ${b}   ${b}   ${b}`;
+    if (interaction.user.id === '547975777291862057') {
+      await interaction.reply(blank);
+    }
+    else {
+      await interaction.reply({ content: 'You do not have permission to run this command.', ephemeral: true });
+    }
   },
 };
