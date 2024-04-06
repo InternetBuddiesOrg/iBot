@@ -259,7 +259,7 @@ module.exports = {
         .setTimestamp();
       const trendingChannel = client.channels.cache.get('1149549485928747120');
       console.log('[EVNT] Word of The Day message sent');
-      trendingChannel.send({ embeds: [reply] });
+      await trendingChannel.send({ embeds: [reply] });
     });
   },
 };

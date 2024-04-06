@@ -47,16 +47,16 @@ module.exports = {
     }
 
     // WoTD variables
-    const wotd = wotdJson[9].content.split('"')[17]; // word of the day
+    const wotd = wotdJson[8].content.split('"')[17]; // word of the day
     const word = toTitleCase(wotd); // Word Of The Day
-    let rss = wotdJson[9].content.split(/<i>(n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|symbol|letter)<\/i>/g);
+    let rss = wotdJson[8].content.split(/<i>(n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|symbol|letter)<\/i>/g);
     rss = rss.map(str => str.replace(/<[^>]+>/gim, '').trim());
     const full = rss.map(str => str.replace(/\n/g, ''));
     const snippet = [];
     const definitions = [];
     let footer = '';
-    const contentSnippet = wotdJson[9].contentSnippet.split('\n');
-    let footerSnippet = wotdJson[9].contentSnippet.split('\n\n ');
+    const contentSnippet = wotdJson[8].contentSnippet.split('\n');
+    let footerSnippet = wotdJson[8].contentSnippet.split('\n\n ');
 
     contentSnippet.forEach(el => {
       if (el.startsWith('edit')) {
@@ -171,6 +171,15 @@ module.exports = {
     // Create fields
     let defNum = 0;
     const defGroups = {};
+
+    // Check for sub-senses
+    // let sub = false;
+    // const subArr = [];
+    // let innerArr = [];
+    // if (/<ol>.*?<ol>.*?<\/ol>/s.test(wotdJson[8].content)) {
+    //   sub = true;
+    // }
+
     rss.map((pos, ind) => {
       if (ind % 2 !== 0) {
         if (pos === 'n') {
@@ -223,6 +232,19 @@ module.exports = {
             defGroups[partOfSpeech] = [];
           }
 
+          // if (sub) {
+          //   if (defArr[senseInd - 1] && defArr[senseInd - 1].trim() !== '' && defArr[senseInd - 1].startsWith('(') && defArr[senseInd - 1].endsWith(')')) {
+          //     if (innerArr.length > 0) {
+          //       subArr.push(innerArr);
+          //       innerArr = [];
+          //     }
+          //     innerArr.push(sense);
+          //   }
+          //   else if (defArr[senseInd - 1] && defArr[senseInd - 1].trim() !== '') {
+          //     console.log(`N ${sense}`);
+          //   }
+          // }
+          // else
           if (sense !== '' && senseInd !== 0) {
             defGroups[partOfSpeech].push(`${senseInd}. ${sense}`);
           }
@@ -236,6 +258,9 @@ module.exports = {
             defGroups[partOfSpeech].push(`${senseInd + 1}. ${sense}`);
           }
         });
+        // if (innerArr.length > 0) {
+        //   subArr.push(innerArr);
+        // }
         defNum++;
       }
       else {
@@ -259,10 +284,10 @@ module.exports = {
       .setTimestamp();
     console.log('[EVNT] Word of The Day message sent');
     if (interaction.user.id === '547975777291862057') {
-      interaction.reply({ embeds: [reply] });
+      await interaction.reply({ embeds: [reply] });
     }
     else {
-      interaction.reply({ content: 'You do not have permission to run this command.', ephemeral: true });
+      await interaction.reply({ content: 'You do not have permission to run this command.', ephemeral: true });
     }
   },
 };
