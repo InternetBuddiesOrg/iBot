@@ -1,4 +1,4 @@
-# iBo(t)
+# iBot
 iBo is a discord server in need of a bot
 
 it's iBo + t
