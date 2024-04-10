@@ -56,7 +56,13 @@ module.exports = {
       const definitions = [];
       let footer = '';
       const contentSnippet = wotdJson[9].contentSnippet.split('\n');
-      let footerSnippet = wotdJson[9].contentSnippet.split('\n\n ');
+      let footerSnippet;
+      if (wotdJson[9].contentSnippet.split('\n\n ').length === 1) {
+        footerSnippet = '';
+      }
+      else {
+        footerSnippet = wotdJson[9].contentSnippet.split('\n\n ');
+      }
 
       contentSnippet.forEach(el => {
         if (el.startsWith('edit')) {
@@ -89,17 +95,22 @@ module.exports = {
         }
       }
 
-      footerSnippet.shift();
-      footerSnippet = footerSnippet[0].split('\n');
-      footerSnippet.forEach(el => {
-        if (el === '' || el.startsWith('←')) {
-          return;
-        }
-        else {
-          footer = footer.concat(`${el} `);
-          definitions[definitions.length - 1].pop();
-        }
-      });
+      if (Array.isArray(footerSnippet)) {
+        footerSnippet.shift();
+        footerSnippet = footerSnippet[0].split('\n');
+        footerSnippet.forEach(el => {
+          if (el === '' || el.startsWith('←')) {
+            return;
+          }
+          else {
+            footer = footer.concat(`${el} `);
+            definitions[definitions.length - 1].pop();
+          }
+        });
+      }
+      else {
+        footer = footerSnippet;
+      }
 
       // Set pronunciation
       // IPA
@@ -214,6 +225,7 @@ module.exports = {
           }
 
           const defArr = definitions[defNum];
+          let senseNum = 0;
           defArr.forEach((sense, senseInd) => {
             if (sense.startsWith('(') && senseInd !== 0) {
               sense = sense.replace('(', '(*').replace(')', '*)');
@@ -223,17 +235,15 @@ module.exports = {
               defGroups[partOfSpeech] = [];
             }
 
-            if (sense !== '' && senseInd !== 0) {
-              defGroups[partOfSpeech].push(`${senseInd}. ${sense}`);
-            }
-            else if (sense !== '' && senseInd === 0) {
+            if (sense.startsWith('(*') && sense.endsWith('*)')) {
               defGroups[partOfSpeech].push(sense);
             }
             else if (sense === '') {
               return;
             }
             else {
-              defGroups[partOfSpeech].push(`${senseInd + 1}. ${sense}`);
+              senseNum++;
+              defGroups[partOfSpeech].push(`${senseNum}. ${sense}`);
             }
           });
           defNum++;
@@ -255,10 +265,13 @@ module.exports = {
         .setTitle(word)
         .setDescription(`${hyphen}\n${ipa}`)
         .addFields(fields)
-        .setFooter({ text: footer })
         .setTimestamp();
+      if (Array.isArray(footerSnippet)) {
+        reply.setFooter({ text: footer });
+      }
+      // const trendingChannel = client.channels.cache.get('1099564476698726401');
       const trendingChannel = client.channels.cache.get('1149549485928747120');
-      console.log('[EVNT] Word of The Day message sent');
+      console.log('[EVNT] Word of the day message sent');
       await trendingChannel.send({ embeds: [reply] });
     });
   },

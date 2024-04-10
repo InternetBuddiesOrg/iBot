@@ -294,7 +294,7 @@ module.exports = {
     if (Array.isArray(footerSnippet)) {
       reply.setFooter({ text: footer });
     }
-    console.log('[INFO] Forced word of The Day message');
+    console.log('[INFO] Forced word of the day message');
     if (interaction.user.id === '547975777291862057') {
       await interaction.reply({ embeds: [reply] });
     }
