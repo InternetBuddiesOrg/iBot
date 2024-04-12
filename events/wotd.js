@@ -34,7 +34,6 @@ module.exports = {
       await parse();
       const wotdJson = require('./wotdLatest.json');
 
-      // Fetch HTML elements
       async function fetchHTML(url) {
         const { data } = await axios.get(url);
         return cheerio.load(data);
