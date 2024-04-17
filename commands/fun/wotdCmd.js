@@ -13,8 +13,8 @@ const { iBotDir } = process.env;
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('force-wotd')
-    .setDescription('Sends the Word of the Day via command'),
+    .setName('wotd')
+    .setDescription('Sends the word of the day to #🔺trending'),
 
   async execute(interaction) {
     // Parse RSS function
@@ -313,7 +313,7 @@ module.exports = {
       try {
         const confirmation = await response.awaitMessageComponent({ time: 60_000 });
         if (confirmation.customId === 'confirm') {
-          const trendingChannel = interaction.client.channels.cache.get('1099564476698726401');
+          const trendingChannel = interaction.client.channels.cache.get('1149549485928747120');
           await trendingChannel.send({ embeds: [reply] });
           await response.delete();
           console.log('[INFO] Completed word of the day interaction');
