@@ -1,6 +1,9 @@
 const {
   EmbedBuilder,
   SlashCommandBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ActionRowBuilder,
 } = require('discord.js');
 const fs = require('fs');
 const Parser = require('rss-parser');
@@ -293,9 +296,37 @@ module.exports = {
     if (Array.isArray(footerSnippet)) {
       reply.setFooter({ text: footer });
     }
-    console.log('[INFO] Forced word of the day message');
     if (interaction.user.id === '547975777291862057') {
-      await interaction.reply({ embeds: [reply] });
+      const confirm = new ButtonBuilder()
+        .setCustomId('confirm')
+        .setLabel('Yes')
+        .setStyle(ButtonStyle.Primary);
+      const deny = new ButtonBuilder()
+        .setCustomId('deny')
+        .setLabel('No')
+        .setStyle(ButtonStyle.Danger);
+      const row = new ActionRowBuilder()
+        .addComponents(confirm, deny);
+
+      const response = await interaction.reply({ content: 'Send this embed?', embeds: [reply], components: [row], ephemeral: true });
+      console.log('[INFO] Started word of the day interaction');
+      try {
+        const confirmation = await response.awaitMessageComponent({ time: 60_000 });
+        if (confirmation.customId === 'confirm') {
+          const trendingChannel = interaction.client.channels.cache.get('1099564476698726401');
+          await trendingChannel.send({ embeds: [reply] });
+          await response.delete();
+          console.log('[INFO] Completed word of the day interaction');
+        }
+        else if (confirmation.customId === 'deny') {
+          await confirmation.update({ content: 'Embed was not sent.', embeds: [], components: [], ephemeral: true });
+          console.log('[INFO] Cancelled word of the day interaction');
+        }
+      }
+      catch (error) {
+        await interaction.editReply({ content: 'No response within 60 seconds; action cancelled.', embeds: [], components: [], ephemeral: true });
+        console.log('[INFO] No response recieved; cancelled word of the day interaction');
+      }
     }
     else {
       await interaction.reply({ content: 'You do not have permission to run this command.', ephemeral: true });
