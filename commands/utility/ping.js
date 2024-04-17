@@ -19,6 +19,11 @@ module.exports = {
       })
       .addFields([
         {
+          name: 'API Latency',
+          value: `${interaction.client.ws.ping} ms`,
+          inline: true,
+        },
+        {
           name: 'Client Ping',
           value: `${message.createdTimestamp - interaction.createdTimestamp} ms`,
         },
