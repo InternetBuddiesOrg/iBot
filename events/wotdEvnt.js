@@ -229,6 +229,9 @@ module.exports = {
             if (sense.startsWith('(') && senseInd !== 0) {
               sense = sense.replace('(', '(*').replace(')', '*)');
             }
+            if (sense.endsWith('[...]')) {
+              sense = sense.replace('[...]', `[[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`);
+            }
             const partOfSpeech = full[ind];
             if (!defGroups[partOfSpeech]) {
               defGroups[partOfSpeech] = [];
@@ -268,8 +271,8 @@ module.exports = {
       if (Array.isArray(footerSnippet)) {
         reply.setFooter({ text: footer });
       }
-      const trendingChannel = client.channels.cache.get('1099564476698726401'); // Dev channel
-      // const trendingChannel = client.channels.cache.get('1149549485928747120');
+      // const trendingChannel = client.channels.cache.get('1099564476698726401'); // Dev channel
+      const trendingChannel = client.channels.cache.get('1149549485928747120');
       console.log('[EVNT] Word of the day message sent');
       await trendingChannel.send({ embeds: [reply] });
     });

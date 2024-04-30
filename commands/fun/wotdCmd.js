@@ -241,6 +241,9 @@ module.exports = {
           if (sense.startsWith('(') && senseInd !== 0) {
             sense = sense.replace('(', '(*').replace(')', '*)');
           }
+          if (sense.endsWith('[...]')) {
+            sense = sense.replace('[...]', `[[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`);
+          }
           const partOfSpeech = full[ind];
           if (!defGroups[partOfSpeech]) {
             defGroups[partOfSpeech] = [];
