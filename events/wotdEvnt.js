@@ -264,6 +264,7 @@ module.exports = {
       const reply = new EmbedBuilder()
         .setColor('#F0CD40')
         .setAuthor({ name: 'The word of the day is:' })
+        .setURL(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`)
         .setTitle(word)
         .setDescription(`${hyphen}\n${ipa}`)
         .addFields(fields)
@@ -271,8 +272,8 @@ module.exports = {
       if (Array.isArray(footerSnippet)) {
         reply.setFooter({ text: footer });
       }
-      // const trendingChannel = client.channels.cache.get('1099564476698726401'); // Dev channel
-      const trendingChannel = client.channels.cache.get('1149549485928747120');
+      // const trendingChannel = client.channels.cache.get('1099564476698726401'); // #development
+      const trendingChannel = client.channels.cache.get('1149549485928747120'); // #trending
       console.log('[EVNT] Word of the day message sent');
       await trendingChannel.send({ embeds: [reply] });
     });

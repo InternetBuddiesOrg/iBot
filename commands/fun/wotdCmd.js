@@ -1,9 +1,10 @@
 const {
   EmbedBuilder,
   SlashCommandBuilder,
-  ButtonBuilder,
-  ButtonStyle,
   ActionRowBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+  ComponentType,
 } = require('discord.js');
 const fs = require('fs');
 const Parser = require('rss-parser');
@@ -293,6 +294,7 @@ module.exports = {
       .setColor('#F0CD40')
       .setAuthor({ name: 'The word of the day is:' })
       .setTitle(word)
+      .setURL(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`)
       .setDescription(`${hyphen}\n${ipa}`)
       .addFields(fields)
       .setTimestamp();
@@ -300,36 +302,50 @@ module.exports = {
       reply.setFooter({ text: footer });
     }
     if (interaction.user.id === '547975777291862057') {
-      const confirm = new ButtonBuilder()
-        .setCustomId('confirm')
-        .setLabel('Yes')
-        .setStyle(ButtonStyle.Primary);
-      const deny = new ButtonBuilder()
-        .setCustomId('deny')
-        .setLabel('No')
-        .setStyle(ButtonStyle.Danger);
+      const channel = new StringSelectMenuBuilder()
+        .setCustomId('channel')
+        .setPlaceholder('Select a channel')
+        .addOptions(
+          new StringSelectMenuOptionBuilder()
+            .setLabel('#🔺trending')
+            .setValue('trending'),
+          new StringSelectMenuOptionBuilder()
+            .setLabel('#🖥️development')
+            .setValue('development'),
+          new StringSelectMenuOptionBuilder()
+            .setLabel('Don\'t send')
+            .setValue('cancel'),
+        );
       const row = new ActionRowBuilder()
-        .addComponents(confirm, deny);
+        .addComponents(channel);
 
-      const response = await interaction.reply({ content: 'Send this embed?', embeds: [reply], components: [row], ephemeral: true });
-      console.log('[INFO] Started word of the day interaction');
-      try {
-        const confirmation = await response.awaitMessageComponent({ time: 60_000 });
-        if (confirmation.customId === 'confirm') {
-          const trendingChannel = interaction.client.channels.cache.get('1149549485928747120');
-          await trendingChannel.send({ embeds: [reply] });
+      const response = await interaction.reply({
+        content: 'Send this embed?',
+        embeds: [reply],
+        components: [row],
+        ephemeral: true,
+      });
+
+      const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
+      collector.on('collect', async i => {
+        const selection = i.values[0];
+        if (selection === 'trending') {
+          const replyChannel = interaction.client.channels.cache.get('1249825068008083597');
+          await replyChannel.send({ embeds: [reply] });
           await response.delete();
           console.log('[INFO] Completed word of the day interaction');
         }
-        else if (confirmation.customId === 'deny') {
-          await confirmation.update({ content: 'Embed was not sent.', embeds: [], components: [], ephemeral: true });
-          console.log('[INFO] Cancelled word of the day interaction');
+        else if (selection === 'development') {
+          const replyChannel = interaction.client.channels.cache.get('1099564476698726401');
+          await replyChannel.send({ embeds: [reply] });
+          await response.delete();
+          console.log('[INFO] Completed word of the day interaction');
         }
-      }
-      catch (error) {
-        await interaction.editReply({ content: 'No response within 60 seconds; action cancelled.', embeds: [], components: [], ephemeral: true });
-        console.log('[INFO] No response recieved; cancelled word of the day interaction');
-      }
+        else if (selection === 'cancel') {
+          await response.delete();
+          console.log('[INFO] Completed word of the day interaction');
+        }
+      });
     }
     else {
       await interaction.reply({ content: 'You do not have permission to run this command.', ephemeral: true });
