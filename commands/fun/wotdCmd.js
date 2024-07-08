@@ -330,7 +330,7 @@ module.exports = {
       collector.on('collect', async i => {
         const selection = i.values[0];
         if (selection === 'trending') {
-          const replyChannel = interaction.client.channels.cache.get('1249825068008083597');
+          const replyChannel = interaction.client.channels.cache.get('1149549485928747120');
           await replyChannel.send({ embeds: [reply] });
           await response.delete();
           console.log('[INFO] Completed word of the day interaction');
