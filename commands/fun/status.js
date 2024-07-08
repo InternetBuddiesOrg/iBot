@@ -93,6 +93,11 @@ module.exports = {
       break;
     }
 
+    const devChannel = interaction.client.channels.cache.get('1099564476698726401');
+    await devChannel.send({
+      content: `**@${interaction.user.username} set the status to:**\n${icon} ${message}${value}`,
+      flags: [4096],
+    });
     await interaction.editReply({
       content: `**Successfully set status to:**\n${icon} ${message}${value}`,
       ephemeral: true,
