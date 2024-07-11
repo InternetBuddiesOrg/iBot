@@ -2,7 +2,7 @@
 ![iBot Banner: iBot by ProtoZappy](./images/iBotBanner.png)
 Developed with [discord.js](https://discord.js.org) for a personal Discord server
 
-### Features {#features}
+### Features
 
 - [x] Daily terms via Word of the Day
 - [x] Customisable status
