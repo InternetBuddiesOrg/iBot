@@ -1,8 +1,17 @@
 # iBot
-iBo is a discord server in need of a bot
+![iBot Banner: iBot by ProtoZappy](./images/iBotBanner.png)
+Developed with [discord.js](https://discord.js.org) for a personal Discord server
 
-it's iBo + t
+### Features {#features}
 
-not i + Bot
+- [x] Daily terms via Word of the Day
+- [x] Customisable status
+- [ ] Connect 4 game
+- [ ] Other games
+- [ ] Currency
+- [ ] Leveling
 
-that would be unoriginal.
+
+---
+
+It's `iBo` + `t`, not `i` + `Bot`. That would be unoriginal.
