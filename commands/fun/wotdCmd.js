@@ -15,7 +15,7 @@ const { iBotDir } = process.env;
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('wotd')
-    .setDescription('Sends the word of the day to #🔺trending'),
+    .setDescription('Sends the word of the day message'),
 
   async execute(interaction) {
     // Parse RSS function
@@ -288,6 +288,18 @@ module.exports = {
       value: defs.join('\n'),
     }));
     fields = [].concat(...fields);
+    // If fields are over character limit, truncate them
+    fields.forEach(obj => {
+      if (obj.value.length > 1024) {
+        const truncStr = obj.value.substring(0, 1024);
+        const lastNewlineInd = truncStr.lastIndexOf('\n');
+        obj.value = `${obj.value.substring(0, lastNewlineInd)} [[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English)`;
+      }
+    });
+
+    // Debug
+    // console.log(fields[0].value.length);
+    // console.log(fields);
 
     // Complete interaction
     const reply = new EmbedBuilder()
