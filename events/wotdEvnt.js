@@ -259,6 +259,14 @@ module.exports = {
         value: defs.join('\n'),
       }));
       fields = [].concat(...fields);
+      // If fields are over character limit, truncate them
+      fields.forEach(obj => {
+        if (obj.value.length > 1024) {
+          const truncStr = obj.value.substring(0, 1024);
+          const lastNewlineInd = truncStr.lastIndexOf('\n');
+          obj.value = `${obj.value.substring(0, lastNewlineInd)} [[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English)`;
+        }
+      });
 
       // Complete interaction
       const reply = new EmbedBuilder()
