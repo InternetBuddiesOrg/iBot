@@ -18,6 +18,11 @@ module.exports = {
   async execute(interaction) {
     const opponent = interaction.options.getUser('challenge');
 
+    if (opponent.id === interaction.user.id) {
+      interaction.reply({ content: 'You cannot play against yourself!', ephemeral: true });
+      return;
+    }
+
     // Create accept/deny buttons
     const accept = new ButtonBuilder()
       .setCustomId('accept')
@@ -110,6 +115,7 @@ module.exports = {
         let boardString;
         let boardMatrix;
         let checkDraw;
+        let lastMove;
         const updateBoard = () => {
           boardMatrix = [
             [c1[5], c2[5], c3[5], c4[5], c5[5], c6[5], c7[5]],
@@ -168,6 +174,7 @@ module.exports = {
           const collector = message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 3_600_000 });
           collector.on('collect', async i => {
             const selection = i.customId;
+            lastMove = i.customId[1];
 
             async function columnSelect(arr, name) {
               if (i.user.id === interaction.user.id && currentTurn === 'a') { // Player A
@@ -187,7 +194,7 @@ module.exports = {
                     return;
                   }
                   await message.delete();
-                  const newMessage = await interaction.channel.send({ content: `${y} <@${opponent.id}>'s turn.\n${boardString}`, components: createButtonRows() });
+                  const newMessage = await interaction.channel.send({ content: `${y} <@${opponent.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(interaction.user.id).nickname || interaction.user.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
                   collect(newMessage);
                   currentTurn = 'b';
                   console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
@@ -213,7 +220,7 @@ module.exports = {
                     return;
                   }
                   await message.delete();
-                  const newMessage = await interaction.channel.send({ content: `${r} <@${interaction.user.id}>'s turn.\n${boardString}`, components: createButtonRows() });
+                  const newMessage = await interaction.channel.send({ content: `${r} <@${interaction.user.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(opponent.id).nickname || opponent.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
                   collect(newMessage);
                   currentTurn = 'a';
                   console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
