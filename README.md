@@ -6,7 +6,7 @@ Developed with [discord.js](https://discord.js.org) for a personal Discord serve
 
 - [x] Daily terms via Word of the Day
 - [x] Customisable status
-- [ ] Connect 4 game
+- [x] Connect 4 game
 - [ ] Other games
 - [ ] Currency
 - [ ] Leveling
