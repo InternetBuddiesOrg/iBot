@@ -74,6 +74,7 @@ module.exports = {
     let r5;
     let r6;
     let board;
+    let currentTurn = 'a';
     const regenerateRows = () => {
       r1 = `${c1[5]} ${c2[5]} ${c3[5]} ${c4[5]} ${c5[5]} ${c6[5]} ${c7[5]}`;
       r2 = `${c1[4]} ${c2[4]} ${c3[4]} ${c4[4]} ${c5[4]} ${c6[4]} ${c7[4]}`;
@@ -85,198 +86,64 @@ module.exports = {
     };
     regenerateRows();
 
-    const handleCollector = async (message) => {
+    const collect = async (message) => {
       const collector = message.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
       collector.on('collect', async i => {
         const selection = i.values[0];
-        if (selection === 'c1') {
-          if (i.user.id === interaction.user.id) { // player A
-            if (c1[c1.indexOf(b)] !== -1) { // checks if column is full
-              c1[c1.indexOf(b)] = r;
+
+        async function columnSelect(arr, name) {
+          if (i.user.id === interaction.user.id && currentTurn === 'a') { // player A
+            if (arr[arr.indexOf(b)] !== -1) { // checks if column is full
+              arr[arr.indexOf(b)] = r;
               regenerateRows();
               await message.delete();
               const row = createSelectMenu();
               const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 1`);
+              collect(newMessage);
+              currentTurn = 'b';
+              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
             }
           }
-          else if (i.user.id === opponent.id) { // player B
-            if (c1[c1.indexOf(b)] !== -1) {
-              c1[c1.indexOf(b)] = y;
+          else if (i.user.id === opponent.id && currentTurn === 'b') { // player B
+            if (arr[arr.indexOf(b)] !== -1) {
+              arr[arr.indexOf(b)] = y;
               regenerateRows();
               await message.delete();
               const row = createSelectMenu();
               const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 1`);
+              collect(newMessage);
+              currentTurn = 'a';
+              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
             }
+          }
+          else if (i.user.id === interaction.user.id || i.user.id === opponent.id) {
+            await i.reply({ content: 'It is not your turn!', ephemeral: true });
           }
           else {
             await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
           }
+        }
+
+        if (selection === 'c1') {
+          await columnSelect(c1, '1');
         }
         else if (selection === 'c2') {
-          if (i.user.id === interaction.user.id) { // player A
-            if (c2[c2.indexOf(b)] !== -1) {
-              c2[c2.indexOf(b)] = r;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 2`);
-            }
-          }
-          else if (i.user.id === opponent.id) { // player B
-            if (c2[c2.indexOf(b)] !== -1) {
-              c2[c2.indexOf(b)] = y;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 2`);
-            }
-          }
-          else {
-            await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
-          }
+          await columnSelect(c2, '2');
         }
         else if (selection === 'c3') {
-          if (i.user.id === interaction.user.id) { // player A
-            if (c3[c3.indexOf(b)] !== -1) {
-              c3[c3.indexOf(b)] = r;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 3`);
-            }
-          }
-          else if (i.user.id === opponent.id) { // player B
-            if (c3[c3.indexOf(b)] !== -1) {
-              c3[c3.indexOf(b)] = y;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 3`);
-            }
-          }
-          else {
-            await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
-          }
+          await columnSelect(c3, '3');
         }
         else if (selection === 'c4') {
-          if (i.user.id === interaction.user.id) { // player A
-            if (c4[c4.indexOf(b)] !== -1) {
-              c4[c4.indexOf(b)] = r;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 4`);
-            }
-          }
-          else if (i.user.id === opponent.id) { // player B
-            if (c4[c4.indexOf(b)] !== -1) {
-              c4[c4.indexOf(b)] = y;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 4`);
-            }
-          }
-          else {
-            await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
-          }
+          await columnSelect(c4, '4');
         }
         else if (selection === 'c5') {
-          if (i.user.id === interaction.user.id) { // player A
-            if (c5[c5.indexOf(b)] !== -1) {
-              c5[c5.indexOf(b)] = r;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 5`);
-            }
-          }
-          else if (i.user.id === opponent.id) { // player B
-            if (c5[c5.indexOf(b)] !== -1) {
-              c5[c5.indexOf(b)] = y;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 5`);
-            }
-          }
-          else {
-            await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
-          }
+          await columnSelect(c5, '5');
         }
         else if (selection === 'c6') {
-          if (i.user.id === interaction.user.id) { // player A
-            if (c6[c6.indexOf(b)] !== -1) {
-              c6[c6.indexOf(b)] = r;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 6`);
-            }
-          }
-          else if (i.user.id === opponent.id) { // player B
-            if (c6[c6.indexOf(b)] !== -1) {
-              c6[c6.indexOf(b)] = y;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 6`);
-            }
-          }
-          else {
-            await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
-          }
+          await columnSelect(c6, '6');
         }
         else if (selection === 'c7') {
-          if (i.user.id === interaction.user.id) { // player A
-            if (c7[c7.indexOf(b)] !== -1) {
-              c7[c7.indexOf(b)] = r;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 7`);
-            }
-          }
-          else if (i.user.id === opponent.id) { // player B
-            if (c7[c7.indexOf(b)] !== -1) {
-              c7[c7.indexOf(b)] = y;
-              regenerateRows();
-              await message.delete();
-              const row = createSelectMenu();
-              const newMessage = await interaction.channel.send({ content: board, components: [row] });
-              handleCollector(newMessage);
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 7`);
-            }
-          }
-          else {
-            await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
-          }
+          await columnSelect(c7, '7');
         }
       });
     };
@@ -289,50 +156,7 @@ module.exports = {
       const row = createSelectMenu();
       const game = await interaction.channel.send({ content: board, components: [row] });
 
-      handleCollector(game);
-
-      // // Header/label--introduces initiator and opponent
-      // await interaction.reply({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**` });
-
-      // // Game board--edited with each interaction from each player
-      // let row = createSelectMenu();
-      // const game = await interaction.channel.send({ content: board, components: [row] });
-
-      // // const collectorFilterA = i => i.user.id === interaction.user.id;
-      // // const collectorFilterB = i => i.user.id === opponent.id;
-
-      // const collector = game.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
-      // collector.on('collect', async i => {
-      //   const selection = i.values[0];
-      //   if (selection === 'c1') {
-      //     if (c1[c1.indexOf(b)] !== -1) {
-      //       c1[c1.indexOf(b)] = r;
-      //       regenerateRows();
-      //       await game.delete();
-      //       row = createSelectMenu();
-      //       await interaction.channel.send({ content: board, components: [row] });
-      //       console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column 1`);
-      //     }
-      //   }
-      //   else if (selection === 'c2') {
-      //     console.log(`[INFO] Updated Connect 4 board: ${'a'} selected column 2`);
-      //   }
-      //   else if (selection === 'c3') {
-      //     console.log(`[INFO] Updated Connect 4 board: ${'a'} selected column 3`);
-      //   }
-      //   else if (selection === 'c4') {
-      //     console.log(`[INFO] Updated Connect 4 board: ${'a'} selected column 4`);
-      //   }
-      //   else if (selection === 'c5') {
-      //     console.log(`[INFO] Updated Connect 4 board: ${'a'} selected column 5`);
-      //   }
-      //   else if (selection === 'c6') {
-      //     console.log(`[INFO] Updated Connect 4 board: ${'a'} selected column 6`);
-      //   }
-      //   else if (selection === 'c7') {
-      //     console.log(`[INFO] Updated Connect 4 board: ${'a'} selected column 7`);
-      //   }
-      // });
+      collect(game);
     }
     else {
       await interaction.reply({ content: 'You do not have permission to run this command.', ephemeral: true });
