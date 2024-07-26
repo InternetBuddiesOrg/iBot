@@ -53,15 +53,15 @@ module.exports = {
     switch (status) {
     case 'online':
       interaction.client.user.setStatus(PresenceUpdateStatus.Online);
-      icon = '<:online:1259666387455184927>';
+      icon = '<:online:1266485857653620836>';
       break;
     case 'idle':
       interaction.client.user.setStatus(PresenceUpdateStatus.Idle);
-      icon = '<:idle:1259666385093529700>';
+      icon = '<:idle:1266485882261733506>';
       break;
     case 'dnd':
       interaction.client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
-      icon = '<:dnd:1259666382350585907>';
+      icon = '<:dnd:1266485896866172958>';
       break;
     }
 
@@ -87,7 +87,7 @@ module.exports = {
         type: ActivityType.Streaming,
         url: 'https://www.twitch.tv/protozappy',
       });
-      icon = '<:streaming:1259666381771640842>';
+      icon = '<:streaming:1266485909688287303>';
       message = 'Streaming ';
       break;
     case 'watching':
