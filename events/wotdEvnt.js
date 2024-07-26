@@ -29,7 +29,7 @@ module.exports = {
             items.push(currentItem);
           }
         }));
-        fs.writeFileSync(`${iBotDir}/events/${fileName}`, JSON.stringify(items));
+        fs.writeFileSync(`${iBotDir}/commands/fun/${fileName}`, JSON.stringify(items));
       }
       await parse();
       const wotdJson = require('./wotdLatest.json');
@@ -48,7 +48,7 @@ module.exports = {
       // WoTD variables
       const wotd = wotdJson[9].content.split('"')[17]; // word of the day
       const word = toTitleCase(wotd); // Word Of The Day
-      let rss = wotdJson[9].content.split(/<i>(n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|symbol|letter)<\/i>/g);
+      let rss = wotdJson[9].content.split(/<i>(n|proper n|plural n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|contraction|symbol|letter)<\/i>/g);
       rss = rss.map(str => str.replace(/<[^>]+>/gim, '').trim());
       const full = rss.map(str => str.replace(/\n/g, ''));
       const snippet = [];
@@ -181,10 +181,17 @@ module.exports = {
       // Create fields
       let defNum = 0;
       const defGroups = {};
+
       rss.map((pos, ind) => {
         if (ind % 2 !== 0) {
           if (pos === 'n') {
             full[ind] = 'noun';
+          }
+          else if (pos === 'proper n') {
+            full[ind] = 'proper noun';
+          }
+          else if (pos === 'plural n') {
+            full[ind] = 'plural noun';
           }
           else if (pos === 'v') {
             full[ind] = 'verb';
@@ -222,6 +229,9 @@ module.exports = {
           else if (pos === 'abbr') {
             full[ind] = 'abbreviation';
           }
+          else if (pos === 'contraction') {
+            full[ind] = 'contraction';
+          }
 
           const defArr = definitions[defNum];
           let senseNum = 0;
@@ -232,12 +242,17 @@ module.exports = {
             if (sense.endsWith('[...]')) {
               sense = sense.replace('[...]', `[[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English)`);
             }
+
             const partOfSpeech = full[ind];
             if (!defGroups[partOfSpeech]) {
               defGroups[partOfSpeech] = [];
             }
 
             if (sense.startsWith('(*') && sense.endsWith('*)')) {
+              defGroups[partOfSpeech].push(sense);
+            }
+            else if (sense.startsWith('[[...]]')) {
+              senseNum = 0;
               defGroups[partOfSpeech].push(sense);
             }
             else if (sense === '') {
@@ -272,14 +287,15 @@ module.exports = {
       const reply = new EmbedBuilder()
         .setColor('#F0CD40')
         .setAuthor({ name: 'The word of the day is:' })
-        .setURL(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`)
         .setTitle(word)
+        .setURL(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`)
         .setDescription(`${hyphen}\n${ipa}`)
         .addFields(fields)
         .setTimestamp();
       if (Array.isArray(footerSnippet)) {
         reply.setFooter({ text: footer });
       }
+
       // const trendingChannel = client.channels.cache.get('1099564476698726401'); // #development
       const trendingChannel = client.channels.cache.get('1149549485928747120'); // #trending
       console.log('[EVNT] Word of the day message sent');

@@ -52,7 +52,7 @@ module.exports = {
     // WoTD variables
     const wotd = wotdJson[9].content.split('"')[17]; // word of the day
     const word = toTitleCase(wotd); // Word Of The Day
-    let rss = wotdJson[9].content.split(/<i>(n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|symbol|letter)<\/i>/g);
+    let rss = wotdJson[9].content.split(/<i>(n|proper n|plural n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|contraction|symbol|letter)<\/i>/g);
     rss = rss.map(str => str.replace(/<[^>]+>/gim, '').trim());
     const full = rss.map(str => str.replace(/\n/g, ''));
     const snippet = [];
@@ -186,18 +186,16 @@ module.exports = {
     let defNum = 0;
     const defGroups = {};
 
-    // Check for sub-senses
-    // let sub = false;
-    // const subArr = [];
-    // let innerArr = [];
-    // if (/<ol>.*?<ol>.*?<\/ol>/s.test(wotdJson[9].content)) {
-    //   sub = true;
-    // }
-
     rss.map((pos, ind) => {
       if (ind % 2 !== 0) {
         if (pos === 'n') {
           full[ind] = 'noun';
+        }
+        else if (pos === 'proper n') {
+          full[ind] = 'proper noun';
+        }
+        else if (pos === 'plural n') {
+          full[ind] = 'plural noun';
         }
         else if (pos === 'v') {
           full[ind] = 'verb';
@@ -235,6 +233,9 @@ module.exports = {
         else if (pos === 'abbr') {
           full[ind] = 'abbreviation';
         }
+        else if (pos === 'contraction') {
+          full[ind] = 'contraction';
+        }
 
         const defArr = definitions[defNum];
         let senseNum = 0;
@@ -245,25 +246,17 @@ module.exports = {
           if (sense.endsWith('[...]')) {
             sense = sense.replace('[...]', `[[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English)`);
           }
+
           const partOfSpeech = full[ind];
           if (!defGroups[partOfSpeech]) {
             defGroups[partOfSpeech] = [];
           }
 
-          // if (sub) {
-          //   if (defArr[senseInd - 1] && defArr[senseInd - 1].trim() !== '' && defArr[senseInd - 1].startsWith('(') && defArr[senseInd - 1].endsWith(')')) {
-          //     if (innerArr.length > 0) {
-          //       subArr.push(innerArr);
-          //       innerArr = [];
-          //     }
-          //     innerArr.push(sense);
-          //   }
-          //   else if (defArr[senseInd - 1] && defArr[senseInd - 1].trim() !== '') {
-          //     console.log(`N ${sense}`);
-          //   }
-          // }
-          // else
           if (sense.startsWith('(*') && sense.endsWith('*)')) {
+            defGroups[partOfSpeech].push(sense);
+          }
+          else if (sense.startsWith('[[...]]')) {
+            senseNum = 0;
             defGroups[partOfSpeech].push(sense);
           }
           else if (sense === '') {
@@ -274,9 +267,6 @@ module.exports = {
             defGroups[partOfSpeech].push(`${senseNum}. ${sense}`);
           }
         });
-        // if (innerArr.length > 0) {
-        //   subArr.push(innerArr);
-        // }
         defNum++;
       }
       else {
@@ -297,10 +287,6 @@ module.exports = {
       }
     });
 
-    // Debug
-    // console.log(fields[0].value.length);
-    // console.log(fields);
-
     // Complete interaction
     const reply = new EmbedBuilder()
       .setColor('#F0CD40')
@@ -313,6 +299,7 @@ module.exports = {
     if (Array.isArray(footerSnippet)) {
       reply.setFooter({ text: footer });
     }
+
     if (interaction.user.id === '547975777291862057') {
       const channel = new StringSelectMenuBuilder()
         .setCustomId('channel')
