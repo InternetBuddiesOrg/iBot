@@ -1,0 +1,8 @@
+iBot Privacy Policy  
+====================
+
+Last updated: July 26, 2024
+
+Nothing is available to this application, other than what is already provided by the Discord API.
+
+Messages and Interactions may be logged.
