@@ -3,6 +3,8 @@ const {
   PresenceUpdateStatus,
   SlashCommandBuilder,
 } = require('discord.js');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -42,8 +44,9 @@ module.exports = {
       ephemeral: true,
     });
     const status = interaction.options.getString('status');
-    const activity = interaction.options.getString('activity') ?? null;
+    const activity = interaction.options.getString('activity');
     const value = interaction.options.getString('value');
+    fs.writeFileSync(path.join(__dirname, 'statusLatest.json'), JSON.stringify({ status, activity, value }, null, 2));
     let icon;
     let message;
 
@@ -96,11 +99,12 @@ module.exports = {
     const devChannel = interaction.client.channels.cache.get('1099564476698726401');
     await devChannel.send({
       content: `**@${interaction.user.username} set the status to:**\n${icon} ${message}${value}`,
-      flags: [4096],
+      flags: [4096], // @silent message
     });
     await interaction.editReply({
       content: `**Successfully set status to:**\n${icon} ${message}${value}`,
       ephemeral: true,
     });
+    console.log(`[INFO] @${interaction.user.username} set the status to: (${status}) ${message}${value}`);
   },
 };

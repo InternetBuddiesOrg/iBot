@@ -5,3 +5,4 @@ node_modules
 .DS_Store
 events/wotdLatest.json
 commands/fun/wotdLatest.json
+commands/utility/statusLatest.json
