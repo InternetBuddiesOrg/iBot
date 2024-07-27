@@ -3,6 +3,6 @@
 node_modules
 ._.DS_Store
 .DS_Store
-events/wotdLatest.json
-commands/fun/wotdLatest.json
-commands/utility/statusLatest.json
+src/events/wotdLatest.json
+src/commands/fun/wotdLatest.json
+src/commands/utility/statusLatest.json
