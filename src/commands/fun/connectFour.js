@@ -17,8 +17,9 @@ module.exports = {
 
   async execute(interaction) {
     const opponent = interaction.options.getUser('challenge');
+    const initiator = interaction.user;
 
-    if (opponent.id === interaction.user.id) {
+    if (opponent.id === initiator.id) {
       interaction.reply({ content: 'You cannot play against yourself!', ephemeral: true });
       return;
     }
@@ -50,29 +51,29 @@ module.exports = {
       .addComponents([acceptDis, denyDis]);
 
 
-    const response = await interaction.reply({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**`, components: [confirmationRow] });
+    const response = await interaction.reply({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**`, components: [confirmationRow] });
     const confirmationFilter = i => i.user.id === opponent.id;
 
     try {
       const confirmation = await response.awaitMessageComponent({ filter: confirmationFilter, time: 60_000 });
       if (confirmation.customId === 'accept') {
-        confirmation.update({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# Game accepted!`, components: [confirmationRowDis] });
-        await startGame(interaction, opponent);
+        confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# Game accepted!`, components: [confirmationRowDis] });
+        await startGame(interaction, initiator, opponent);
       }
       else if (confirmation.customId === 'deny') {
-        await confirmation.update({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has been denied.`, components: [confirmationRowDis] });
+        await confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has been denied.`, components: [confirmationRowDis] });
         return;
       }
     }
     catch (e) {
-      await interaction.editReply({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has expired.`, components: [confirmationRowDis] });
+      await interaction.editReply({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has expired.`, components: [confirmationRowDis] });
       console.log('[INFO] No response received; match cancelled');
       return;
     }
   },
 };
 
-async function confirmGame(interaction, opponent) {
+async function confirmGame(interaction, initiator, opponent) {
   const accept = new ButtonBuilder()
     .setCustomId('accept')
     .setLabel('Accept')
@@ -99,30 +100,29 @@ async function confirmGame(interaction, opponent) {
   const confirmationRowDis = new ActionRowBuilder()
     .addComponents([acceptDis, denyDis]);
 
-
-  const response = await interaction.channel.send({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**`, components: [confirmationRow] });
+  const response = await interaction.channel.send({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**`, components: [confirmationRow] });
   const confirmationFilter = i => i.user.id === opponent.id;
 
   try {
     const confirmation = await response.awaitMessageComponent({ filter: confirmationFilter, time: 60_000 });
     if (confirmation.customId === 'accept') {
-      confirmation.update({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# Game accepted!`, components: [confirmationRowDis] });
-      await startGame(interaction, opponent);
+      confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# Game accepted!`, components: [confirmationRowDis] });
+      await startGame(interaction, initiator, opponent);
     }
     else if (confirmation.customId === 'deny') {
-      await confirmation.update({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has been denied.`, components: [confirmationRowDis] });
+      await confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has been denied.`, components: [confirmationRowDis] });
       return;
     }
   }
   catch (e) {
-    await interaction.editReply({ content: `**<@${interaction.user.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has expired.`, components: [confirmationRowDis] });
+    await interaction.editReply({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has expired.`, components: [confirmationRowDis] });
     console.log('[INFO] No response received; match cancelled');
     return;
   }
 }
 
-async function startGame(interaction, opponent) {
-  const rematchFilter = i => i.user.id === opponent.id || i.user.id === interaction.user.id;
+async function startGame(interaction, playerA, playerB) {
+  const rematchFilter = i => i.user.id === playerB.id || i.user.id === playerA.id;
   const createButtonRows = () => {
     const buttons = [
       new ButtonBuilder().setCustomId('c1').setLabel('1️⃣').setStyle(ButtonStyle.Primary),
@@ -227,30 +227,30 @@ async function startGame(interaction, opponent) {
       lastMove = i.customId[1];
 
       const columnSelect = async (arr, name) => {
-        if (i.user.id === interaction.user.id && currentTurn === 'a') { // Player A
+        if (i.user.id === playerA.id && currentTurn === 'a') { // Player A
           if (arr.indexOf(b) !== -1) { // Checks if column is full
             arr[arr.indexOf(b)] = r;
             updateBoard();
 
             if (checkWin(r)) {
               await i.message.delete();
-              const end = await i.message.channel.send({ content: `${r} **<@${interaction.user.id}> has won!**\n${boardString}`, components: [] });
+              const end = await i.message.channel.send({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [] });
               setTimeout(async () => {
-                await end.edit({ content: `${r} **<@${interaction.user.id}> has won!**\n${boardString}`, components: [rematchRow] });
-                console.log(`[INFO] @${interaction.user.username} won Connect 4`);
+                await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [rematchRow] });
+                console.log(`[INFO] @${playerA.username} won Connect 4`);
 
                 // Rematch logic
                 try {
                   const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
                   if (rematchConf.customId === 'rematch') {
                     console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
-                    await end.edit({ content: `${r} **<@${interaction.user.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, opponent);
+                    await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
+                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
                   }
                 }
                 catch (e) {
                   console.log('[INFO] No response recieved; rematch cancelled');
-                  await end.edit({ content: `${r} **<@${interaction.user.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
+                  await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
                   return;
                 }
 
@@ -270,7 +270,7 @@ async function startGame(interaction, opponent) {
                   if (rematchConf.customId === 'rematch') {
                     console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
                     await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, opponent);
+                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
                   }
                 }
                 catch (e) {
@@ -285,7 +285,7 @@ async function startGame(interaction, opponent) {
             else {
               currentTurn = 'b';
               await i.deferUpdate();
-              await i.message.edit({ content: `${y} <@${opponent.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(interaction.user.id).nickname || interaction.user.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
+              await i.message.edit({ content: `${y} <@${playerB.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerA.id).nickname || playerA.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
               console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
             }
           }
@@ -293,30 +293,30 @@ async function startGame(interaction, opponent) {
             i.reply({ content: 'Select a different column!', ephemeral: true });
           }
         }
-        else if (i.user.id === opponent.id && currentTurn === 'b') { // Player B
+        else if (i.user.id === playerB.id && currentTurn === 'b') { // Player B
           if (arr.indexOf(b) !== -1) { // Checks if column is full
             arr[arr.indexOf(b)] = y;
             updateBoard();
 
             if (checkWin(y)) {
               await i.message.delete();
-              const end = await i.message.channel.send({ content: `${y} **<@${opponent.id}> has won!**\n${boardString}`, components: [] });
+              const end = await i.message.channel.send({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [] });
               setTimeout(async () => {
-                await end.edit({ content: `${y} **<@${opponent.id}> has won!**\n${boardString}`, components: [rematchRow] });
-                console.log(`[INFO] @${opponent.username} won Connect 4`);
+                await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [rematchRow] });
+                console.log(`[INFO] @${playerB.username} won Connect 4`);
 
                 // Rematch logic
                 try {
                   const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
                   if (rematchConf.customId === 'rematch') {
                     console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
-                    await end.edit({ content: `${y} **<@${opponent.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, opponent);
+                    await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
+                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
                   }
                 }
                 catch (e) {
                   console.log('[INFO] No response recieved; rematch cancelled');
-                  await end.edit({ content: `${y} **<@${opponent.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
+                  await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
                   return;
                 }
 
@@ -336,7 +336,7 @@ async function startGame(interaction, opponent) {
                   if (rematchConf.customId === 'rematch') {
                     console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
                     await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, opponent);
+                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
                   }
                 }
                 catch (e) {
@@ -351,7 +351,7 @@ async function startGame(interaction, opponent) {
             else {
               currentTurn = 'a';
               await i.deferUpdate();
-              await i.message.edit({ content: `${r} <@${interaction.user.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(opponent.id).nickname || opponent.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
+              await i.message.edit({ content: `${r} <@${playerA.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerB.id).nickname || playerB.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
               console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
             }
           }
@@ -359,7 +359,7 @@ async function startGame(interaction, opponent) {
             i.reply({ content: 'Select a different column!', ephemeral: true });
           }
         }
-        else if (i.user.id === interaction.user.id || i.user.id === opponent.id) {
+        else if (i.user.id === playerA.id || i.user.id === playerB.id) {
           await i.reply({ content: 'It is not your turn!', ephemeral: true });
         }
         else {
@@ -395,7 +395,7 @@ async function startGame(interaction, opponent) {
     });
   };
 
-  const game = await interaction.followUp({ content: `${r} <@${interaction.user.id}> starts.\n${boardString}`, components: createButtonRows() });
+  const game = await interaction.followUp({ content: `${r} <@${playerA.id}> starts.\n${boardString}`, components: createButtonRows() });
   currentTurn = 'a';
   collect(game);
 }
