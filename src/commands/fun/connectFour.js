@@ -285,7 +285,7 @@ async function startGame(interaction, playerA, playerB) {
             else {
               currentTurn = 'b';
               await i.deferUpdate();
-              await i.message.edit({ content: `${y} <@${playerB.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerA.id).nickname || playerA.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
+              await i.message.edit({ content: `${y} <@${playerB.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerA.id).nickname || playerA.displayName}'s last move was in column ${lastMove}`, components: createButtonRows() });
               console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
             }
           }
@@ -351,7 +351,7 @@ async function startGame(interaction, playerA, playerB) {
             else {
               currentTurn = 'a';
               await i.deferUpdate();
-              await i.message.edit({ content: `${r} <@${playerA.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerB.id).nickname || playerB.username}'s last move was in column ${lastMove}`, components: createButtonRows() });
+              await i.message.edit({ content: `${r} <@${playerA.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerB.id).nickname || playerB.displayName}'s last move was in column ${lastMove}`, components: createButtonRows() });
               console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
             }
           }
