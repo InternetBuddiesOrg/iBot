@@ -4,5 +4,7 @@ node_modules
 ._.DS_Store
 .DS_Store
 src/events/wotdLatest.json
-src/commands/fun/wotdLatest.json
+src/commands/utility/wotdLatest.json
 src/commands/utility/statusLatest.json
+src/appData.json
+src/sql/appData.sqlite

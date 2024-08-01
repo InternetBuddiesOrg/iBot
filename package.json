@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zaappy/iBo-t.git"
+    "url": "git+https://github.com/InternetBuddiesOrg/iBot.git"
   },
   "author": "ProtoZappy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Zaappy/iBo-t/issues"
+    "url": "https://github.com/InternetBuddiesOrg/iBot/issues"
   },
-  "homepage": "https://github.com/Zaappy/iBo-t",
+  "homepage": "https://github.com/InternetBuddiesOrg/iBot",
   "dependencies": {
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",

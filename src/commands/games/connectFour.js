@@ -5,6 +5,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
 } = require('discord.js');
+const User = require('../../sql/models/user');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -125,13 +126,13 @@ async function startGame(interaction, playerA, playerB) {
   const rematchFilter = i => i.user.id === playerB.id || i.user.id === playerA.id;
   const createButtonRows = () => {
     const buttons = [
-      new ButtonBuilder().setCustomId('c1').setLabel('1️⃣').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c2').setLabel('2️⃣').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c3').setLabel('3️⃣').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c4').setLabel('4️⃣').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c5').setLabel('5️⃣').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c6').setLabel('6️⃣').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c7').setLabel('7️⃣').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('c1').setLabel('1').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('c2').setLabel('2').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('c3').setLabel('3').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('c4').setLabel('4').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('c5').setLabel('5').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('c6').setLabel('6').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('c7').setLabel('7').setStyle(ButtonStyle.Primary),
     ];
     const row1 = new ActionRowBuilder().addComponents(buttons.slice(0, 4));
     const row2 = new ActionRowBuilder().addComponents(buttons.slice(4));
@@ -234,10 +235,16 @@ async function startGame(interaction, playerA, playerB) {
 
             if (checkWin(r)) {
               await i.message.delete();
+
+              const [winner] = await User.findOrCreate({ where: { id: await playerA.id } });
+              const [loser] = await User.findOrCreate({ where: { id: await playerB.id } });
+              await winner.increment('wins', { by: 1 });
+              await loser.increment('losses', { by: 1 });
+
               const end = await i.message.channel.send({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [] });
               setTimeout(async () => {
                 await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [rematchRow] });
-                console.log(`[INFO] @${playerA.username} won Connect 4`);
+                console.log(`[INFO] @${playerA.username} won Connect 4 (${winner.wins + 1} total wins)`);
 
                 // Rematch logic
                 try {
@@ -299,11 +306,17 @@ async function startGame(interaction, playerA, playerB) {
             updateBoard();
 
             if (checkWin(y)) {
+
+              const [winner] = await User.findOrCreate({ where: { id: await playerB.id } });
+              const [loser] = await User.findOrCreate({ where: { id: await playerA.id } });
+              await winner.increment('wins', { by: 1 });
+              await loser.increment('losses', { by: 1 });
+
               await i.message.delete();
               const end = await i.message.channel.send({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [] });
               setTimeout(async () => {
                 await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [rematchRow] });
-                console.log(`[INFO] @${playerB.username} won Connect 4`);
+                console.log(`[INFO] @${playerB.username} won Connect 4 (${winner.wins + 1} total points)`);
 
                 // Rematch logic
                 try {

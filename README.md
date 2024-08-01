@@ -1,4 +1,3 @@
-# iBot
 ![iBot Banner: iBot by ProtoZappy](./images/iBotBanner.png)
 Developed with [discord.js](https://discord.js.org) for a personal Discord server
 

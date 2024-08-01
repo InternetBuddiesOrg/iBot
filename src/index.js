@@ -10,10 +10,12 @@ require('dotenv').config();
 const { token } = process.env;
 
 // Create client
-const client = new Client({ intents: [
-  GatewayIntentBits.Guilds,
-  GatewayIntentBits.MessageContent,
-] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.MessageContent,
+  ],
+});
 
 // Command handler
 client.commands = new Collection();

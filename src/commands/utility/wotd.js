@@ -33,7 +33,7 @@ module.exports = {
           items.push(currentItem);
         }
       }));
-      fs.writeFileSync(`${iBotDir}/src/commands/fun/${fileName}`, JSON.stringify(items));
+      fs.writeFileSync(`${iBotDir}/src/commands/utility/${fileName}`, JSON.stringify(items));
     }
     await parse();
     const wotdJson = require('./wotdLatest.json');

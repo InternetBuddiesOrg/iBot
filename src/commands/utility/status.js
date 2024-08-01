@@ -46,7 +46,9 @@ module.exports = {
     const status = interaction.options.getString('status');
     const activity = interaction.options.getString('activity');
     const value = interaction.options.getString('value');
-    fs.writeFileSync(path.join(__dirname, 'statusLatest.json'), JSON.stringify({ status, activity, value }, null, 2));
+    fs.writeFileSync(path.join(__dirname, './statusLatest.json'), JSON.stringify({
+      botStatus: { status, activity, value },
+    }, null, 2));
     let icon;
     let message;
 

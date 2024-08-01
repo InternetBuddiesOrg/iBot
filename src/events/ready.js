@@ -6,6 +6,7 @@ const {
 } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
+const User = require('../sql/models/user');
 
 module.exports = {
   name: Events.ClientReady,
@@ -14,11 +15,24 @@ module.exports = {
   execute(client) {
     console.log(`[INFO] Logged in as ${client.user.tag}`);
 
-    const statusData = JSON.parse(fs.readFileSync(path.join(__dirname, '../commands/utility/statusLatest.json'), 'utf8'));
+    // Status data
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../commands/utility/statusLatest.json'), 'utf8'));
     let icon;
     let message;
 
-    switch (statusData.status) {
+    // Syncs user db
+    User.sync().then(() => {
+      return User.findAll();
+    }).then(users => {
+      console.log('[INFO] User database:');
+      users.forEach(user => {
+        console.log(`[INFO] ${user.id}: wins: ${user.wins}, ${user.losses} losses`);
+      });
+    }).catch(e => {
+      console.error(`[ERR!] ${e}`);
+    });
+
+    switch (data.botStatus.status) {
     case 'online':
       client.user.setStatus(PresenceUpdateStatus.Online);
       icon = '<:online:1266485857653620836>';
@@ -33,25 +47,25 @@ module.exports = {
       break;
     }
 
-    switch (statusData.activity) {
+    switch (data.botStatus.activity) {
     case 'competing':
-      client.user.setActivity(statusData.value, { type: ActivityType.Competing });
+      client.user.setActivity(data.botStatus.value, { type: ActivityType.Competing });
       message = 'Competing in ';
       break;
     case 'custom':
-      client.user.setActivity(statusData.value, { type: ActivityType.Custom });
+      client.user.setActivity(data.botStatus.value, { type: ActivityType.Custom });
       message = '';
       break;
     case 'listening':
-      client.user.setActivity(statusData.value, { type: ActivityType.Listening });
+      client.user.setActivity(data.botStatus.value, { type: ActivityType.Listening });
       message = 'Listening to ';
       break;
     case 'playing':
-      client.user.setActivity(statusData.value, { type: ActivityType.Playing });
+      client.user.setActivity(data.botStatus.value, { type: ActivityType.Playing });
       message = 'Playing ';
       break;
     case 'streaming':
-      client.user.setActivity(statusData.value, {
+      client.user.setActivity(data.botStatus.value, {
         type: ActivityType.Streaming,
         url: 'https://www.twitch.tv/protozappy',
       });
@@ -59,18 +73,18 @@ module.exports = {
       message = 'Streaming ';
       break;
     case 'watching':
-      client.user.setActivity(statusData.value, { type: ActivityType.Watching });
+      client.user.setActivity(data.botStatus.value, { type: ActivityType.Watching });
       message = 'Watching ';
       break;
     }
-    console.log(`[EVNT] Set the status to: (${statusData.status}) ${message}${statusData.value}`);
+    console.log(`[EVNT] Set the status to: (${data.botStatus.status}) ${message}${data.botStatus.value}`);
 
     const devChannel = client.channels.cache.get('1099564476698726401');
     const embed = new EmbedBuilder()
       .setColor('#68AB3F')
       .setTitle('Logged in')
       .setTimestamp()
-      .setDescription(`-# **Status:** ${icon} ${message}${statusData.value}`);
+      .setDescription(`-# **Status:** ${icon} ${message}${data.botStatus.value}`);
 
     devChannel.send({ embeds: [embed], flags: [4096] }); // @silent message
   },
