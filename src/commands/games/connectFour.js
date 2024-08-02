@@ -125,15 +125,32 @@ async function confirmGame(interaction, initiator, opponent) {
 async function startGame(interaction, playerA, playerB) {
   const rematchFilter = i => i.user.id === playerB.id || i.user.id === playerA.id;
   const createButtonRows = () => {
-    const buttons = [
-      new ButtonBuilder().setCustomId('c1').setLabel('1').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c2').setLabel('2').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c3').setLabel('3').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c4').setLabel('4').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c5').setLabel('5').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c6').setLabel('6').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('c7').setLabel('7').setStyle(ButtonStyle.Primary),
-    ];
+    const buttons = [];
+
+    const columns = {
+      c1: c1,
+      c2: c2,
+      c3: c3,
+      c4: c4,
+      c5: c5,
+      c6: c6,
+      c7: c7,
+    };
+
+    Object.keys(columns).forEach((col, index) => {
+      const label = (index + 1).toString();
+      const button = new ButtonBuilder()
+        .setCustomId(col)
+        .setLabel(label)
+        .setStyle(ButtonStyle.Primary);
+
+      if (!columns[col].includes(b)) {
+        button.setDisabled(true);
+      }
+
+      buttons.push(button);
+    });
+
     const row1 = new ActionRowBuilder().addComponents(buttons.slice(0, 4));
     const row2 = new ActionRowBuilder().addComponents(buttons.slice(4));
     return [row1, row2];
@@ -229,147 +246,137 @@ async function startGame(interaction, playerA, playerB) {
 
       const columnSelect = async (arr, name) => {
         if (i.user.id === playerA.id && currentTurn === 'a') { // Player A
-          if (arr.indexOf(b) !== -1) { // Checks if column is full
-            arr[arr.indexOf(b)] = r;
-            updateBoard();
+          arr[arr.indexOf(b)] = r;
+          updateBoard();
 
-            if (checkWin(r)) {
-              await i.message.delete();
+          if (checkWin(r)) {
+            await i.message.delete();
 
-              const [winner] = await User.findOrCreate({ where: { id: await playerA.id } });
-              const [loser] = await User.findOrCreate({ where: { id: await playerB.id } });
-              await winner.increment('wins', { by: 1 });
-              await loser.increment('losses', { by: 1 });
+            const [winner] = await User.findOrCreate({ where: { id: await playerA.id } });
+            const [loser] = await User.findOrCreate({ where: { id: await playerB.id } });
+            await winner.increment('wins', { by: 1 });
+            await loser.increment('losses', { by: 1 });
 
-              const end = await i.message.channel.send({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [] });
-              setTimeout(async () => {
-                await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [rematchRow] });
-                console.log(`[INFO] @${playerA.username} won Connect 4 (${winner.wins + 1} total wins)`);
+            const end = await i.message.channel.send({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [] });
+            setTimeout(async () => {
+              await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [rematchRow] });
+              console.log(`[INFO] @${playerA.username} won Connect 4 (${winner.wins + 1} total wins)`);
 
-                // Rematch logic
-                try {
-                  const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
-                  if (rematchConf.customId === 'rematch') {
-                    console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
-                    await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
-                  }
+              // Rematch logic
+              try {
+                const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
+                if (rematchConf.customId === 'rematch') {
+                  console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
+                  await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
+                  await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
                 }
-                catch (e) {
-                  console.log('[INFO] No response recieved; rematch cancelled');
-                  await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
-                  return;
-                }
-
+              }
+              catch (e) {
+                console.log('[INFO] No response recieved; rematch cancelled');
+                await end.edit({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
                 return;
-              }, 500);
-            }
-            else if (checkDraw) {
-              await i.message.delete();
-              const end = await i.message.channel.send({ content: `**Draw!**\n${boardString}`, components: [] });
-              setTimeout(async () => {
-                await end.edit({ content: `**Draw!**\n${boardString}`, components: [rematchRow] });
-                console.log('[INFO] Connect 4 ended in a draw');
+              }
 
-                // Rematch logic
-                try {
-                  const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
-                  if (rematchConf.customId === 'rematch') {
-                    console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
-                    await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
-                  }
-                }
-                catch (e) {
-                  console.log('[INFO] No response recieved; rematch cancelled');
-                  await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
-                  return;
-                }
+              return;
+            }, 500);
+          }
+          else if (checkDraw) {
+            await i.message.delete();
+            const end = await i.message.channel.send({ content: `**Draw!**\n${boardString}`, components: [] });
+            setTimeout(async () => {
+              await end.edit({ content: `**Draw!**\n${boardString}`, components: [rematchRow] });
+              console.log('[INFO] Connect 4 ended in a draw');
 
+              // Rematch logic
+              try {
+                const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
+                if (rematchConf.customId === 'rematch') {
+                  console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
+                  await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch requested!`, components: [] });
+                  await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
+                }
+              }
+              catch (e) {
+                console.log('[INFO] No response recieved; rematch cancelled');
+                await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
                 return;
-              }, 500);
-            }
-            else {
-              currentTurn = 'b';
-              await i.deferUpdate();
-              await i.message.edit({ content: `${y} <@${playerB.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerA.id).nickname || playerA.displayName}'s last move was in column ${lastMove}`, components: createButtonRows() });
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
-            }
+              }
+
+              return;
+            }, 500);
           }
           else {
-            i.reply({ content: 'Select a different column!', ephemeral: true });
+            currentTurn = 'b';
+            await i.deferUpdate();
+            await i.message.edit({ content: `${y} <@${playerB.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerA.id).nickname || playerA.displayName}'s last move was in column ${lastMove}`, components: createButtonRows() });
+            console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
           }
         }
         else if (i.user.id === playerB.id && currentTurn === 'b') { // Player B
-          if (arr.indexOf(b) !== -1) { // Checks if column is full
-            arr[arr.indexOf(b)] = y;
-            updateBoard();
+          arr[arr.indexOf(b)] = y;
+          updateBoard();
 
-            if (checkWin(y)) {
+          if (checkWin(y)) {
 
-              const [winner] = await User.findOrCreate({ where: { id: await playerB.id } });
-              const [loser] = await User.findOrCreate({ where: { id: await playerA.id } });
-              await winner.increment('wins', { by: 1 });
-              await loser.increment('losses', { by: 1 });
+            const [winner] = await User.findOrCreate({ where: { id: await playerB.id } });
+            const [loser] = await User.findOrCreate({ where: { id: await playerA.id } });
+            await winner.increment('wins', { by: 1 });
+            await loser.increment('losses', { by: 1 });
 
-              await i.message.delete();
-              const end = await i.message.channel.send({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [] });
-              setTimeout(async () => {
-                await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [rematchRow] });
-                console.log(`[INFO] @${playerB.username} won Connect 4 (${winner.wins + 1} total points)`);
+            await i.message.delete();
+            const end = await i.message.channel.send({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [] });
+            setTimeout(async () => {
+              await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [rematchRow] });
+              console.log(`[INFO] @${playerB.username} won Connect 4 (${winner.wins + 1} total points)`);
 
-                // Rematch logic
-                try {
-                  const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
-                  if (rematchConf.customId === 'rematch') {
-                    console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
-                    await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
-                  }
+              // Rematch logic
+              try {
+                const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
+                if (rematchConf.customId === 'rematch') {
+                  console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
+                  await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}\n-# Rematch requested!`, components: [] });
+                  await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
                 }
-                catch (e) {
-                  console.log('[INFO] No response recieved; rematch cancelled');
-                  await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
-                  return;
-                }
-
+              }
+              catch (e) {
+                console.log('[INFO] No response recieved; rematch cancelled');
+                await end.edit({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
                 return;
-              }, 500);
-            }
-            else if (checkDraw) {
-              await i.message.delete();
-              const end = await i.message.channel.send({ content: `**Draw!**\n${boardString}`, components: [] });
-              setTimeout(async () => {
-                await end.edit({ content: `**Draw!**\n${boardString}`, components: [rematchRow] });
-                console.log('[INFO] Connect 4 ended in a draw');
+              }
 
-                // Rematch logic
-                try {
-                  const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
-                  if (rematchConf.customId === 'rematch') {
-                    console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
-                    await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch requested!`, components: [] });
-                    await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
-                  }
-                }
-                catch (e) {
-                  console.log('[INFO] No response recieved; rematch cancelled');
-                  await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
-                  return;
-                }
+              return;
+            }, 500);
+          }
+          else if (checkDraw) {
+            await i.message.delete();
+            const end = await i.message.channel.send({ content: `**Draw!**\n${boardString}`, components: [] });
+            setTimeout(async () => {
+              await end.edit({ content: `**Draw!**\n${boardString}`, components: [rematchRow] });
+              console.log('[INFO] Connect 4 ended in a draw');
 
+              // Rematch logic
+              try {
+                const rematchConf = await end.awaitMessageComponent({ filter: rematchFilter, time: 60_000 });
+                if (rematchConf.customId === 'rematch') {
+                  console.log(`[INFO] @${rematchConf.user.username} initiated a rematch`);
+                  await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch requested!`, components: [] });
+                  await confirmGame(interaction, rematchConf.user, rematchConf.user === playerA ? playerB : playerA);
+                }
+              }
+              catch (e) {
+                console.log('[INFO] No response recieved; rematch cancelled');
+                await end.edit({ content: `**Draw!**\n${boardString}\n-# Rematch time expired.`, components: [rematchRowDis] });
                 return;
-              }, 500);
-            }
-            else {
-              currentTurn = 'a';
-              await i.deferUpdate();
-              await i.message.edit({ content: `${r} <@${playerA.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerB.id).nickname || playerB.displayName}'s last move was in column ${lastMove}`, components: createButtonRows() });
-              console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
-            }
+              }
+
+              return;
+            }, 500);
           }
           else {
-            i.reply({ content: 'Select a different column!', ephemeral: true });
+            currentTurn = 'a';
+            await i.deferUpdate();
+            await i.message.edit({ content: `${r} <@${playerA.id}>'s turn.\n${boardString}\n-# ${i.guild.members.cache.get(playerB.id).nickname || playerB.displayName}'s last move was in column ${lastMove}`, components: createButtonRows() });
+            console.log(`[INFO] Updated Connect 4 board: @${i.user.username} selected column ${name}`);
           }
         }
         else if (i.user.id === playerA.id || i.user.id === playerB.id) {
