@@ -16,6 +16,7 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ],
 });
+client.embedColour = '#F47BA2';
 
 // Command handler
 client.commands = new Collection();

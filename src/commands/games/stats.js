@@ -21,8 +21,11 @@ module.exports = {
       const [user] = await User.findOrCreate({ where: { id: await interaction.user.id } });
 
       const embed = new EmbedBuilder()
-        .setAuthor({ name: `${guildMember.nickname || interaction.user.displayName}'s Connect 4 stats`, iconURL: guildMember.displayAvatarURL() })
-        .setColor('#F0CD40')
+        .setAuthor({
+          name: `${guildMember.nickname || interaction.user.displayName}'s Connect 4 stats`,
+          iconURL: guildMember.displayAvatarURL(),
+        })
+        .setColor(interaction.client.embedColour)
         .addFields(
           { name: 'Wins', value: user.wins.toString(), inline: true },
           { name: 'Losses', value: user.losses.toString(), inline: true },

@@ -285,7 +285,7 @@ module.exports = {
 
       // Complete interaction
       const reply = new EmbedBuilder()
-        .setColor('#F0CD40')
+        .setColor(client.embedColour)
         .setAuthor({ name: 'The word of the day is:' })
         .setTitle(word)
         .setURL(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`)

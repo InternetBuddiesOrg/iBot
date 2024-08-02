@@ -10,19 +10,16 @@ module.exports = {
 
   async execute(interaction) {
     const message = await interaction.deferReply({ fetchReply: true });
+
+    const guildMember = interaction.guild.members.cache.get(interaction.user.id);
     const embed = new EmbedBuilder()
-      .setColor('#F0CD40')
+      .setColor(interaction.client.embedColour)
       .setTitle('Pong!')
       .setAuthor({
-        name: interaction.user.username,
-        iconURL: interaction.user.displayAvatarURL(),
+        name: guildMember.nickname || interaction.user.displayName,
+        iconURL: guildMember.displayAvatarURL(),
       })
       .addFields([
-        {
-          name: 'API Latency',
-          value: `${interaction.client.ws.ping} ms`,
-          inline: true,
-        },
         {
           name: 'Client Ping',
           value: `${message.createdTimestamp - interaction.createdTimestamp} ms`,
