@@ -1,20 +1,26 @@
 ![iBot Banner: iBot by ProtoZappy](./images/iBotBanner.png)
 Developed with [discord.js](https://discord.js.org) for a personal Discord server
 
-### Features
+---
 
-- [x] Daily terms via Word of the Day
+## Features
+
+- [x] Daily terms via Term of the Day
 - [x] Customisable status
-- [x] Connect 4 game
-- [ ] Extreme(!!!!!!!!!) Connect 4 game
-- [ ] Wheel of Fortune game
-- [ ] Tic Tac Toe game
-- [ ] Hit and Blow game
-- [ ] Currency and gambling
-- [ ] Leveling
-- [ ] Fortune cookies
 - [ ] Reminders
-
+- [ ] Leveling
+- [ ] Currency and gambling
+- [ ] Fortune cookies
+### Fun and games
+- [x] Connect 4
+- [ ] Extreme(!!!!!!!!!) Connect 4
+- [ ] Codebreaker
+- [ ] Gyattzee
+- [ ] Tic Tac Toe
+- [ ] Wheel of Fortune
+- [ ] Texas Hold 'em
+- [ ] Roulette
+- [ ] Bingo
 
 ---
 

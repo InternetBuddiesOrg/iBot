@@ -26,7 +26,7 @@ module.exports = {
     }).then(users => {
       console.log('[INFO] User database:');
       users.forEach(user => {
-        console.log(`[INFO] ${user.id}: wins: ${user.wins}, ${user.losses} losses`);
+        console.log(`[INFO] ${user.id}: wins: ${user.wins}, losses: ${user.losses}`);
       });
     }).catch(e => {
       console.error(`[ERR!] ${e}`);

@@ -20,7 +20,7 @@ module.exports = {
         const feed = await parser.parseURL('https://en.wiktionary.org/w/api.php?action=featuredfeed&feed=wotd');
 
         const items = [];
-        const fileName = 'wotdLatest.json';
+        const fileName = 'totdLatest.json';
         if (fs.existsSync(fileName)) {
           fs.rmSync(fileName);
         }
@@ -32,7 +32,7 @@ module.exports = {
         fs.writeFileSync(`${iBotDir}/src/events/${fileName}`, JSON.stringify(items));
       }
       await parse();
-      const wotdJson = require('./wotdLatest.json');
+      const totdJson = require('./totdLatest.json');
 
       async function fetchHTML(url) {
         const { data } = await axios.get(url);
@@ -45,22 +45,22 @@ module.exports = {
         }).join(' ');
       }
 
-      // WoTD variables
-      const wotd = wotdJson[9].content.split('"')[17]; // word of the day
-      const word = toTitleCase(wotd); // Word Of The Day
-      let rss = wotdJson[9].content.split(/<i>(n|proper n|plural n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|contraction|symbol|letter)<\/i>/g);
+      // ToTD variables
+      const totd = totdJson[9].content.split('"')[17]; // term of the day
+      const term = toTitleCase(totd); // Term Of The Day
+      let rss = totdJson[9].content.split(/<i>(n|proper n|plural n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|contraction|symbol|letter)<\/i>/g);
       rss = rss.map(str => str.replace(/<[^>]+>/gim, '').trim());
       const full = rss.map(str => str.replace(/\n/g, ''));
       const snippet = [];
       const definitions = [];
       let footer = '';
-      const contentSnippet = wotdJson[9].contentSnippet.split('\n');
+      const contentSnippet = totdJson[9].contentSnippet.split('\n');
       let footerSnippet;
-      if (wotdJson[9].contentSnippet.split('\n\n ').length === 1) {
+      if (totdJson[9].contentSnippet.split('\n\n ').length === 1) {
         footerSnippet = '';
       }
       else {
-        footerSnippet = wotdJson[9].contentSnippet.split('\n\n ');
+        footerSnippet = totdJson[9].contentSnippet.split('\n\n ');
       }
 
       contentSnippet.forEach(el => {
@@ -77,9 +77,9 @@ module.exports = {
           snippet.push(el);
         }
       });
-      let foundWotd = false;
+      let foundTotd = false;
       for (let i = 0; i < snippet.length; i++) {
-        if (snippet[i].startsWith(wotd)) {
+        if (snippet[i].startsWith(totd)) {
           const match = snippet[i].match(/\(([^)]+)\)/);
           if (match) {
             definitions.push([`(*${match[1]}*)`]);
@@ -87,9 +87,9 @@ module.exports = {
           else {
             definitions.push(['']);
           }
-          foundWotd = true;
+          foundTotd = true;
         }
-        else if (foundWotd) {
+        else if (foundTotd) {
           definitions[definitions.length - 1].push(snippet[i]);
         }
       }
@@ -114,7 +114,7 @@ module.exports = {
       // Set pronunciation
       // IPA
       async function ipaMulti1() {
-        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${totd.replace(/ /g, '_')}`);
         let ipaString = '';
         $('div[lang="en"] ul li ul li span.IPA').filter(function() {
           // eslint-disable-next-line quotes
@@ -127,7 +127,7 @@ module.exports = {
         return ipaString.trimEnd();
       }
       async function ipaMulti2() {
-        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${totd.replace(/ /g, '_')}`);
         let ipaString = '';
         $('div[lang="en"] ul li span.IPA').filter(function() {
           // eslint-disable-next-line quotes
@@ -139,7 +139,7 @@ module.exports = {
         return ipaString.trimEnd().replace(/,$/, '');
       }
       async function ipaSingle() {
-        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${totd.replace(/ /g, '_')}`);
         let ipaString = '';
         $('div[lang="en"] ul li span.IPA').filter(function() {
           // eslint-disable-next-line quotes
@@ -167,7 +167,7 @@ module.exports = {
 
       // Hyphenation
       async function hyp() {
-        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}`);
+        const $ = await fetchHTML(`https://en.wiktionary.org/wiki/${totd.replace(/ /g, '_')}`);
         let hyphenString = '';
         $('div[lang="en"] ul li span.Latn').filter(function() {
           return $(this).parent('li').text().includes('Hyphenation: ');
@@ -240,7 +240,7 @@ module.exports = {
               sense = sense.replace('(', '(*').replace(')', '*)');
             }
             if (sense.endsWith('[...]')) {
-              sense = sense.replace('[...]', `[[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English)`);
+              sense = sense.replace('[...]', `[[...]](https://en.wiktionary.org/wiki/${totd.replace(/ /g, '_')}#English)`);
             }
 
             const partOfSpeech = full[ind];
@@ -279,16 +279,16 @@ module.exports = {
         if (obj.value.length > 1024) {
           const truncStr = obj.value.substring(0, 1024);
           const lastNewlineInd = truncStr.lastIndexOf('\n');
-          obj.value = `${obj.value.substring(0, lastNewlineInd)} [[...]](https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English)`;
+          obj.value = `${obj.value.substring(0, lastNewlineInd)} [[...]](https://en.wiktionary.org/wiki/${totd.replace(/ /g, '_')}#English)`;
         }
       });
 
       // Complete interaction
       const reply = new EmbedBuilder()
         .setColor(client.embedColour)
-        .setAuthor({ name: 'The word of the day is:' })
-        .setTitle(word)
-        .setURL(`https://en.wiktionary.org/wiki/${wotd.replace(/ /g, '_')}#English`)
+        .setAuthor({ name: 'The term of the day is:' })
+        .setTitle(term)
+        .setURL(`https://en.wiktionary.org/wiki/${totd.replace(/ /g, '_')}#English`)
         .setDescription(`${hyphen}\n${ipa}`)
         .addFields(fields)
         .setTimestamp();
@@ -298,7 +298,7 @@ module.exports = {
 
       // const trendingChannel = client.channels.cache.get('1099564476698726401'); // #development
       const trendingChannel = client.channels.cache.get('1149549485928747120'); // #trending
-      console.log('[EVNT] Word of the day message sent');
+      console.log('[EVNT] Term of the day message sent');
       await trendingChannel.send({ embeds: [reply] });
     });
   },
