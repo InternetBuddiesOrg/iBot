@@ -12,12 +12,14 @@ module.exports = {
     .setName('connect-four')
     .setDescription('Stupid Dumb Baby Game')
     .addUserOption(option =>
-      option.setName('challenge')
+      option
+        .setName('opponent')
         .setDescription('Select your opponent')
-        .setRequired(true)),
+        .setRequired(true),
+    ),
 
   async execute(interaction) {
-    const opponent = interaction.options.getUser('challenge');
+    const opponent = interaction.options.getUser('opponent');
     const initiator = interaction.user;
 
     if (opponent.id === initiator.id) {
@@ -388,29 +390,29 @@ async function startGame(interaction, playerA, playerB) {
       };
 
       switch (selection) {
-      case 'c1':
-        await columnSelect(c1, '1');
-        break;
-      case 'c2':
-        await columnSelect(c2, '2');
-        break;
-      case 'c3':
-        await columnSelect(c3, '3');
-        break;
-      case 'c4':
-        await columnSelect(c4, '4');
-        break;
-      case 'c5':
-        await columnSelect(c5, '5');
-        break;
-      case 'c6':
-        await columnSelect(c6, '6');
-        break;
-      case 'c7':
-        await columnSelect(c7, '7');
-        break;
-      default:
-        break;
+        case 'c1':
+          await columnSelect(c1, '1');
+          break;
+        case 'c2':
+          await columnSelect(c2, '2');
+          break;
+        case 'c3':
+          await columnSelect(c3, '3');
+          break;
+        case 'c4':
+          await columnSelect(c4, '4');
+          break;
+        case 'c5':
+          await columnSelect(c5, '5');
+          break;
+        case 'c6':
+          await columnSelect(c6, '6');
+          break;
+        case 'c7':
+          await columnSelect(c7, '7');
+          break;
+        default:
+          break;
       }
     });
   };

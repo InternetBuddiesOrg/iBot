@@ -21,9 +21,14 @@ module.exports = {
       })
       .addFields([
         {
+          name: 'API Latency',
+          value: `${interaction.client.ws.ping} ms`,
+        },
+        {
           name: 'Client Ping',
           value: `${message.createdTimestamp - interaction.createdTimestamp} ms`,
         },
+        // For later: make these inline if possible
       ])
       .setTimestamp();
     await interaction.editReply({ embeds: [embed] });

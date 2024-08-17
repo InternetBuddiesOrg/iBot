@@ -11,7 +11,8 @@ module.exports = {
     .setName('status')
     .setDescription('Sets the bot\'s status to whatever your heart desires')
     .addStringOption(option =>
-      option.setName('status')
+      option
+        .setName('status')
         .setDescription('The bot\'s online status')
         .setRequired(true)
         .addChoices(
@@ -21,7 +22,8 @@ module.exports = {
         ),
     )
     .addStringOption(option =>
-      option.setName('activity')
+      option
+        .setName('activity')
         .setDescription('The bot\'s activity type')
         .setRequired(true)
         .addChoices(
@@ -34,7 +36,8 @@ module.exports = {
         ),
     )
     .addStringOption(option =>
-      option.setName('value')
+      option
+        .setName('value')
         .setDescription('The bot\'s activity status')
         .setRequired(true),
     ),
@@ -53,49 +56,49 @@ module.exports = {
     let message;
 
     switch (status) {
-    case 'online':
-      interaction.client.user.setStatus(PresenceUpdateStatus.Online);
-      icon = '<:online:1266485857653620836>';
-      break;
-    case 'idle':
-      interaction.client.user.setStatus(PresenceUpdateStatus.Idle);
-      icon = '<:idle:1266485882261733506>';
-      break;
-    case 'dnd':
-      interaction.client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
-      icon = '<:dnd:1266485896866172958>';
-      break;
+      case 'online':
+        interaction.client.user.setStatus(PresenceUpdateStatus.Online);
+        icon = '<:online:1266485857653620836>';
+        break;
+      case 'idle':
+        interaction.client.user.setStatus(PresenceUpdateStatus.Idle);
+        icon = '<:idle:1266485882261733506>';
+        break;
+      case 'dnd':
+        interaction.client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
+        icon = '<:dnd:1266485896866172958>';
+        break;
     }
 
     switch (activity) {
-    case 'competing':
-      interaction.client.user.setActivity(value, { type: ActivityType.Competing });
-      message = 'Competing in ';
-      break;
-    case 'custom':
-      interaction.client.user.setActivity(value, { type: ActivityType.Custom });
-      message = '';
-      break;
-    case 'listening':
-      interaction.client.user.setActivity(value, { type: ActivityType.Listening });
-      message = 'Listening to ';
-      break;
-    case 'playing':
-      interaction.client.user.setActivity(value, { type: ActivityType.Playing });
-      message = 'Playing ';
-      break;
-    case 'streaming':
-      interaction.client.user.setActivity(value, {
-        type: ActivityType.Streaming,
-        url: 'https://www.twitch.tv/protozappy',
-      });
-      icon = '<:streaming:1266485909688287303>';
-      message = 'Streaming ';
-      break;
-    case 'watching':
-      interaction.client.user.setActivity(value, { type: ActivityType.Watching });
-      message = 'Watching ';
-      break;
+      case 'competing':
+        interaction.client.user.setActivity(value, { type: ActivityType.Competing });
+        message = 'Competing in ';
+        break;
+      case 'custom':
+        interaction.client.user.setActivity(value, { type: ActivityType.Custom });
+        message = '';
+        break;
+      case 'listening':
+        interaction.client.user.setActivity(value, { type: ActivityType.Listening });
+        message = 'Listening to ';
+        break;
+      case 'playing':
+        interaction.client.user.setActivity(value, { type: ActivityType.Playing });
+        message = 'Playing ';
+        break;
+      case 'streaming':
+        interaction.client.user.setActivity(value, {
+          type: ActivityType.Streaming,
+          url: 'https://www.twitch.tv/protozappy',
+        });
+        icon = '<:streaming:1266485909688287303>';
+        message = 'Streaming ';
+        break;
+      case 'watching':
+        interaction.client.user.setActivity(value, { type: ActivityType.Watching });
+        message = 'Watching ';
+        break;
     }
 
     const devChannel = interaction.client.channels.cache.get('1099564476698726401');

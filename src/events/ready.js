@@ -33,49 +33,49 @@ module.exports = {
     });
 
     switch (data.botStatus.status) {
-    case 'online':
-      client.user.setStatus(PresenceUpdateStatus.Online);
-      icon = '<:online:1266485857653620836>';
-      break;
-    case 'idle':
-      client.user.setStatus(PresenceUpdateStatus.Idle);
-      icon = '<:idle:1266485882261733506>';
-      break;
-    case 'dnd':
-      client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
-      icon = '<:dnd:1266485896866172958>';
-      break;
+      case 'online':
+        client.user.setStatus(PresenceUpdateStatus.Online);
+        icon = '<:online:1266485857653620836>';
+        break;
+      case 'idle':
+        client.user.setStatus(PresenceUpdateStatus.Idle);
+        icon = '<:idle:1266485882261733506>';
+        break;
+      case 'dnd':
+        client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
+        icon = '<:dnd:1266485896866172958>';
+        break;
     }
 
     switch (data.botStatus.activity) {
-    case 'competing':
-      client.user.setActivity(data.botStatus.value, { type: ActivityType.Competing });
-      message = 'Competing in ';
-      break;
-    case 'custom':
-      client.user.setActivity(data.botStatus.value, { type: ActivityType.Custom });
-      message = '';
-      break;
-    case 'listening':
-      client.user.setActivity(data.botStatus.value, { type: ActivityType.Listening });
-      message = 'Listening to ';
-      break;
-    case 'playing':
-      client.user.setActivity(data.botStatus.value, { type: ActivityType.Playing });
-      message = 'Playing ';
-      break;
-    case 'streaming':
-      client.user.setActivity(data.botStatus.value, {
-        type: ActivityType.Streaming,
-        url: 'https://www.twitch.tv/protozappy',
-      });
-      icon = '<:streaming:1266485909688287303>';
-      message = 'Streaming ';
-      break;
-    case 'watching':
-      client.user.setActivity(data.botStatus.value, { type: ActivityType.Watching });
-      message = 'Watching ';
-      break;
+      case 'competing':
+        client.user.setActivity(data.botStatus.value, { type: ActivityType.Competing });
+        message = 'Competing in ';
+        break;
+      case 'custom':
+        client.user.setActivity(data.botStatus.value, { type: ActivityType.Custom });
+        message = '';
+        break;
+      case 'listening':
+        client.user.setActivity(data.botStatus.value, { type: ActivityType.Listening });
+        message = 'Listening to ';
+        break;
+      case 'playing':
+        client.user.setActivity(data.botStatus.value, { type: ActivityType.Playing });
+        message = 'Playing ';
+        break;
+      case 'streaming':
+        client.user.setActivity(data.botStatus.value, {
+          type: ActivityType.Streaming,
+          url: 'https://www.twitch.tv/protozappy',
+        });
+        icon = '<:streaming:1266485909688287303>';
+        message = 'Streaming ';
+        break;
+      case 'watching':
+        client.user.setActivity(data.botStatus.value, { type: ActivityType.Watching });
+        message = 'Watching ';
+        break;
     }
     console.log(`[EVNT] Set the status to: (${data.botStatus.status}) ${message}${data.botStatus.value}`);
 
