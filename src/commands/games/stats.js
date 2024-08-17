@@ -15,7 +15,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    if (interaction.options.getSubcommand() === 'connect-four') {
+    if (interaction.options.getSubcommand() === 'connect-4') {
       const guildMember = interaction.guild.members.cache.get(interaction.user.id);
       await interaction.deferReply();
       const [user] = await User.findOrCreate({ where: { id: await interaction.user.id } });

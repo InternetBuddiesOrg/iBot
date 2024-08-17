@@ -9,7 +9,7 @@ const User = require('../../sql/models/user');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('connect-four')
+    .setName('connect-4')
     .setDescription('Stupid Dumb Baby Game')
     .addUserOption(option =>
       option
