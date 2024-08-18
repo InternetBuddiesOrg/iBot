@@ -7,20 +7,23 @@ Developed with [discord.js](https://discord.js.org) for a personal Discord serve
 
 - [x] Daily terms via Term of the Day
 - [x] Customisable status
+- [x] Magic 8 ball
+- [x] Message echoing
 - [ ] Reminders
 - [ ] Leveling
 - [ ] Currency and gambling
 - [ ] Fortune cookies
 ### Fun and games
 - [x] Connect 4
+- [ ] Gyattzee
 - [ ] Extreme(!!!!!!!!!) Connect 4
 - [ ] Codebreaker
-- [ ] Gyattzee
 - [ ] Tic Tac Toe
 - [ ] Wheel of Fortune
 - [ ] Texas Hold 'em
 - [ ] Roulette
 - [ ] Bingo
+- [ ] Monopoly
 
 ---
 
