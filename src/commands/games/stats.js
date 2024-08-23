@@ -10,7 +10,7 @@ module.exports = {
     .setDescription('Lists your game stats')
     .addSubcommand(sub =>
       sub
-        .setName('connect-four')
+        .setName('connect-4')
         .setDescription('Lists your Connect 4 stats'),
     ),
 
