@@ -129,7 +129,7 @@ module.exports = {
 
       const generateScorecardDescription = () => {
         totals = {
-          upper: scores.aces + scores.deuces + scores.threes + scores.fours + scores.fives + scores.sixes + scores.bonus,
+          upper: scores.aces + scores.deuces + scores.threes + scores.fours + scores.fives + scores.sixes,
           lower: scores.choice + scores.toak + scores.foak + scores.fh + scores.ss + scores.ls + scores.y,
           final: scores.choice + scores.toak + scores.foak + scores.fh + scores.ss + scores.ls + scores.y + scores.aces + scores.deuces + scores.threes + scores.fours + scores.fives + scores.sixes + scores.bonus,
         };
@@ -160,11 +160,11 @@ module.exports = {
                `\`          Fives:\` ${scores.fives !== null ? scores.fives : ''}\n` +
                `\`          Sixes:\` ${scores.sixes !== null ? scores.sixes : ''}\n` +
                `\`(${totals.upper.toString().padStart(2, '0')}/63)   Bonus:\` ${scores.bonus !== null ? scores.bonus : ''}\n` +
-               `**\`    UPPER TOTAL:\` ${totals.upper}**\n\n` +
+               `**\`    UPPER TOTAL:\` ${totals.upper + scores.bonus}**\n\n` +
 
                `\`         Choice:\` ${scores.choice !== null ? scores.choice : ''}\n` +
                `\`Three of a kind:\` ${scores.toak !== null ? scores.toak : ''}\n` +
-               `\` Four of a kind:\` ${scores.foak !== null ? scores.toak : ''}\n` +
+               `\` Four of a kind:\` ${scores.foak !== null ? scores.foak : ''}\n` +
                `\`     Full House:\` ${scores.fh !== null ? scores.fh : ''}\n` +
                `\` Small Straight:\` ${scores.ss !== null ? scores.ss : ''}\n` +
                `\` Large Straight:\` ${scores.ls !== null ? scores.ls : ''}\n` +
@@ -312,10 +312,9 @@ module.exports = {
 
         Object.keys(rollValues).forEach(key => rollValues[key]());
         const countValues = Object.values(counts);
-        // ! ! ! ! FOUR OF A KIND RETURNS "NULL" ON OCCASION.
         rollValueChoice = diceValues.reduce((acc, num) => acc + num, 0);
-        rollValueTOAK = countValues.some(count => count >= 3) ? rollValueChoice : 0;
-        rollValueFOAK = countValues.some(count => count >= 4) ? rollValueChoice : 0;
+        rollValueTOAK = countValues.some(count => count >= 3) ? diceValues.reduce((acc, num) => acc + num, 0) : 0;
+        rollValueFOAK = countValues.some(count => count >= 4) ? diceValues.reduce((acc, num) => acc + num, 0) : 0;
         rollValueY = countValues.some(count => count === 5) ? 50 : 0;
 
         const checkFullHouse = () => {
