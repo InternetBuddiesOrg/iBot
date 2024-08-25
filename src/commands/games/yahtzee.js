@@ -70,11 +70,11 @@ module.exports = {
       '<:d6s:1274162559536336917>',
     ];
     const rollingEmojis = [
-      '<a:d1r:1274513877706604554>',
-      '<a:d2r:1274513892000923729>',
-      '<a:d3r:1274513903120023643>',
-      '<a:d4r:1274513911110041695>',
-      '<a:d5r:1274513923143499779>',
+      '<a:d1rwhite:1274513877706604554>',
+      '<a:d2rwhite:1277050866339414118>',
+      '<a:d3rwhite:1277050904788471901>',
+      '<a:d4rwhite:1277050916154904687>',
+      '<a:d5rwhite:1277050927051964507>',
     ];
 
     const rollingDice = `# **|${rollingEmojis[0]}|${rollingEmojis[1]}|${rollingEmojis[2]}|${rollingEmojis[3]}|${rollingEmojis[4]}|**`;
@@ -439,11 +439,14 @@ module.exports = {
         }
       });
 
+      let endMsg;
       rollMsgRollButtonCollector.on('end', async () => {
-        await rollMsg.edit({
-          content: '-# This game has expired',
-          components: [],
-        });
+        if (!endMsg) {
+          await rollMsg.edit({
+            content: '-# This game has expired',
+            components: [],
+          });
+        }
       });
 
       // * Collector for Buttons 1 - 5
@@ -529,7 +532,7 @@ module.exports = {
         await interaction.editReply({ embeds: [scorecardEmbed] });
 
         if (turnCount === 13) {
-          await i.update({
+          endMsg = await i.update({
             content: `**You finished with __${totals.final}__ points!**`,
             components: [],
           });
