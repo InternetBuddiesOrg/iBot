@@ -24,9 +24,15 @@ module.exports = {
     User.sync().then(() => {
       return User.findAll();
     }).then(users => {
-      console.log('[INFO] User database:');
-      users.forEach(user => {
-        console.log(`[INFO] ${user.id}: wins: ${user.wins}, losses: ${user.losses}`);
+      console.log('[INFO] User table:');
+      users.forEach(async user => {
+        const userObj = await client.users.fetch(user.id);
+        console.log(`[INFO] @${userObj.username} (${user.id})`);
+        console.log(`     |-c4Wins: ${user.c4Wins}`);
+        console.log(`     |-c4Losses: ${user.c4Losses}`);
+        console.log(`     |-yahtzeeMultiWins: ${user.yahtzeeMultiWins}`);
+        console.log(`     |-yahtzeeHighScore: ${user.yahtzeeHighScore}`);
+        console.log(`     |-yahtzeeTotalScore: ${user.yahtzeeTotalScore}`);
       });
     }).catch(e => {
       console.error(`[ERR!] ${e}`);

@@ -6,12 +6,27 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING,
     primaryKey: true,
   },
-  wins: {
+  c4Wins: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     allowNull: false,
   },
-  losses: {
+  c4Losses: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+  },
+  yahtzeeMultiWins: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+  },
+  yahtzeeHighScore: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+  },
+  yahtzeeTotalScore: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     allowNull: false,

@@ -8,6 +8,7 @@ const {
   StringSelectMenuOptionBuilder,
   ComponentType,
 } = require('discord.js');
+const User = require('../../sql/models/user');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -532,6 +533,12 @@ module.exports = {
         await interaction.editReply({ embeds: [scorecardEmbed] });
 
         if (turnCount === 13) {
+          const [player] = await User.findOrCreate({ where: { id: await interaction.user.id } });
+          await player.increment('yahtzeeTotalScore', { by: totals.final });
+          if (player.yahtzeeHighScore < totals.final) {
+            await player.update({ yahtzeeHighScore: totals.final });
+          }
+
           endMsg = await i.update({
             content: `**You finished with __${totals.final}__ points!**`,
             components: [],

@@ -256,8 +256,8 @@ async function startGame(interaction, playerA, playerB) {
 
             const [winner] = await User.findOrCreate({ where: { id: await playerA.id } });
             const [loser] = await User.findOrCreate({ where: { id: await playerB.id } });
-            await winner.increment('wins', { by: 1 });
-            await loser.increment('losses', { by: 1 });
+            await winner.increment('c4Wins', { by: 1 });
+            await loser.increment('c4Losses', { by: 1 });
 
             const end = await i.message.channel.send({ content: `${r} **<@${playerA.id}> has won!**\n${boardString}`, components: [] });
             setTimeout(async () => {
@@ -322,8 +322,8 @@ async function startGame(interaction, playerA, playerB) {
 
             const [winner] = await User.findOrCreate({ where: { id: await playerB.id } });
             const [loser] = await User.findOrCreate({ where: { id: await playerA.id } });
-            await winner.increment('wins', { by: 1 });
-            await loser.increment('losses', { by: 1 });
+            await winner.increment('c4Wins', { by: 1 });
+            await loser.increment('c4Losses', { by: 1 });
 
             await i.message.delete();
             const end = await i.message.channel.send({ content: `${y} **<@${playerB.id}> has won!**\n${boardString}`, components: [] });
