@@ -11,24 +11,35 @@ module.exports = {
     .addSubcommand(sub =>
       sub
         .setName('connect-4')
-        .setDescription('Lists your Connect 4 stats'),
+        .setDescription('Lists your Connect 4 stats')
+        .addUserOption(option =>
+          option
+            .setName('user')
+            .setDescription('View a specific user\'s stats (optional)'),
+        ),
     )
     .addSubcommand(sub =>
       sub
         .setName('gyattzee')
-        .setDescription('Lists your Gyattzee stats'),
+        .setDescription('Lists your Gyattzee stats')
+        .addUserOption(option =>
+          option
+            .setName('user')
+            .setDescription('View a specific user\'s stats (optional)'),
+        ),
     ),
 
   async execute(interaction) {
-    const guildMember = interaction.guild.members.cache.get(interaction.user.id);
-    const [user] = await User.findOrCreate({ where: { id: await interaction.user.id } });
+    const targetUser = interaction.options.getUser('user') || interaction.user;
+    const guildMember = interaction.guild.members.cache.get(targetUser.id);
+    const [user] = await User.findOrCreate({ where: { id: await targetUser.id } });
 
     if (interaction.options.getSubcommand() === 'connect-4') {
       await interaction.deferReply();
 
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: `${guildMember.nickname || interaction.user.displayName}'s Connect 4 stats`,
+          name: `${guildMember.nickname || targetUser.displayName}'s Connect 4 stats`,
           iconURL: guildMember.displayAvatarURL(),
         })
         .setColor(interaction.client.embedColour)
@@ -45,7 +56,7 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: `${guildMember.nickname || interaction.user.displayName}'s Gyattzee stats`,
+          name: `${guildMember.nickname || targetUser.displayName}'s Gyattzee stats`,
           iconURL: guildMember.displayAvatarURL(),
         })
         .setColor(interaction.client.embedColour)
