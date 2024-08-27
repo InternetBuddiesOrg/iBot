@@ -52,32 +52,261 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    // Dice emoji arrays
-    const diceEmojis = [
-      '<:d1:1273785081860980747>',
-      '<:d2:1273785008292630570>',
-      '<:d3:1273786004972638238>',
-      '<:d4:1273785100143689799>',
-      '<:d5:1273785115406766110>',
-      '<:d6:1273785062441226331>',
-    ];
+    const guildMember = interaction.guild.members.cache.get(interaction.user.id);
+    //* Dice emoji arrays
+    let diceEmojis = [];
     // eslint-disable-next-line no-unused-vars
-    const selectedEmojis = [
-      '<:d1s:1274162501013082225>',
-      '<:d2s:1274162513566498877>',
-      '<:d3s:1274162525788700762>',
-      '<:d4s:1274162537289617489>',
-      '<:d5s:1274162548270170162>',
-      '<:d6s:1274162559536336917>',
-    ];
-    const rollingEmojis = [
-      '<a:d1rwhite:1274513877706604554>',
-      '<a:d2rwhite:1277050866339414118>',
-      '<a:d3rwhite:1277050904788471901>',
-      '<a:d4rwhite:1277050916154904687>',
-      '<a:d5rwhite:1277050927051964507>',
-    ];
-
+    let selectedEmojis = [];
+    let rollingEmojis = [];
+    const whiteDice = {
+      normal: [
+        '<:d1:1273785081860980747>',
+        '<:d2:1273785008292630570>',
+        '<:d3:1273786004972638238>',
+        '<:d4:1273785100143689799>',
+        '<:d5:1273785115406766110>',
+        '<:d6:1273785062441226331>',
+      ],
+      selected: [
+        '<:d1s:1274162501013082225>',
+        '<:d2s:1274162513566498877>',
+        '<:d3s:1274162525788700762>',
+        '<:d4s:1274162537289617489>',
+        '<:d5s:1274162548270170162>',
+        '<:d6s:1274162559536336917>',
+      ],
+      rolling: [
+        '<a:d1rwhite:1277477959401345047>',
+        '<a:d2rwhite:1277478068096733205>',
+        '<a:d3rwhite:1277478086446944330>',
+        '<a:d4rwhite:1277478095732867072>',
+        '<a:d5rwhite:1277478104218079246>',
+      ],
+    };
+    const blackDice = {
+      normal: [
+        '<:d1black:1277050235054456916>',
+        '<:d2black:1277050394328957012>',
+        '<:d3black:1277050413354450984>',
+        '<:d4black:1277050437022777479>',
+        '<:d5black:1277050579671191664>',
+        '<:d6black:1277050600395378763>',
+      ],
+      selected: [
+        '<:d1sblack:1277050385554608158>',
+        '<:d2sblack:1277050403430600917>',
+        '<:d3sblack:1277050425056559104>',
+        '<:d4sblack:1277050569915240519>',
+        '<:d5sblack:1277050590127718462>',
+        '<:d6sblack:1277050610037948547>',
+      ],
+      rolling: [
+        '<a:d1rblack:1277478120462487634>',
+        '<a:d2rblack:1277478129958653982>',
+        '<a:d3rblack:1277478139630452766>',
+        '<a:d4rblack:1277478149810294875>',
+        '<a:d5rblack:1277478159436087347>',
+      ],
+    };
+    const redDice = {
+      normal: [
+        '<:d1red:1277480440604655647>',
+        '<:d2red:1277480453368053834>',
+        '<:d3red:1277480462218170438>',
+        '<:d4red:1277480470686334998>',
+        '<:d5red:1277480480178044999>',
+        '<:d6red:1277480489137078304>',
+      ],
+      selected: [
+        '<:d1sred:1277480860194705408>',
+        '<:d2sred:1277480868319068275>',
+        '<:d3sred:1277480880901984296>',
+        '<:d4sred:1277480891588808724>',
+        '<:d5sred:1277480901223256155>',
+        '<:d6sred:1277480910798852240>',
+      ],
+      rolling: [
+        '<a:d1rred:1277478376419889234>',
+        '<a:d2rred:1277478385504878682>',
+        '<a:d3rred:1277478394145275944>',
+        '<a:d4rred:1277478401392771114>',
+        '<a:d5rred:1277478409773256854>',
+      ],
+    };
+    const orangeDice = {
+      normal: [
+        '<:d1orange:1277480503431401525>',
+        '<:d2orange:1277480512918654976>',
+        '<:d3orange:1277480521609384049>',
+        '<:d4orange:1277480530069422143>',
+        '<:d5orange:1277480538453577728>',
+        '<:d6orange:1277480547819720734>',
+      ],
+      selected: [
+        '<:d1sorange:1277480921557110796>',
+        '<:d2sorange:1277480929228619798>',
+        '<:d3sorange:1277480938191720549>',
+        '<:d4sorange:1277480948438663312>',
+        '<:d5sorange:1277480961977880640>',
+        '<:d6sorange:1277480969766567976>',
+      ],
+      rolling: [
+        '<a:d1rorange:1277478332879077396>',
+        '<a:d2rorange:1277478341783457872>',
+        '<a:d3rorange:1277478349060571236>',
+        '<a:d4rorange:1277478359600857119>',
+        '<a:d5rorange:1277478367204999219>',
+      ],
+    };
+    const yellowDice = {
+      normal: [
+        '<:d1yellow:1277480556791332967>',
+        '<:d2yellow:1277480564819230805>',
+        '<:d3yellow:1277480574235447399>',
+        '<:d4yellow:1277480582686707723>',
+        '<:d5yellow:1277480590479724574>',
+        '<:d6yellow:1277480598209822750>',
+      ],
+      selected: [
+        '<:d1syellow:1277480976649420813>',
+        '<:d2syellow:1277480982731165809>',
+        '<:d3syellow:1277480988556922922>',
+        '<:d4syellow:1277480994009645178>',
+        '<:d5syellow:1277480999705513986>',
+        '<:d6syellow:1277481007011856470>',
+      ],
+      rolling: [
+        '<a:d1ryellow:1277478418065133700>',
+        '<a:d2ryellow:1277478426457931786>',
+        '<a:d3ryellow:1277478434444021760>',
+        '<a:d4ryellow:1277478443117707377>',
+        '<a:d5ryellow:1277478449900163124>',
+      ],
+    };
+    const blueDice = {
+      normal: [
+        '<:d1blue:1277480269879709737>',
+        '<:d2blue:1277480277844824170>',
+        '<:d3blue:1277480289001537537>',
+        '<:d4blue:1277480299520983160>',
+        '<:d5blue:1277480313240682547>',
+        '<:d6blue:1277480325227876496>',
+      ],
+      selected: [
+        '<:d1sblue:1277481056332812339>',
+        '<:d2sblue:1277481061688934461>',
+        '<:d3sblue:1277481066763911200>',
+        '<:d4sblue:1277481073676390532>',
+        '<:d5sblue:1277481082685620296>',
+        '<:d6sblue:1277481088435879978>',
+      ],
+      rolling: [
+        '<a:d1rblue:1278118610128076913>',
+        '<a:d2rblue:1278118619821244417>',
+        '<a:d3rblue:1278118627119464545>',
+        '<a:d4rblue:1278118634467754044>',
+        '<a:d5rblue:1278118641879089213>',
+      ],
+    };
+    const greenDice = {
+      normal: [
+        '<:d1green:1277480608066703401>',
+        '<:d2green:1277480617486974997>',
+        '<:d3green:1277480627397988432>',
+        '<:d4green:1277480634474037259>',
+        '<:d5green:1277480642250018846>',
+        '<:d6green:1277480651037212732>',
+      ],
+      selected: [
+        '<:d1sgreen:1277481015769563189>',
+        '<:d2sgreen:1277481022078062686>',
+        '<:d3sgreen:1277481027928854528>',
+        '<:d4sgreen:1277481033905737731>',
+        '<:d5sgreen:1277481041153757235>',
+        '<:d6sgreen:1277481047746940983>',
+      ],
+      rolling: [
+        '<a:d1rgreen:1278118649705791519>',
+        '<a:d2rgreen:1278118656643170386>',
+        '<a:d3rgreen:1278118662385172644>',
+        '<a:d4rgreen:1278118668559188051>',
+        '<a:d5rgreen:1278118676284969063>',
+      ],
+    };
+    const fuchsiaDice = {
+      normal: [
+        '<:d1fuchsia:1277480361429041162>',
+        '<:d2fuchsia:1277480372380368969>',
+        '<:d3fuchsia:1277480380190163076>',
+        '<:d4fuchsia:1277480390478663742>',
+        '<:d5fuchsia:1277480399060340746>',
+        '<:d6fuchsia:1277480410141687889>',
+      ],
+      selected: [
+        '<:d1sfuchsia:1277481096791064637>',
+        '<:d2sfuchsia:1277481102747107390>',
+        '<:d3sfuchsia:1277481108254101667>',
+        '<:d4sfuchsia:1277481113542987777>',
+        '<:d5sfuchsia:1277481119142383658>',
+        '<:d6sfuchsia:1277481126142939156>',
+      ],
+      rolling: [
+        '<a:d1rfuchsia:1277478235113787423>',
+        '<a:d2rfuchsia:1277478244811145256>',
+        '<a:d3rfuchsia:1277478254848114719>',
+        '<a:d4rfuchsia:1277478271327670292>',
+        '<a:d5rfuchsia:1277478281309851739>',
+      ],
+    };
+    const [player] = await User.findOrCreate({ where: { id: await interaction.user.id } });
+    switch (player.diceColour) {
+      case 'red':
+        diceEmojis = redDice.normal;
+        selectedEmojis = redDice.selected;
+        rollingEmojis = redDice.rolling;
+        break;
+      case 'orange':
+        diceEmojis = orangeDice.normal;
+        selectedEmojis = orangeDice.selected;
+        rollingEmojis = orangeDice.rolling;
+        break;
+      case 'yellow':
+        diceEmojis = yellowDice.normal;
+        selectedEmojis = yellowDice.selected;
+        rollingEmojis = yellowDice.rolling;
+        break;
+      case 'green':
+        diceEmojis = greenDice.normal;
+        selectedEmojis = greenDice.selected;
+        rollingEmojis = greenDice.rolling;
+        break;
+      case 'blue':
+        diceEmojis = blueDice.normal;
+        selectedEmojis = blueDice.selected;
+        rollingEmojis = blueDice.rolling;
+        break;
+      case 'fuchsia':
+        diceEmojis = fuchsiaDice.normal;
+        selectedEmojis = fuchsiaDice.selected;
+        rollingEmojis = fuchsiaDice.rolling;
+        break;
+      case 'black':
+        diceEmojis = blackDice.normal;
+        selectedEmojis = blackDice.selected;
+        rollingEmojis = blackDice.rolling;
+        break;
+      case 'white':
+        diceEmojis = whiteDice.normal;
+        selectedEmojis = whiteDice.selected;
+        rollingEmojis = whiteDice.rolling;
+        break;
+      default:
+        diceEmojis = whiteDice.normal;
+        // eslint-disable-next-line no-unused-vars
+        selectedEmojis = whiteDice.selected;
+        rollingEmojis = whiteDice.rolling;
+    }
+    // TODO: if user.id's emojis = <color> then set arrays to colored dice.
     const rollingDice = `# **|${rollingEmojis[0]}|${rollingEmojis[1]}|${rollingEmojis[2]}|${rollingEmojis[3]}|${rollingEmojis[4]}|**`;
 
     const availableScores = [
@@ -104,11 +333,11 @@ module.exports = {
       return rollingEmojis[number];
     }
 
-    // Solo Gyattzee:
+    // * Solo Gyattzee:
 
     if (interaction.options.getSubcommand() === 'solo') {
 
-      // * Scorecard
+      // Scorecard
       const scores = {
         aces: null,
         deuces: null,
@@ -127,13 +356,16 @@ module.exports = {
         y: null,
       };
       let totals = {};
-
-      const generateScorecardDescription = () => {
+      const updateTotals = () => {
         totals = {
           upper: scores.aces + scores.deuces + scores.threes + scores.fours + scores.fives + scores.sixes,
           lower: scores.choice + scores.toak + scores.foak + scores.fh + scores.ss + scores.ls + scores.y,
           final: scores.choice + scores.toak + scores.foak + scores.fh + scores.ss + scores.ls + scores.y + scores.aces + scores.deuces + scores.threes + scores.fours + scores.fives + scores.sixes + scores.bonus,
         };
+      };
+
+      const generateScorecardDescription = () => {
+        updateTotals();
 
         // Check bonus
         const bonusCheckArray = [ // template used to check which scores are still unplaced
@@ -152,6 +384,8 @@ module.exports = {
             scores.bonus = 0;
           }
         }
+
+        updateTotals();
 
         return '# __*Gyattzee!*__\n' +
                `\`           Aces:\` ${scores.aces !== null ? scores.aces : ''}\n` +
@@ -174,21 +408,19 @@ module.exports = {
 
                `## \`FINAL SCORE:\` ${totals.final}`;
       };
-      const guildMember = interaction.guild.members.cache.get(interaction.user.id);
       const scorecardEmbed = new EmbedBuilder()
         .setColor(interaction.client.embedColour)
         .setAuthor({
           name: `${guildMember.nickname || interaction.user.displayName}'s scorecard`,
           iconURL: guildMember.displayAvatarURL(),
         })
-        // TODO: use image manpulation for scorecard instead
         .setDescription(generateScorecardDescription());
 
       await interaction.reply({ embeds: [scorecardEmbed] });
 
       // --------------------------------------------------------------------------------------- //
 
-      // * Dice roll
+      // Dice roll
 
       // Create buttons
 
@@ -249,7 +481,7 @@ module.exports = {
       };
       let rerollRow = createRerollButton();
 
-      // * Score Menu -- @MrCologne + @Zaappy
+      // Score Menu -- @MrCologne + @Zaappy
 
       // Scoring Conditions (checks for rolls that can be scored e.g. fh, aces, y, etc.)
       // eslint-disable-next-line no-unused-vars
@@ -391,7 +623,7 @@ module.exports = {
       let saved = [];
 
 
-      // * Collector for 'Roll!' and 'Reroll' buttons
+      // Collector for 'Roll!' and 'Reroll' buttons
       rollMsgRollButtonCollector.on('collect', async i => {
         if (i.customId === 'roll') {
           rollCount++;
@@ -450,7 +682,7 @@ module.exports = {
         }
       });
 
-      // * Collector for Buttons 1 - 5
+      // Collector for Buttons 1 - 5
       const rollMsgSelectionButtonCollector = rollMsg.createMessageComponentCollector({ componentType: ComponentType.Button, filter: collectorFilter, time: 3_600_000 });
       rollMsgSelectionButtonCollector.on('collect', async i => {
         const updateRollMsg = async select => {
@@ -498,7 +730,7 @@ module.exports = {
             break;
         }
       });
-      // * Resets the previous round.
+      // Resets the previous round.
       const resetRound = () => {
         turnCount++;
         d1 = rollingEmojis[0],
@@ -512,7 +744,7 @@ module.exports = {
         selectionRow = createSelectionButtons();
       };
 
-      // * Collector for Score Menu
+      // Collector for Score Menu
       const rollMsgSelectCollector = rollMsg.createMessageComponentCollector({ componentType: ComponentType.StringSelect, filter: collectorFilter, time: 3_600_000 });
 
       rollMsgSelectCollector.on('collect', async i => {
@@ -533,7 +765,6 @@ module.exports = {
         await interaction.editReply({ embeds: [scorecardEmbed] });
 
         if (turnCount === 13) {
-          const [player] = await User.findOrCreate({ where: { id: await interaction.user.id } });
           await player.increment('yahtzeeTotalScore', { by: totals.final });
           if (player.yahtzeeHighScore < totals.final) {
             await player.update({ yahtzeeHighScore: totals.final });
@@ -557,25 +788,30 @@ module.exports = {
 
     // * Multiplayer Gyattzee:
 
-    // else if (interaction.options.getSubcommand() === 'multi') {
+    else if (interaction.options.getSubcommand() === 'multi') {
+      // const opponent1 = interaction.options.getUser('opponent-1');
+      // const opponent2 = interaction.options.getUser('opponent-2') ?? null;
+      // const opponent3 = interaction.options.getUser('opponent-3') ?? null;
+      // const opponent4 = interaction.options.getUser('opponent-4') ?? null;
+      // const opponent5 = interaction.options.getUser('opponent-5') ?? null;
 
-    //   // WIP & nae nae
+      // // ? probs wanna do testing with just a two player game for simplicity
+      // // TODO: create confirmation message where all players accept the game
+      // // TODO: uhhhhh idk my brain's melted rn ig ill come back to this like tomorrow
 
-    //   const opponent1 = interaction.options.getUser('opponent-1');
-    //   const opponent2 = interaction.options.getUser('opponent-2') ?? null;
-    //   const opponent3 = interaction.options.getUser('opponent-3') ?? null;
-    //   const opponent4 = interaction.options.getUser('opponent-4') ?? null;
-    //   const opponent5 = interaction.options.getUser('opponent-5') ?? null;
+      // // * im thinking we may want to move a lot of the logic from the solo game into their own separate functions (below async execute), then just call them as needed.
 
-    //   const embed = new EmbedBuilder()
-    //     .setColor(interaction.client.embedColour)
-    //     .setAuthor({
-    //       name: `${guildMember.nickname || interaction.user.displayName} initiated a game of Gyattzee!`,
-    //       iconURL: guildMember.displayAvatarURL(),
-    //     })
-    //     .setDescription(`Opponent 1: ${opponent1}\nOpponent 2: ${opponent2}\nOpponent 3: ${opponent3}\nOpponent 4: ${opponent4}\nOpponent 5: ${opponent5}`);
+      // const embed = new EmbedBuilder()
+      //   .setColor(interaction.client.embedColour)
+      //   .setAuthor({
+      //     name: `${guildMember.nickname || interaction.user.displayName} initiated a game of Gyattzee!`,
+      //     iconURL: guildMember.displayAvatarURL(),
+      //   })
+      //   .setDescription(`Opponent 1: ${opponent1}\nOpponent 2: ${opponent2}\nOpponent 3: ${opponent3}\nOpponent 4: ${opponent4}\nOpponent 5: ${opponent5}`);
 
-    //   interaction.reply({ embeds: [embed] });
-    // }
+      // interaction.reply({ embeds: [embed] });
+    }
   },
 };
+// ! FOR COLIN TEMPORARILY
+// ! sudo systemctl start iBot.service

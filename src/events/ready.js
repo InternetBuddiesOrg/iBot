@@ -33,6 +33,7 @@ module.exports = {
         console.log(`     |-yahtzeeMultiWins: ${user.yahtzeeMultiWins}`);
         console.log(`     |-yahtzeeHighScore: ${user.yahtzeeHighScore}`);
         console.log(`     |-yahtzeeTotalScore: ${user.yahtzeeTotalScore}`);
+        console.log(`     |-diceColour: ${user.diceColour}`);
       });
     }).catch(e => {
       console.error(`[ERR!] ${e}`);
