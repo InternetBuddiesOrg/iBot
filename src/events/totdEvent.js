@@ -46,7 +46,7 @@ module.exports = {
       }
 
       // ToTD variables
-      const totd = totdJson[9].content.split('"')[17]; // term of the day
+      const totd = totdJson[9].content.split('"')[19]; // term of the day
       const term = toTitleCase(totd); // Term Of The Day
       let rss = totdJson[9].content.split(/<i>(n|proper n|plural n|v|adj|adv|pron|prep|conj|interj|det|art|num|part|phrase|prepositional phrase|idiom|proverb|abbr|contraction|symbol|letter)<\/i>/g);
       rss = rss.map(str => str.replace(/<[^>]+>/gim, '').trim());
