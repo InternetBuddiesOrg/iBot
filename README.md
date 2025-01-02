@@ -1,4 +1,4 @@
-![iBot Banner: iBot by ProtoZappy](./images/iBotBanner.png)
+![iBot Banner: iBot by ProtoZappy and Mr. Cologne](./images/ReadmeBanner.png)
 Developed with [discord.js](https://discord.js.org) for a personal Discord server
 
 ---
@@ -15,6 +15,7 @@ Developed with [discord.js](https://discord.js.org) for a personal Discord serve
 - [ ] Fortune cookies
 ### Fun and games
 - [x] Connect 4
+- [x] Customisable game pieces
 - [ ] Gyattzee
 - [ ] Extreme(!!!!!!!!!) Connect 4
 - [ ] Codebreaker
@@ -24,6 +25,8 @@ Developed with [discord.js](https://discord.js.org) for a personal Discord serve
 - [ ] Roulette
 - [ ] Bingo
 - [ ] Monopoly
+
+⭐️ Custom dice emojis by @MrCologne ⭐️
 
 ---
 
