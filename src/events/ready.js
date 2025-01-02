@@ -3,6 +3,7 @@ const {
   EmbedBuilder,
   PresenceUpdateStatus,
   ActivityType,
+  MessageFlags,
 } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -93,6 +94,6 @@ module.exports = {
       .setTimestamp()
       .setDescription(`-# **Status:** ${icon} ${message}${data.botStatus.value}`);
 
-    devChannel.send({ embeds: [embed], flags: [4096] }); // @silent message
+    devChannel.send({ embeds: [embed], flags: [MessageFlags.SuppressNotifications] });
   },
 };

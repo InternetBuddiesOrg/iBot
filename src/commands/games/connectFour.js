@@ -4,6 +4,7 @@ const {
   ComponentType,
   ButtonBuilder,
   ButtonStyle,
+  MessageFlags,
 } = require('discord.js');
 const User = require('../../sql/models/user');
 
@@ -23,7 +24,7 @@ module.exports = {
     const initiator = interaction.user;
 
     if (opponent.id === initiator.id) {
-      interaction.reply({ content: 'You cannot play against yourself!', ephemeral: true });
+      interaction.reply({ content: 'You cannot play against yourself!', flags: [MessageFlags.Ephemeral] });
       return;
     }
 
@@ -382,10 +383,10 @@ async function startGame(interaction, playerA, playerB) {
           }
         }
         else if (i.user.id === playerA.id || i.user.id === playerB.id) {
-          await i.reply({ content: 'It is not your turn!', ephemeral: true });
+          await i.reply({ content: 'It is not your turn!', flags: [MessageFlags.Ephemeral] });
         }
         else {
-          await i.reply({ content: 'You are not a part of this game!', ephemeral: true });
+          await i.reply({ content: 'You are not a part of this game!', flags: [MessageFlags.Ephemeral] });
         }
       };
 

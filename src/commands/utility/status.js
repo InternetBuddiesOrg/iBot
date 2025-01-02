@@ -2,6 +2,7 @@ const {
   ActivityType,
   PresenceUpdateStatus,
   SlashCommandBuilder,
+  MessageFlags,
 } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -44,7 +45,7 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.deferReply({
-      ephemeral: true,
+      flags: [MessageFlags.Ephemeral],
     });
     const status = interaction.options.getString('status');
     const activity = interaction.options.getString('activity');
@@ -104,11 +105,11 @@ module.exports = {
     const devChannel = interaction.client.channels.cache.get('1099564476698726401');
     await devChannel.send({
       content: `**@${interaction.user.username} set the status to:**\n${icon} ${message}${value}`,
-      flags: [4096], // @silent message
+      flags: [MessageFlags.SuppressNotifications],
     });
     await interaction.editReply({
       content: `**Successfully set status to:**\n${icon} ${message}${value}`,
-      ephemeral: true,
+      flags: [MessageFlags.Ephemeral],
     });
     console.log(`[INFO] @${interaction.user.username} set the status to: (${status}) ${message}${value}`);
   },

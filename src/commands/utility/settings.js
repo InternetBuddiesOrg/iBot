@@ -1,5 +1,6 @@
 const {
   SlashCommandBuilder,
+  MessageFlags,
 } = require('discord.js');
 const User = require('../../sql/models/user');
 
@@ -65,7 +66,7 @@ module.exports = {
 
       await interaction.reply({
         content: `You are now using **${emoji} ${selection.charAt(0).toUpperCase() + selection.slice(1)}** dice.`,
-        ephemeral: true,
+        flags: [MessageFlags.Ephemeral],
       });
     }
   },
