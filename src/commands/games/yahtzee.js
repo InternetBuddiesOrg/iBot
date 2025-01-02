@@ -28,26 +28,26 @@ module.exports = {
             .setName('opponent-1')
             .setDescription('Select an opponent')
             .setRequired(true),
-        )
-        .addUserOption(option =>
-          option
-            .setName('opponent-2')
-            .setDescription('Select another opponent (optional)'),
-        )
-        .addUserOption(option =>
-          option
-            .setName('opponent-3')
-            .setDescription('Select another opponent (optional)'),
-        )
-        .addUserOption(option =>
-          option
-            .setName('opponent-4')
-            .setDescription('Select another opponent (optional)'),
-        )
-        .addUserOption(option =>
-          option
-            .setName('opponent-5')
-            .setDescription('Select another opponent (optional)'),
+        // )
+        // .addUserOption(option =>
+        //   option
+        //     .setName('opponent-2')
+        //     .setDescription('Select another opponent (optional)'),
+        // )
+        // .addUserOption(option =>
+        //   option
+        //     .setName('opponent-3')
+        //     .setDescription('Select another opponent (optional)'),
+        // )
+        // .addUserOption(option =>
+        //   option
+        //     .setName('opponent-4')
+        //     .setDescription('Select another opponent (optional)'),
+        // )
+        // .addUserOption(option =>
+        //   option
+        //     .setName('opponent-5')
+        //     .setDescription('Select another opponent (optional)'),
         ),
     ),
 
@@ -788,7 +788,7 @@ module.exports = {
     // * Multiplayer Gyattzee:
 
     else if (interaction.options.getSubcommand() === 'multi') {
-      // const opponent1 = interaction.options.getUser('opponent-1');
+      const opponent1 = interaction.options.getUser('opponent-1');
       // const opponent2 = interaction.options.getUser('opponent-2') ?? null;
       // const opponent3 = interaction.options.getUser('opponent-3') ?? null;
       // const opponent4 = interaction.options.getUser('opponent-4') ?? null;
