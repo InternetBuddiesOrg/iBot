@@ -38,33 +38,33 @@ module.exports = {
 
       switch (selection) {
         case 'white':
-          emoji = '<a:d1rwhite:1277477959401345047>';
+          emoji = '<a:dra_white:1277477959401345047>';
           break;
         case 'black':
-          emoji = '<a:d1rblack:1277478120462487634>';
+          emoji = '<a:dra_black:1277478120462487634>';
           break;
         case 'blue':
-          emoji = '<a:d1rblue:1278118610128076913>';
+          emoji = '<a:dra_blue:1278118610128076913>';
           break;
         case 'fuchsia':
-          emoji = '<a:d1rfuchsia:1277478235113787423>';
+          emoji = '<a:dra_fuchsia:1277478235113787423>';
           break;
         case 'green':
-          emoji = '<a:d1rgreen:1278118649705791519>';
+          emoji = '<a:dra_green:1278118649705791519>';
           break;
         case 'orange':
-          emoji = '<a:d1rorange:1277478332879077396>';
+          emoji = '<a:dra_orange:1277478332879077396>';
           break;
         case 'red':
-          emoji = '<a:d1rred:1277478376419889234>';
+          emoji = '<a:dra_red:1277478376419889234>';
           break;
         case 'yellow':
-          emoji = '<a:d1ryellow:1277478418065133700>';
+          emoji = '<a:dra_yellow:1277478418065133700>';
           break;
       }
 
       await interaction.reply({
-        content: `**Successfully changed dice to:**\n${emoji} ${selection.charAt(0).toUpperCase() + selection.slice(1)}`,
+        content: `You are now using **${emoji} ${selection.charAt(0).toUpperCase() + selection.slice(1)}** dice.`,
         ephemeral: true,
       });
     }
