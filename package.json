@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Discord bot for iBo",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "start": "node ."
   },
@@ -10,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/InternetBuddiesOrg/iBot.git"
   },
-  "author": "ProtoZappy",
+  "author": "Vyxtella",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/InternetBuddiesOrg/iBot/issues"
