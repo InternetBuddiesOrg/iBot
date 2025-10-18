@@ -1,6 +1,6 @@
 config
 .env
-.eslintrc.json
+.eslintrc
 ._.DS_Store
 .DS_Store
 node_modules
