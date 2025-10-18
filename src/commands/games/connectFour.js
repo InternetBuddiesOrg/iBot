@@ -1,81 +1,77 @@
-const {
+import {
   SlashCommandBuilder,
   ActionRowBuilder,
   ComponentType,
   ButtonBuilder,
   ButtonStyle,
   MessageFlags,
-} = require('discord.js');
-const User = require('../../sql/models/user');
+} from 'discord.js';
+import { findOrCreate } from '../../sql/models/user';
 
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('connect-4')
-    .setDescription('Stupid Dumb Baby Game')
-    .addUserOption(option =>
-      option
-        .setName('opponent')
-        .setDescription('Select your opponent')
-        .setRequired(true),
-    ),
+export const data = new SlashCommandBuilder()
+  .setName('connect-4')
+  .setDescription('Stupid Dumb Baby Game')
+  .addUserOption(option => option
+    .setName('opponent')
+    .setDescription('Select your opponent')
+    .setRequired(true),
+  );
+export async function execute(interaction) {
+  const opponent = interaction.options.getUser('opponent');
+  const initiator = interaction.user;
 
-  async execute(interaction) {
-    const opponent = interaction.options.getUser('opponent');
-    const initiator = interaction.user;
+  if (opponent.id === initiator.id) {
+    interaction.reply({ content: 'You cannot play against yourself!', flags: [MessageFlags.Ephemeral] });
+    return;
+  }
 
-    if (opponent.id === initiator.id) {
-      interaction.reply({ content: 'You cannot play against yourself!', flags: [MessageFlags.Ephemeral] });
+  const accept = new ButtonBuilder()
+    .setCustomId('accept')
+    .setLabel('Accept')
+    .setStyle(ButtonStyle.Success);
+  const deny = new ButtonBuilder()
+    .setCustomId('deny')
+    .setLabel('Deny')
+    .setStyle(ButtonStyle.Danger);
+
+  const confirmationRow = new ActionRowBuilder()
+    .addComponents([accept, deny]);
+
+  const acceptDis = new ButtonBuilder()
+    .setCustomId('accept')
+    .setLabel('Accept')
+    .setStyle(ButtonStyle.Success)
+    .setDisabled(true);
+  const denyDis = new ButtonBuilder()
+    .setCustomId('deny')
+    .setLabel('Deny')
+    .setStyle(ButtonStyle.Danger)
+    .setDisabled(true);
+
+  const confirmationRowDis = new ActionRowBuilder()
+    .addComponents([acceptDis, denyDis]);
+
+
+  const response = await interaction.reply({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**`, components: [confirmationRow] });
+  const confirmationFilter = i => i.user.id === opponent.id;
+
+  try {
+    const confirmation = await response.awaitMessageComponent({ filter: confirmationFilter, time: 60000 });
+    if (confirmation.customId === 'accept') {
+      confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# Game accepted!`, components: [confirmationRowDis] });
+      await startGame(interaction, initiator, opponent);
+    }
+    else if (confirmation.customId === 'deny') {
+      await confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has been denied.`, components: [confirmationRowDis] });
       return;
     }
-
-    const accept = new ButtonBuilder()
-      .setCustomId('accept')
-      .setLabel('Accept')
-      .setStyle(ButtonStyle.Success);
-    const deny = new ButtonBuilder()
-      .setCustomId('deny')
-      .setLabel('Deny')
-      .setStyle(ButtonStyle.Danger);
-
-    const confirmationRow = new ActionRowBuilder()
-      .addComponents([accept, deny]);
-
-    const acceptDis = new ButtonBuilder()
-      .setCustomId('accept')
-      .setLabel('Accept')
-      .setStyle(ButtonStyle.Success)
-      .setDisabled(true);
-    const denyDis = new ButtonBuilder()
-      .setCustomId('deny')
-      .setLabel('Deny')
-      .setStyle(ButtonStyle.Danger)
-      .setDisabled(true);
-
-    const confirmationRowDis = new ActionRowBuilder()
-      .addComponents([acceptDis, denyDis]);
-
-
-    const response = await interaction.reply({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**`, components: [confirmationRow] });
-    const confirmationFilter = i => i.user.id === opponent.id;
-
-    try {
-      const confirmation = await response.awaitMessageComponent({ filter: confirmationFilter, time: 60_000 });
-      if (confirmation.customId === 'accept') {
-        confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# Game accepted!`, components: [confirmationRowDis] });
-        await startGame(interaction, initiator, opponent);
-      }
-      else if (confirmation.customId === 'deny') {
-        await confirmation.update({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has been denied.`, components: [confirmationRowDis] });
-        return;
-      }
-    }
-    catch (e) {
-      await interaction.editReply({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has expired.`, components: [confirmationRowDis] });
-      console.log('[INFO] No response received; match cancelled');
-      return;
-    }
-  },
-};
+  }
+  catch (e) {
+    await interaction.editReply({ content: `**<@${initiator.id}> challenges <@${opponent.id}> to a game of Connect 4!**\n-# This request has expired.`, components: [confirmationRowDis] });
+    console.log('[INFO] No response received; match cancelled');
+    return;
+  }
+}
 
 async function confirmGame(interaction, initiator, opponent) {
   const accept = new ButtonBuilder()
@@ -255,8 +251,8 @@ async function startGame(interaction, playerA, playerB) {
           if (checkWin(r)) {
             await i.message.delete();
 
-            const [winner] = await User.findOrCreate({ where: { id: await playerA.id } });
-            const [loser] = await User.findOrCreate({ where: { id: await playerB.id } });
+            const [winner] = await findOrCreate({ where: { id: await playerA.id } });
+            const [loser] = await findOrCreate({ where: { id: await playerB.id } });
             await winner.increment('c4Wins', { by: 1 });
             await loser.increment('c4Losses', { by: 1 });
 
@@ -321,8 +317,8 @@ async function startGame(interaction, playerA, playerB) {
 
           if (checkWin(y)) {
 
-            const [winner] = await User.findOrCreate({ where: { id: await playerB.id } });
-            const [loser] = await User.findOrCreate({ where: { id: await playerA.id } });
+            const [winner] = await findOrCreate({ where: { id: await playerB.id } });
+            const [loser] = await findOrCreate({ where: { id: await playerA.id } });
             await winner.increment('c4Wins', { by: 1 });
             await loser.increment('c4Losses', { by: 1 });
 

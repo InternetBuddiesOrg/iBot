@@ -1,41 +1,41 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../db');
+import { STRING, INTEGER } from 'sequelize';
+import { define } from '../db';
 
-const User = sequelize.define('user', {
+const User = define('user', {
   id: {
-    type: Sequelize.STRING,
+    type: STRING,
     primaryKey: true,
   },
   c4Wins: {
-    type: Sequelize.INTEGER,
+    type: INTEGER,
     defaultValue: 0,
     allowNull: false,
   },
   c4Losses: {
-    type: Sequelize.INTEGER,
+    type: INTEGER,
     defaultValue: 0,
     allowNull: false,
   },
   yahtzeeMultiWins: {
-    type: Sequelize.INTEGER,
+    type: INTEGER,
     defaultValue: 0,
     allowNull: false,
   },
   yahtzeeHighScore: {
-    type: Sequelize.INTEGER,
+    type: INTEGER,
     defaultValue: 0,
     allowNull: false,
   },
   yahtzeeTotalScore: {
-    type: Sequelize.INTEGER,
+    type: INTEGER,
     defaultValue: 0,
     allowNull: false,
   },
   diceColour: {
-    type: Sequelize.STRING,
+    type: STRING,
     defaultValue: 'white',
     allowNull: false,
   },
 });
 
-module.exports = User;
+export default User;

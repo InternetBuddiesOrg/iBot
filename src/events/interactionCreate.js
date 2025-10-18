@@ -1,31 +1,31 @@
-const { Events, MessageFlags } = require('discord.js');
+import {
+  Events,
+  MessageFlags,
+} from 'discord.js';
 
-module.exports = {
-  name: Events.InteractionCreate,
+export const name = Events.InteractionCreate;
+export async function execute(interaction) {
+  if (!interaction.isChatInputCommand()) return;
 
-  async execute(interaction) {
-    if (!interaction.isChatInputCommand()) return;
+  const command = interaction.client.commands.get(interaction.commandName);
 
-    const command = interaction.client.commands.get(interaction.commandName);
+  if (!command) {
+    console.error(`[ERR!] No application command found matching ${interaction.commandName}`);
+    return;
+  }
 
-    if (!command) {
-      console.error(`[ERR!] No application command found matching ${interaction.commandName}`);
-      return;
+  try {
+    await command.execute(interaction);
+  }
+  catch (error) {
+    console.error(`[ERR!] ${error}`);
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({ content: `An error occured while executing this command.\n\`\`\`diff\n- [ERR!] ${error}\n\`\`\``, flags: [MessageFlags.Ephemeral] });
     }
-
-    try {
-      await command.execute(interaction);
+    else {
+      await interaction.reply({ content: `An error occured while executing this command.\n\`\`\`diff\n- [ERR!] ${error}\n\`\`\``, flags: [MessageFlags.Ephemeral] });
     }
-    catch (error) {
-      console.error(`[ERR!] ${error}`);
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({ content: `An error occured while executing this command.\n\`\`\`diff\n- [ERR!] ${error}\n\`\`\``, flags: [MessageFlags.Ephemeral] });
-      }
-      else {
-        await interaction.reply({ content: `An error occured while executing this command.\n\`\`\`diff\n- [ERR!] ${error}\n\`\`\``, flags: [MessageFlags.Ephemeral] });
-      }
-    }
+  }
 
-    console.log(`[INFO] Recieved interaction from @${interaction.user.username}: ${interaction}`);
-  },
-};
+  console.log(`[INFO] Recieved interaction from @${interaction.user.username}: ${interaction}`);
+}

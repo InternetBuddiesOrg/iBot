@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 
 const sequelize = new Sequelize('appData', 'user', 'password', {
   host: 'localhost',
@@ -7,4 +7,4 @@ const sequelize = new Sequelize('appData', 'user', 'password', {
   storage: './src/sql/appData.sqlite',
 });
 
-module.exports = sequelize;
+export default sequelize;
