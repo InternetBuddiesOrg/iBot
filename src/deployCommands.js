@@ -4,14 +4,15 @@ import {
 } from 'discord.js';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
-require('dotenv').config();
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import 'dotenv/config';
 const {
   token,
   clientId,
 } = process.env;
 
 const commands = [];
-const foldersPath = join(__dirname, 'commands');
+const foldersPath = fileURLToPath(new URL('./commands', import.meta.url));
 const commandFolders = readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
@@ -19,7 +20,7 @@ for (const folder of commandFolders) {
   const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
   for (const file of commandFiles) {
     const filePath = join(commandsPath, file);
-    const command = require(filePath);
+    const command = await import(pathToFileURL(filePath).href);
     if ('data' in command && 'execute' in command) {
       commands.push(command.data.toJSON());
     }

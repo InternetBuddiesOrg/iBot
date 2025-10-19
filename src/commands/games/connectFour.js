@@ -6,7 +6,7 @@ import {
   ButtonStyle,
   MessageFlags,
 } from 'discord.js';
-import { findOrCreate } from '../../sql/models/user';
+import User from '../../sql/models/user.js';
 
 export const data = new SlashCommandBuilder()
   .setName('connect-4')
@@ -251,8 +251,8 @@ async function startGame(interaction, playerA, playerB) {
           if (checkWin(r)) {
             await i.message.delete();
 
-            const [winner] = await findOrCreate({ where: { id: await playerA.id } });
-            const [loser] = await findOrCreate({ where: { id: await playerB.id } });
+            const [winner] = await User.findOrCreate({ where: { id: await playerA.id } });
+            const [loser] = await User.findOrCreate({ where: { id: await playerB.id } });
             await winner.increment('c4Wins', { by: 1 });
             await loser.increment('c4Losses', { by: 1 });
 
@@ -317,8 +317,8 @@ async function startGame(interaction, playerA, playerB) {
 
           if (checkWin(y)) {
 
-            const [winner] = await findOrCreate({ where: { id: await playerB.id } });
-            const [loser] = await findOrCreate({ where: { id: await playerA.id } });
+            const [winner] = await User.findOrCreate({ where: { id: await playerB.id } });
+            const [loser] = await User.findOrCreate({ where: { id: await playerA.id } });
             await winner.increment('c4Wins', { by: 1 });
             await loser.increment('c4Losses', { by: 1 });
 

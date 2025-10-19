@@ -1,7 +1,7 @@
 import { STRING, INTEGER } from 'sequelize';
-import { define } from '../db';
+import sequelize from '../db.js';
 
-const User = define('user', {
+const User = sequelize.define('user', {
   id: {
     type: STRING,
     primaryKey: true,

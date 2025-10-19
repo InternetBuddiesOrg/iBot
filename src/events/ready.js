@@ -6,8 +6,10 @@ import {
   MessageFlags,
 } from 'discord.js';
 import { readFileSync } from 'fs';
-import { join } from 'path';
-import { sync, findAll } from '../sql/models/user';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import User from '../sql/models/user.js';
+const dir = dirname(fileURLToPath(import.meta.url));
 
 export const name = Events.ClientReady;
 export const once = true;
@@ -15,13 +17,13 @@ export function execute(client) {
   console.log(`[INFO] Logged in as ${client.user.tag}`);
 
   // Status data
-  const data = JSON.parse(readFileSync(join(__dirname, '../commands/utility/statusLatest.json'), 'utf8'));
+  const data = JSON.parse(readFileSync(join(dir, '../commands/utility/statusLatest.json'), 'utf8'));
   let icon;
   let message;
 
   // Syncs user db
-  sync().then(() => {
-    return findAll();
+  User.sync().then(() => {
+    return User.findAll();
   }).then(users => {
     console.log('[INFO] User table:');
     users.forEach(async (user) => {

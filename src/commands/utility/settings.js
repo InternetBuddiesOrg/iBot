@@ -2,7 +2,7 @@ import {
   SlashCommandBuilder,
   MessageFlags,
 } from 'discord.js';
-import { findOrCreate } from '../../sql/models/user';
+import User from '../../sql/models/user.js';
 
 export const data = new SlashCommandBuilder()
   .setName('settings')
@@ -29,7 +29,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
   if (interaction.options.getSubcommand() === 'gyattzee') {
     const selection = interaction.options.getString('colour');
-    const [user] = await findOrCreate({ where: { id: await interaction.user.id } });
+    const [user] = await User.findOrCreate({ where: { id: await interaction.user.id } });
     await user.update({ diceColour: selection });
     let emoji;
 

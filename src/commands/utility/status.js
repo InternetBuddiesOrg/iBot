@@ -4,8 +4,10 @@ import {
   SlashCommandBuilder,
   MessageFlags,
 } from 'discord.js';
+import { fileURLToPath } from 'url';
 import { writeFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+const dir = dirname(fileURLToPath(import.meta.url));
 
 export const data = new SlashCommandBuilder()
   .setName('status')
@@ -45,7 +47,7 @@ export async function execute(interaction) {
   const status = interaction.options.getString('status');
   const activity = interaction.options.getString('activity');
   const value = interaction.options.getString('value');
-  writeFileSync(join(__dirname, './statusLatest.json'), JSON.stringify({
+  writeFileSync(join(dir, './statusLatest.json'), JSON.stringify({
     botStatus: { status, activity, value },
   }, null, 2));
   let icon;

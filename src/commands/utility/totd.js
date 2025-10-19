@@ -11,9 +11,10 @@ import {
   existsSync,
   rmSync,
   writeFileSync,
+  readFileSync,
 } from 'fs';
 import Parser from 'rss-parser';
-import { get } from 'axios';
+import axios from 'axios';
 import { load } from 'cheerio';
 const { iBotDir } = process.env;
 
@@ -39,11 +40,12 @@ export async function execute(interaction) {
     writeFileSync(`${iBotDir}/src/commands/utility/${fileName}`, JSON.stringify(items));
   }
   await parse();
-  const totdJson = require('./totdLatest.json');
+  const totdJson = JSON.parse(readFileSync(`${iBotDir}/src/commands/utility/totdLatest.json`, 'utf8'));
 
   async function fetchHTML(url) {
-    const { reponse } = await get(url);
-    return load(reponse);
+    // eslint-disable-next-line no-shadow
+    const { data } = await axios.get(url);
+    return load(data);
   }
 
   function toTitleCase(str) {

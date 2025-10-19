@@ -2,7 +2,7 @@ import {
   SlashCommandBuilder,
   EmbedBuilder,
 } from 'discord.js';
-import { findOrCreate } from '../../sql/models/user';
+import User from '../../sql/models/user.js';
 
 export const data = new SlashCommandBuilder()
   .setName('stats')
@@ -26,7 +26,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
   const targetUser = interaction.options.getUser('user') || interaction.user;
   const guildMember = interaction.guild.members.cache.get(targetUser.id);
-  const [user] = await findOrCreate({ where: { id: await targetUser.id } });
+  const [user] = await User.findOrCreate({ where: { id: await targetUser.id } });
 
   if (interaction.options.getSubcommand() === 'connect-4') {
     await interaction.deferReply();

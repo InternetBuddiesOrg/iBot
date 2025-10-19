@@ -8,7 +8,7 @@ import {
   StringSelectMenuOptionBuilder,
   ComponentType,
 } from 'discord.js';
-import { findOrCreate } from '../../sql/models/user';
+import User from '../../sql/models/user.js';
 
 export const data = new SlashCommandBuilder()
   .setName('gyattzee')
@@ -233,7 +233,7 @@ export async function execute(interaction) {
       '<a:dre_fuchsia:1277478281309851739>',
     ],
   };
-  const [player] = await findOrCreate({ where: { id: await interaction.user.id } });
+  const [player] = await User.findOrCreate({ where: { id: await interaction.user.id } });
   switch (player.diceColour) {
     case 'red':
       diceEmojis = redDice.normal;

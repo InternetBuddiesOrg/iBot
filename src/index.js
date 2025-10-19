@@ -5,6 +5,7 @@ import {
   GatewayIntentBits,
 } from 'discord.js';
 import { readdirSync } from 'node:fs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 import 'dotenv/config';
 const { token } = process.env;
@@ -20,7 +21,7 @@ client.embedColour = '#F47BA2';
 
 // Command handler
 client.commands = new Collection();
-const foldersPath = join(__dirname, 'commands');
+const foldersPath = fileURLToPath(new URL('./commands', import.meta.url));
 const commandFolders = readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
@@ -28,7 +29,7 @@ for (const folder of commandFolders) {
   const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
   for (const file of commandFiles) {
     const filePath = join(commandsPath, file);
-    const command = require(filePath);
+    const command = await import(pathToFileURL(filePath).href);
 
     if ('data' in command && 'execute' in command) {
       client.commands.set(command.data.name, command);
@@ -40,12 +41,12 @@ for (const folder of commandFolders) {
 }
 
 // Event handler
-const eventsPath = join(__dirname, 'events');
+const eventsPath = fileURLToPath(new URL('./events', import.meta.url));
 const eventFiles = readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
   const filePath = join(eventsPath, file);
-  const event = require(filePath);
+  const event = await import(pathToFileURL(filePath).href);
   if (event.once) {
     client.once(event.name, (...args) => event.execute(...args));
   }

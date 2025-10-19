@@ -3,9 +3,14 @@ import {
   Events,
 } from 'discord.js';
 import { schedule } from 'node-cron';
-import { existsSync, rmSync, writeFileSync } from 'fs';
+import {
+  existsSync,
+  rmSync,
+  writeFileSync,
+  readFileSync,
+} from 'fs';
 import Parser from 'rss-parser';
-import { get } from 'axios';
+import axios from 'axios';
 import { load } from 'cheerio';
 const { iBotDir } = process.env;
 
@@ -30,10 +35,10 @@ export async function execute(client) {
       writeFileSync(`${iBotDir}/src/events/${fileName}`, JSON.stringify(items));
     }
     await parse();
-    const totdJson = require('./totdLatest.json');
+    const totdJson = JSON.parse(readFileSync(`${iBotDir}/src/commands/utility/totdLatest.json`, 'utf8'));
 
     async function fetchHTML(url) {
-      const { data } = await get(url);
+      const { data } = await axios.get(url);
       return load(data);
     }
 
