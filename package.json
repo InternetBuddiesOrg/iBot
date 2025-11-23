@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/InternetBuddiesOrg/iBot",
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.13.2",
     "cheerio": "^1.0.0-rc.12",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.2",

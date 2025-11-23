@@ -3,6 +3,7 @@ config
 .eslintrc
 ._.DS_Store
 .DS_Store
+jsconfig.json
 node_modules
 src/appData.json
 src/commands/utility/statusLatest.json
