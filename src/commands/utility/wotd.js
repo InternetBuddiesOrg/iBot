@@ -16,21 +16,45 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
   try {
-    // Fetch with Axios
-    const response = await axios.get(
-      'https://en.wiktionary.org/wiki/compersion', // TODO: get actual wotd link ty
-      {
-        responseType: 'text',
-        headers: {
-          'User-Agent':
-            'iBot/1.0 (https://github.com/InternetBuddiesOrg/iBot; contact: stella@ibo.lol',
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.9',
-          Referer: 'https://en.wiktionary.org',
-        },
+    const axiosConfig = {
+      responseType: 'text',
+      headers: {
+        'User-Agent':
+          'iBot/1.0 (https://github.com/InternetBuddiesOrg/iBot; contact: stella@ibo.lol',
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        Referer: 'https://en.wiktionary.org',
       },
+    };
+
+    // Fetch the main page to find the word of the day
+    const mainPageResponse = await axios.get(
+      'https://en.wiktionary.org/wiki/Wiktionary:Main_Page',
+      axiosConfig,
     );
+
+    const $main = load(mainPageResponse.data);
+
+    // Find an h3 whose next sibling is p and contains a .headword-line
+    let wotdUrl = null;
+    $main('h3').each((i, el) => {
+      const nextSibling = $main(el).next();
+      if (nextSibling.is('p') && nextSibling.find('.headword-line').length > 0) {
+        const wordLink = nextSibling.find('.headword-line a').first().attr('href');
+        if (wordLink) {
+          wotdUrl = `https://en.wiktionary.org${wordLink}`;
+        }
+        return false; // break the loop
+      }
+    });
+
+    if (!wotdUrl) {
+      throw new Error('Could not find word of the day on the main page');
+    }
+
+    // Fetch the word page with Axios
+    const response = await axios.get(wotdUrl, axiosConfig);
 
     // Parse with Cheerio
     const $ = load(response.data);
