@@ -128,7 +128,7 @@ export function execute(client) {
     .setTitle('Logged in')
     .setTimestamp()
     .setDescription(`-# **Status:** ${icon} ${message}${data.botStatus.value}
-      -# **Version:** ${iBotVersion}`);
+       **Version:** ${iBotVersion}`);
 
   devChannel.send({ embeds: [embed], flags: [MessageFlags.SuppressNotifications] });
 }

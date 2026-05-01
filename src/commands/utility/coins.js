@@ -29,6 +29,10 @@ export const data = new SlashCommandBuilder()
   .addSubcommand(sub => sub
     .setName('remove')
     .setDescription('Make yourself poor!')
+    .addIntegerOption(option => option
+      .setName('amount')
+      .setDescription('The amount of coins you want to remove.')
+    )
   );
 
 // * The Command Function
@@ -40,49 +44,38 @@ export async function execute(interaction) {
   const targetUser = interaction.options.getUser('user') || interaction.user;
   const guildMember = interaction.guild.members.cache.get(targetUser.id);
   const [user] = await User.findOrCreate({ where: { id: await targetUser.id } });
+  const userCoinAmountString = user.currency.toString();
 
 // * This is where each subcommand's actions are made with if else statements.
 // * First subcommand action for /coins view
 
   if (interaction.options.getSubcommand() === 'view') {
-    await interaction.deferReply();
+    await interaction.deferReply()
 
-    const embed = new EmbedBuilder()
-      .setAuthor({
-        name: `${guildMember.nickname || targetUser.displayName}'s Coins`,
-        iconURL: guildMember.displayAvatarURL(),
-      })
-      .setColor(interaction.client.embedColour)
-      .addFields(
-        // @ts-ignore
-        { name: 'Coins', value: user.currency.toString(), inline: true });
-
-    await interaction.editReply({ embeds: [embed] });
+    await interaction.editReply(`${guildMember}, You currently have ${userCoinAmountString} coins!`);
   }
 
 // * Second subcommand action for /coins add
 
   else if (interaction.options.getSubcommand() === 'add') {
     await interaction.deferReply();
-    await user.increment('currency', { by: 1 });
+    const addAmount = interaction.options.getInteger('amount');
+    await user.increment('currency', { by: addAmount });
 
-    const embed = new EmbedBuilder()
-      .setAuthor({
-        name: `${guildMember.nickname || targetUser.displayName}'s Coins`,
-        iconURL: guildMember.displayAvatarURL(),
-      })
-      .setColor(interaction.client.embedColour)
-      .addFields(
-        // @ts-ignore
-        { name: 'Coins', value: user.currency.toString(), inline: true });
 
-    await interaction.editReply({ embeds: [embed] });
+    await interaction.editReply(`You now have ${userCoinAmountString} coins!`);
 
   }
 
   // * Third subcommand action for /coins remove
 
   else if (interaction.options.getSubcommand() === 'remove') {
+
+        await interaction.deferReply();
+    const removeAmount = interaction.options.getInteger('amount');
+    await user.decrement('currency', { by: removeAmount });
+
+    await interaction.editReply(`You now have ${userCoinAmountString} coins!`);
 
   };
 
