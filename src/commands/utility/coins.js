@@ -44,7 +44,8 @@ export async function execute(interaction) {
   const targetUser = interaction.options.getUser('user') || interaction.user;
   const guildMember = interaction.guild.members.cache.get(targetUser.id);
   const [user] = await User.findOrCreate({ where: { id: await targetUser.id } });
-  const userCoinAmountString = user.currency.toString();
+  // @ts-ignore
+  const userCoinAmountString = (user) => `${user.currency} coins`;
 
 // * This is where each subcommand's actions are made with if else statements.
 // * First subcommand action for /coins view
@@ -52,7 +53,7 @@ export async function execute(interaction) {
   if (interaction.options.getSubcommand() === 'view') {
     await interaction.deferReply()
 
-    await interaction.editReply(`${guildMember}, You currently have ${userCoinAmountString} coins!`);
+    await interaction.editReply(`${guildMember}, You currently have ${userCoinAmountString(user)}`);
   }
 
 // * Second subcommand action for /coins add
@@ -61,9 +62,10 @@ export async function execute(interaction) {
     await interaction.deferReply();
     const addAmount = interaction.options.getInteger('amount');
     await user.increment('currency', { by: addAmount });
+    await user.reload();
 
 
-    await interaction.editReply(`You now have ${userCoinAmountString} coins!`);
+    await interaction.editReply(`You now have ${userCoinAmountString(user)}!`);
 
   }
 
@@ -72,10 +74,11 @@ export async function execute(interaction) {
   else if (interaction.options.getSubcommand() === 'remove') {
 
         await interaction.deferReply();
-    const removeAmount = interaction.options.getInteger('amount');
-    await user.decrement('currency', { by: removeAmount });
+    const removeAmount = -(interaction.options.getInteger('amount'));
+    await user.increment('currency', { by: removeAmount });
+    await user.reload();
 
-    await interaction.editReply(`You now have ${userCoinAmountString} coins!`);
+    await interaction.editReply(`You now have ${userCoinAmountString(user)}!`);
 
   };
 
