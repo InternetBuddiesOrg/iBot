@@ -9,6 +9,7 @@ import 'dotenv/config';
 const {
   token,
   clientId,
+  guildId,
 } = process.env;
 
 const commands = [];
@@ -37,7 +38,7 @@ const rest = new REST().setToken(token);
     console.log(`[INFO] Started reloading ${commands.length} application commands`);
 
     const data = await rest.put(
-      Routes.applicationCommands(clientId),
+      Routes.applicationGuildCommands(clientId, guildId),
       { body: commands },
     );
 

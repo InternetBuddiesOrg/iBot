@@ -11,3 +11,4 @@ src/commands/utility/totdLatest.json
 src/events/totdLatest.json
 src/sql/appData.sqlite
 start.zsh
+DEVNOTES.txt

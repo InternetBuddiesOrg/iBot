@@ -9,6 +9,12 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import User from '../sql/models/user.js';
+import Pokemon from '../sql/models/pokemon.js';
+// eslint-disable-next-line no-unused-vars
+import seedPokemon from '../sql/seeders/pokemonSeeder.js';
+import { pushBotChangelog } from '../botChangelog.js';
+import { iBotVersion } from '../botChangelog.js';
+
 const dir = dirname(fileURLToPath(import.meta.url));
 
 export const name = Events.ClientReady;
@@ -22,23 +28,52 @@ export function execute(client) {
   let message;
 
   // Syncs user db
+  
   User.sync().then(() => {
     return User.findAll();
-  }).then(users => {
+  }).then(async (users) => {
     console.log('[INFO] User table:');
-    users.forEach(async (user) => {
-      const userObj = await client.users.fetch(user.id);
-      console.log(`[INFO] @${userObj.username} (${user.id})`);
-      console.log(`     |-c4Wins: ${user.c4Wins}`);
-      console.log(`     |-c4Losses: ${user.c4Losses}`);
-      console.log(`     |-yahtzeeMultiWins: ${user.yahtzeeMultiWins}`);
-      console.log(`     |-yahtzeeHighScore: ${user.yahtzeeHighScore}`);
-      console.log(`     |-yahtzeeTotalScore: ${user.yahtzeeTotalScore}`);
-      console.log(`     |-diceColour: ${user.diceColour}`);
-    });
+    for (const user of users) {
+      const userId = user.getDataValue('id');
+      const userObj = await client.users.fetch(userId);
+
+      console.log(`[INFO] @${userObj.username} (${userId})`);
+      console.log(`     |-c4Wins: ${user.getDataValue('c4Wins')}`);
+      console.log(`     |-c4Losses: ${user.getDataValue('c4Losses')}`);
+      console.log(`     |-yahtzeeMultiWins: ${user.getDataValue('yahtzeeMultiWins')}`);
+      console.log(`     |-yahtzeeHighScore: ${user.getDataValue('yahtzeeHighScore')}`);
+      console.log(`     |-yahtzeeTotalScore: ${user.getDataValue('yahtzeeTotalScore')}`);
+      console.log(`     |-diceColour: ${user.getDataValue('diceColour')}`);
+      console.log(`     |-currency: ${user.getDataValue('currency')}`);
+    }
   }).catch(e => {
     console.error(`[ERR!] ${e}`);
   });
+  
+  // If new iBot Version is ready to be released,
+  // This will post a changelog if enabled. 
+
+  // ! Uncomment the function when ready to release version.
+  // pushBotChangelog(client);
+
+
+  // Syncs pokemon db
+  Pokemon.sync().then(() => {
+    console.log('[INFO] Pokemon TCG Database synced!');
+  }).catch(e => {
+    console.error(`[ERR!] ${e}`);
+  });
+
+
+  // Seeds Pokemon DB
+  // ! Uncomment the seed command when needed
+  // seedPokemon();
+  // ! Uncomment if table needs to be reset (i.e. for duplicates)
+  // Pokemon.drop();
+
+
+  // TEST LOG FOR POKEMON DB
+  // console.log('[COMMAND TEST] ' + Pokemon.findOne({ where: { id: 'POR003' } }));
 
   switch (data.botStatus.status) {
     case 'online':
@@ -92,7 +127,8 @@ export function execute(client) {
     .setColor('#68AB3F')
     .setTitle('Logged in')
     .setTimestamp()
-    .setDescription(`-# **Status:** ${icon} ${message}${data.botStatus.value}`);
+    .setDescription(`-# **Status:** ${icon} ${message}${data.botStatus.value}
+      -# **Version:** ${iBotVersion}`);
 
   devChannel.send({ embeds: [embed], flags: [MessageFlags.SuppressNotifications] });
 }

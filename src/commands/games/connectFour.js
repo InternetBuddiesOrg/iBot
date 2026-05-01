@@ -1,3 +1,4 @@
+// Connect 4 Game by Vyxtella!
 import {
   SlashCommandBuilder,
   ActionRowBuilder,

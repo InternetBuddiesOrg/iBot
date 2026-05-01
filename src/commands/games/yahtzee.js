@@ -1,3 +1,7 @@
+// Gyattzee Game by Vyxtella & Mr. Cologne!
+// Play the classic dice game using iBot! 
+// ! Multiplayer Coming Soon
+
 import {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -234,7 +238,7 @@ export async function execute(interaction) {
     ],
   };
   const [player] = await User.findOrCreate({ where: { id: await interaction.user.id } });
-  switch (player.diceColour) {
+  switch (player.get('diceColour') || 'white') {
     case 'red':
       diceEmojis = redDice.normal;
       selectedEmojis = redDice.selected;
@@ -734,7 +738,7 @@ export async function execute(interaction) {
 
       if (turnCount === 13) {
         await player.increment('yahtzeeTotalScore', { by: totals.final });
-        if (player.yahtzeeHighScore < totals.final) {
+        if (player.get('yahtzeeHighScore') < totals.final) {
           await player.update({ yahtzeeHighScore: totals.final });
         }
 

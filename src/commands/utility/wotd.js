@@ -10,7 +10,7 @@ export const data = new SlashCommandBuilder()
 
 /**
  *
- * @param {import('discord.js').ChatInputCommandInteraction} interaction
+ * @param { import('discord.js').ChatInputCommandInteraction } interaction
  *
  */
 
@@ -66,7 +66,9 @@ export async function execute(interaction) {
         }
       });
 
-    await interaction.reply(`The word of the day is:\n# ${wotd}\n${hyphenation.join(', ')}   ${ipa.join(', ')}\n\n### to be continued (also make it title case ty)`);
+    await interaction.reply(
+      `The word of the day is:\n# ${wotd}\n${hyphenation.join(', ')}   ${ipa.join(', ')}\n\n### to be continued (also make it title case ty)`,
+    );
   }
   catch (e) {
     console.error(e);
