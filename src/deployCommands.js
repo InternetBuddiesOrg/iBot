@@ -38,7 +38,7 @@ const rest = new REST().setToken(token);
     console.log(`[INFO] Started reloading ${commands.length} application commands`);
 
     const data = await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
+      Routes.applicationCommands(clientId, guildId),
       { body: commands },
     );
 
