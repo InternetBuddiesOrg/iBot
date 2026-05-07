@@ -1,14 +1,20 @@
-config
+# Repo root
+
+.vscode/
+config/
+node_modules/
+WIP/
 .env
 .eslintrc
 ._.DS_Store
 .DS_Store
+DEVNOTES.txt
 jsconfig.json
-node_modules
-src/appData.json
+start.zsh
+
+# Source code directory
+
 src/commands/utility/statusLatest.json
 src/commands/utility/totdLatest.json
 src/events/totdLatest.json
 src/sql/appData.sqlite
-start.zsh
-DEVNOTES.txt
