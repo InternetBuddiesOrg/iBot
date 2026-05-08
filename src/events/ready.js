@@ -12,6 +12,7 @@ import User from '../sql/models/user.js';
 import Pokemon from '../sql/models/pokemon.js';
 // eslint-disable-next-line no-unused-vars
 import seedPokemon from '../sql/seeders/pokemonSeeder.js';
+// eslint-disable-next-line no-unused-vars
 import { pushBotChangelog } from '../botChangelog.js';
 import { iBotVersion } from '../botChangelog.js';
 
@@ -28,41 +29,24 @@ export function execute(client) {
   let message;
 
   // Syncs user db
-  
   User.sync().then(() => {
     return User.findAll();
-  }).then(async (users) => {
-    console.log('[INFO] User table:');
-    for (const user of users) {
-      const userId = user.getDataValue('id');
-      const userObj = await client.users.fetch(userId);
-
-      console.log(`[INFO] @${userObj.username} (${userId})`);
-      console.log(`     |-c4Wins: ${user.getDataValue('c4Wins')}`);
-      console.log(`     |-c4Losses: ${user.getDataValue('c4Losses')}`);
-      console.log(`     |-yahtzeeMultiWins: ${user.getDataValue('yahtzeeMultiWins')}`);
-      console.log(`     |-yahtzeeHighScore: ${user.getDataValue('yahtzeeHighScore')}`);
-      console.log(`     |-yahtzeeTotalScore: ${user.getDataValue('yahtzeeTotalScore')}`);
-      console.log(`     |-diceColour: ${user.getDataValue('diceColour')}`);
-      console.log(`     |-currency: ${user.getDataValue('currency')}`);
-    }
   }).catch(e => {
     console.error(`[ERR!] ${e}`);
   });
-  
+
   // If new iBot Version is ready to be released,
-  // This will post a changelog if enabled. 
+  // This will post a changelog if enabled.
 
   // ! Uncomment the function when ready to release version.
   // pushBotChangelog(client);
 
 
   // Syncs pokemon db
-  Pokemon.sync().then(() => {
-    console.log('[INFO] Pokemon TCG Database synced!');
-  }).catch(e => {
-    console.error(`[ERR!] ${e}`);
-  });
+  Pokemon.sync()
+    .catch(e => {
+      console.error(`[ERR!] ${e}`);
+    });
 
 
   // Seeds Pokemon DB
@@ -131,4 +115,9 @@ export function execute(client) {
        **Version:** ${iBotVersion}`);
 
   devChannel.send({ embeds: [embed], flags: [MessageFlags.SuppressNotifications] });
+
+
+  // * Cutesy startup message
+  console.log('[INFO] iBot is online and ready to go! Use \'CTRL + C\' to STOP.');
+  // formatting these big fat booty cheeks !!!!!!!!
 }
