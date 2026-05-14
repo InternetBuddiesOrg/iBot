@@ -33,7 +33,19 @@ export const data = new SlashCommandBuilder()
       .setName('amount')
       .setDescription('The amount of coins you want to remove.')
     )
-  );
+  )
+  .addSubcommand(sub => sub
+    .setName('set')
+    .setDescription(`Set another user's coins`)
+    .addUserOption(option => option
+      .setName('user')
+      .setDescription('The user whose coins you are setting.')
+    )
+    .addIntegerOption(option => option
+      .setName('amount')
+      .setDescription('The amount of coins you are setting.')
+    )
+  )
 
 // * The Command Function
 
@@ -45,7 +57,7 @@ export async function execute(interaction) {
   const guildMember = interaction.guild.members.cache.get(targetUser.id);
   const [user] = await User.findOrCreate({ where: { id: await targetUser.id } });
   // @ts-ignore
-  const userCoinAmountString = (user) => `${user.currency} coins`;
+  const userCoinAmountString = (user) => `${user.currency}`;
 
 // * This is where each subcommand's actions are made with if else statements.
 // * First subcommand action for /coins view
@@ -53,7 +65,7 @@ export async function execute(interaction) {
   if (interaction.options.getSubcommand() === 'view') {
     await interaction.deferReply()
 
-    await interaction.editReply(`${guildMember}, You currently have ${userCoinAmountString(user)}`);
+    await interaction.editReply(`${guildMember}, You currently have **${userCoinAmountString(user)}** coins.`);
   }
 
 // * Second subcommand action for /coins add
@@ -65,7 +77,7 @@ export async function execute(interaction) {
     await user.reload();
 
 
-    await interaction.editReply(`You now have ${userCoinAmountString(user)}!`);
+    await interaction.editReply(`You added **${addAmount}** coins! You now have **${userCoinAmountString(user)}** coins!`);
 
   }
 
@@ -78,8 +90,20 @@ export async function execute(interaction) {
     await user.increment('currency', { by: removeAmount });
     await user.reload();
 
-    await interaction.editReply(`You now have ${userCoinAmountString(user)}!`);
+    await interaction.editReply(`You removed **${removeAmount + -2*removeAmount}** coins! You now have **${userCoinAmountString(user)}** coins!`);
 
-  };
+  }
+
+  // * Fourth subcommand action for /coins set
+
+  else if (interaction.options.getSubcommand() === 'set') {
+
+    await interaction.deferReply();
+    const setAmount = interaction.options.getInteger('amount');
+    await user.update({ currency: setAmount });
+    await user.save(); // Is this redundant?
+
+    await interaction.editReply(`You set ${targetUser}'s coins to ${userCoinAmountString(user)}!`);
+  }
 
 };
