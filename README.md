@@ -1,4 +1,4 @@
-![iBot Banner: iBot by ProtoZappy and Mr. Cologne](./images/ReadmeBanner.png)
+![iBot Banner: iBot by ProtoZappy and Mr. Cologne](./images/iboGitHubBanner.png)
 Developed with [discord.js](https://discord.js.org) for a personal Discord server
 
 ---
