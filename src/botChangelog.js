@@ -8,26 +8,35 @@ import { channelLink } from "discord.js"
 import { Events } from "discord.js"
 
 
-const channelID = '1099564476698726401'; // #development channel
-export const iBotVersion = 0.1
-const changelogMessage = `**Hello! I am iBot. This is a test message!** 
-iBot is running version ${iBotVersion} `;
+const channelID = '1099515790383906838'; // #general channel
+export const iBotVersion = 0.1;
+const changelogMessage = `**HELLO GOOBERS!**
+iBot has been updated with a :fire: HAWT new FEATURE FOR yOU!
+(version 0.1)
+
+Here's what we got in store for you:
+
+**NEW** /hotdog command!
+- Just for when you need it! 
+
+That's all! Have a wonderful! `;
 
 
 export async function pushBotChangelog(client) {
-    
-    try {
-        const channel = await client.channels.fetch(channelID);
 
-        if (!channel) {
-            console.log('[WARN] Channel not found! Check channelID to ensure it is the correct ID number.')
-            return;
-        }
+  try {
+    const channel = await client.channels.fetch(channelID);
 
-        await channel.send(`${changelogMessage}`);
-        console.log(`iBot Version ${iBotVersion} changelog has been posted!`);
-    } catch (err) {
-        console.error('[ERROR] An error occured while sending message: ', err);   
-     }
+    if (!channel) {
+      console.log('[WARN] Channel not found! Check channelID to ensure it is the correct ID number.')
+      return;
+    }
+
+    await channel.send(`${changelogMessage}`);
+    console.log(`iBot Version ${iBotVersion} changelog has been posted!`);
+  }
+  catch (err) {
+    console.error('[ERR!] An error occured while sending message: ', err);
+  }
 };
 
