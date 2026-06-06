@@ -10,9 +10,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import User from '../sql/models/user.js';
 import Pokemon from '../sql/models/pokemon.js';
-// eslint-disable-next-line no-unused-vars
-import seedPokemon from '../sql/seeders/pokemonSeeder.js';
-// eslint-disable-next-line no-unused-vars
+import seedPOR from '../sql/seeders/ptcgPOR.js';
 import { pushBotChangelog } from '../botChangelog.js';
 import { iBotVersion } from '../botChangelog.js';
 
@@ -21,43 +19,40 @@ const dir = dirname(fileURLToPath(import.meta.url));
 export const name = Events.ClientReady;
 export const once = true;
 export function execute(client) {
-  console.log(`[INFO] Logged in as ${client.user.tag}`);
-
-  // Status data
-  const data = JSON.parse(readFileSync(join(dir, '../commands/utility/statusLatest.json'), 'utf8'));
-  let icon;
-  let message;
-
-  // Syncs user db
+  // * Database
+  // Syncs User table
   User.sync().then(() => {
     return User.findAll();
   }).catch(e => {
     console.error(`[ERR!] ${e}`);
   });
 
-  // If new iBot Version is ready to be released,
-  // This will post a changelog if enabled.
-
-  // ! Uncomment the function when ready to release version.
-  // pushBotChangelog(client);
-
-
-  // Syncs pokemon db
+  // Syncs Pokémon table
   Pokemon.sync()
     .catch(e => {
       console.error(`[ERR!] ${e}`);
     });
 
+  // Seeds all Pokémon sets
+  // ! Set seedPokemon to true when needed (e.g. add new set to table, or edit a set)
+  // ! Be sure to DROP the table, then SYNC the table before re-seeding
+  const seedPokemon = false;
+  if (seedPokemon) {
+    seedPOR();
+    // add seeder functions here when finished
+  }
 
-  // Seeds Pokemon DB
-  // ! Uncomment the seed command when needed
-  // seedPokemon();
-  // ! Uncomment if table needs to be reset (i.e. for duplicates)
-  // Pokemon.drop();
+  // Drops Pokémon table
+  // ! Set dropPokemon to true if table needs to be reset (e.g. for duplicates, or adding a new set)
+  const dropPokemon = false;
+  if (dropPokemon) Pokemon.drop();
 
 
-  // TEST LOG FOR POKEMON DB
-  // console.log('[COMMAND TEST] ' + Pokemon.findOne({ where: { id: 'POR003' } }));
+  // * Status
+  // Get previous status and set it
+  const data = JSON.parse(readFileSync(join(dir, '../commands/utility/statusLatest.json'), 'utf8'));
+  let icon;
+  let message;
 
   switch (data.botStatus.status) {
     case 'online':
@@ -106,18 +101,29 @@ export function execute(client) {
   }
   console.log(`[EVNT] Set the status to: (${data.botStatus.status}) ${message}${data.botStatus.value}`);
 
+  // * Confirm bot's status...
+  // ...in dev channel...
   const devChannel = client.channels.cache.get('1099564476698726401');
   const embed = new EmbedBuilder()
     .setColor('#68AB3F')
     .setTitle('Logged in')
     .setTimestamp()
-    .setDescription(`-# **Status:** ${icon} ${message}${data.botStatus.value}
-       **Version:** ${iBotVersion}`);
+    .setDescription(
+      `**Status:** ${icon} ${message}${data.botStatus.value}\n` +
+      `**Version:** ${iBotVersion}`,
+    );
 
   devChannel.send({ embeds: [embed], flags: [MessageFlags.SuppressNotifications] });
 
+  // ... and in console
+  console.log(`[INFO] ${client.user.tag} is online and ready to go! Use 'CTRL + C' to STOP.`);
 
-  // * Cutesy startup message
-  console.log('[INFO] iBot is online and ready to go! Use \'CTRL + C\' to STOP.');
-  // formatting these big fat booty cheeks !!!!!!!!
+
+  // * If new iBot Version is ready to be released,
+  // * This will post a changelog if enabled.
+  // ! Set sendChangelog to true when ready to release version.
+
+  const sendChangelog = false;
+  if (sendChangelog) pushBotChangelog(client);
+
 }

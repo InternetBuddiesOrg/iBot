@@ -61,7 +61,7 @@ const Pokemon = sequelize.define('pokemon', {
     allowNull: true,
   },
   retreat: {
-    type: STRING,
+    type: INTEGER,
     allowNull: true,
   },
 }, {
