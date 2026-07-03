@@ -4,6 +4,8 @@ import {
   PresenceUpdateStatus,
   ActivityType,
   MessageFlags,
+  // eslint-disable-next-line no-unused-vars
+  Client,
 } from 'discord.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
@@ -18,6 +20,9 @@ const dir = dirname(fileURLToPath(import.meta.url));
 
 export const name = Events.ClientReady;
 export const once = true;
+/**
+ * @param {Client} client The discord.js client instance
+ */
 export function execute(client) {
   // * Database
   // Syncs User table
@@ -99,10 +104,11 @@ export function execute(client) {
       message = 'Watching ';
       break;
   }
-  console.log(`[EVNT] Set the status to: (${data.botStatus.status}) ${message}${data.botStatus.value}`);
+  // console.log(`[EVNT] Set the status to: (${data.botStatus.status}) ${message}${data.botStatus.value}`);
+
 
   // * Confirm bot's status...
-  // ...in dev channel...
+  // * ...in dev channel...
   const devChannel = client.channels.cache.get('1099564476698726401');
   const embed = new EmbedBuilder()
     .setColor('#68AB3F')
@@ -115,15 +121,22 @@ export function execute(client) {
 
   devChannel.send({ embeds: [embed], flags: [MessageFlags.SuppressNotifications] });
 
-  // ... and in console
-  console.log(`[INFO] ${client.user.tag} is online and ready to go! Use 'CTRL + C' to STOP.`);
+  // * ... and in console
+  console.log(`
+   ██                                ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████
+       ██                ██            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████
+   ██  ██████  ██████  ██████            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████      
+   ██  ██  ██  ██  ██   ██                 ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████ 
+   ██  ██████  ██████    ████    v 0.1       ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████
+ `);
+   console.log(`[INFO] iBot is online and ready to go! Use 'CTRL + C' to STOP.`);
 
 
-  // * If new iBot Version is ready to be released,
-  // * This will post a changelog if enabled.
+  // * Changelog
+  // ! If new iBot Version is ready to be released,
+  // ! This will post a changelog if enabled.
   // ! Set sendChangelog to true when ready to release version.
 
   const sendChangelog = false;
   if (sendChangelog) pushBotChangelog(client);
-
 }
