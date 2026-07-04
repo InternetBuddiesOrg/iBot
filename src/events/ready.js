@@ -112,7 +112,7 @@ export function execute(client) {
   const devChannel = client.channels.cache.get('1099564476698726401');
   const embed = new EmbedBuilder()
     .setColor('#68AB3F')
-    .setTitle('Logged in')
+    .setTitle('Bot Started!')
     .setTimestamp()
     .setDescription(
       `**Status:** ${icon} ${message}${data.botStatus.value}\n` +
