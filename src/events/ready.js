@@ -129,7 +129,8 @@ export function execute(client) {
  ██  ██  ██  ██  ██   ██                 ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████ 
  ██  ██████  ██████    ████    v 0.1       ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████
  `);
-   console.log(`[INFO] iBot is online and ready to go! Use 'CTRL + C' to STOP.`);
+   console.log(`[INFO] iBot is online and ready to go! Use 'CTRL + C' to STOP current instance.`);
+   console.log(`[INFO] Enter 'pm2 <start/stop> iBot' to start/stop an ongoing instance!`);
 
 
   // * Changelog
