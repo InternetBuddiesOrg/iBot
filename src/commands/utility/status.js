@@ -4,10 +4,16 @@ import {
   SlashCommandBuilder,
   MessageFlags,
 } from 'discord.js';
+import chalk from 'chalk';
 import { fileURLToPath } from 'url';
-import { writeFileSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+} from 'fs';
 import { join, dirname } from 'path';
-const dir = dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const emojis = JSON.parse(readFileSync(join(__dirname, '../../emojis.json'), 'utf8'));
 
 export const data = new SlashCommandBuilder()
   .setName('status')
@@ -47,6 +53,7 @@ export async function execute(interaction) {
   const status = interaction.options.getString('status');
   const activity = interaction.options.getString('activity');
   const value = interaction.options.getString('value');
+  const dir = dirname(fileURLToPath(import.meta.url));
   writeFileSync(join(dir, './statusLatest.json'), JSON.stringify({
     botStatus: { status, activity, value },
   }, null, 2));
@@ -56,15 +63,15 @@ export async function execute(interaction) {
   switch (status) {
     case 'online':
       interaction.client.user.setStatus(PresenceUpdateStatus.Online);
-      icon = '<:online:1266485857653620836>';
+      icon = emojis.online;
       break;
     case 'idle':
       interaction.client.user.setStatus(PresenceUpdateStatus.Idle);
-      icon = '<:idle:1266485882261733506>';
+      icon = emojis.idle;
       break;
     case 'dnd':
       interaction.client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
-      icon = '<:dnd:1266485896866172958>';
+      icon = emojis.dnd;
       break;
   }
 
@@ -88,9 +95,9 @@ export async function execute(interaction) {
     case 'streaming':
       interaction.client.user.setActivity(value, {
         type: ActivityType.Streaming,
-        url: 'https://www.twitch.tv/protozappy',
+        url: 'https://www.twitch.tv/vyxtella',
       });
-      icon = '<:streaming:1266485909688287303>';
+      icon = emojis.streaming;
       message = 'Streaming ';
       break;
     case 'watching':
@@ -108,5 +115,5 @@ export async function execute(interaction) {
     content: `**Successfully set status to:**\n${icon} ${message}${value}`,
     flags: [MessageFlags.Ephemeral],
   });
-  console.log(`[INFO] @${interaction.user.username} set the status to: (${status}) ${message}${value}`);
+  console.log(`[${chalk.green('INFO')}]  @${interaction.user.username} set the status to: (${status}) ${message}${value}`);
 }

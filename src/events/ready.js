@@ -7,6 +7,7 @@ import {
   // eslint-disable-next-line no-unused-vars
   Client,
 } from 'discord.js';
+import chalk from 'chalk';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,27 +16,28 @@ import Pokemon from '../sql/models/pokemon.js';
 import seedPOR from '../sql/seeders/ptcgPOR.js';
 import { pushBotChangelog } from '../botChangelog.js';
 import { iBotVersion } from '../botChangelog.js';
-
-const dir = dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const emojis = JSON.parse(readFileSync(join(__dirname, '../emojis.json'), 'utf8'));
 
 export const name = Events.ClientReady;
 export const once = true;
 /**
  * @param {Client} client The discord.js client instance
  */
-export function execute(client) {
+export async function execute(client) {
   // * Database
   // Syncs User table
   User.sync().then(() => {
     return User.findAll();
   }).catch(e => {
-    console.error(`[ERR!] ${e}`);
+    console.error(`[${chalk.red('ERR!')}] ${e}`);
   });
 
   // Syncs Pokémon table
   Pokemon.sync()
     .catch(e => {
-      console.error(`[ERR!] ${e}`);
+      console.error(`[${chalk.red('ERR!')}] ${e}`);
     });
 
   // Seeds all Pokémon sets
@@ -55,6 +57,7 @@ export function execute(client) {
 
   // * Status
   // Get previous status and set it
+  const dir = dirname(fileURLToPath(import.meta.url));
   const data = JSON.parse(readFileSync(join(dir, '../commands/utility/statusLatest.json'), 'utf8'));
   let icon;
   let message;
@@ -62,15 +65,15 @@ export function execute(client) {
   switch (data.botStatus.status) {
     case 'online':
       client.user.setStatus(PresenceUpdateStatus.Online);
-      icon = '<:online:1266485857653620836>';
+      icon = emojis.online;
       break;
     case 'idle':
       client.user.setStatus(PresenceUpdateStatus.Idle);
-      icon = '<:idle:1266485882261733506>';
+      icon = emojis.idle;
       break;
     case 'dnd':
       client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
-      icon = '<:dnd:1266485896866172958>';
+      icon = emojis.dnd;
       break;
   }
 
@@ -94,9 +97,9 @@ export function execute(client) {
     case 'streaming':
       client.user.setActivity(data.botStatus.value, {
         type: ActivityType.Streaming,
-        url: 'https://www.twitch.tv/protozappy',
+        url: 'https://www.twitch.tv/vyxtella',
       });
-      icon = '<:streaming:1266485909688287303>';
+      icon = emojis.streaming;
       message = 'Streaming ';
       break;
     case 'watching':
@@ -104,33 +107,34 @@ export function execute(client) {
       message = 'Watching ';
       break;
   }
-  // console.log(`[EVNT] Set the status to: (${data.botStatus.status}) ${message}${data.botStatus.value}`);
-
 
   // * Confirm bot's status...
   // * ...in dev channel...
   const devChannel = client.channels.cache.get('1099564476698726401');
   const embed = new EmbedBuilder()
     .setColor('#68AB3F')
-    .setTitle('Bot Started!')
+    .setTitle('iBot is online')
     .setTimestamp()
     .setDescription(
       `**Status:** ${icon} ${message}${data.botStatus.value}\n` +
       `**Version:** ${iBotVersion}`,
     );
 
-  devChannel.send({ embeds: [embed], flags: [MessageFlags.SuppressNotifications] });
+  await devChannel.send({
+    embeds: [embed],
+    flags: [MessageFlags.SuppressNotifications],
+  });
 
   // * ... and in console
-  console.log(`
- ██                                ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████
-     ██                ██            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████
- ██  ██████  ██████  ██████            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████      
- ██  ██  ██  ██  ██   ██                 ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████ 
- ██  ██████  ██████    ████    v 0.1       ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████
- `);
-   console.log(`[INFO] iBot is online and ready to go! Use 'CTRL + C' to STOP current instance.`);
-   console.log(`[INFO] Enter 'pm2 <start/stop> iBot' to start/stop an ongoing instance!`);
+  console.log(
+    ' ██                                ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
+    '     ██                ██            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
+    ' ██  ██████  ██████  ██████            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
+    ' ██  ██  ██  ██  ██   ██                 ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
+    ' ██  ██████  ██████    ████    v 0.1       ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████',
+  );
+  console.log(`[${chalk.green('INFO')}]  iBot is online and ready to go! Use 'CTRL + C' to STOP current instance.`);
+  console.log(`[${chalk.green('INFO')}]  Enter 'pm2 <start/stop> iBot' to start/stop an ongoing instance.`);
 
 
   // * Changelog

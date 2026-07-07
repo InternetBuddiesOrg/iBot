@@ -1,16 +1,16 @@
-// Require classes
 import {
   Client,
   Collection,
   GatewayIntentBits,
 } from 'discord.js';
+import chalk from 'chalk';
 import { readdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 import 'dotenv/config';
 const { token } = process.env;
 
-// Create client
+// * Create client
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -19,7 +19,7 @@ const client = new Client({
 });
 client.embedColour = '#F47BA2';
 
-// Command handler
+// * Command handler
 client.commands = new Collection();
 const foldersPath = fileURLToPath(new URL('./commands', import.meta.url));
 const commandFolders = readdirSync(foldersPath);
@@ -35,12 +35,12 @@ for (const folder of commandFolders) {
       client.commands.set(command.data.name, command);
     }
     else {
-      console.warn(`[WARN] The command at ${filePath} is missing a required 'data' or 'execute' property`);
+      console.warn(`[${chalk.yellow('WARN')}]  The command at ${filePath} is missing a required 'data' or 'execute' property`);
     }
   }
 }
 
-// Event handler
+// * Event handler
 const eventsPath = fileURLToPath(new URL('./events', import.meta.url));
 const eventFiles = readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
@@ -55,5 +55,5 @@ for (const file of eventFiles) {
   }
 }
 
-// Log in
+// * Log in
 client.login(token);

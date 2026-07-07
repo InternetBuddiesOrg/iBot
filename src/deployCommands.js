@@ -2,6 +2,7 @@ import {
   REST,
   Routes,
 } from 'discord.js';
+import chalk from 'chalk';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -26,7 +27,7 @@ for (const folder of commandFolders) {
       commands.push(command.data.toJSON());
     }
     else {
-      console.warn(`[WARN] The command at ${filePath} is missing a required 'data' or 'execute' property`);
+      console.warn(`[${chalk.yellow('WARN')}]  The command at ${filePath} is missing a required 'data' or 'execute' property`);
     }
   }
 }
@@ -35,16 +36,16 @@ const rest = new REST().setToken(token);
 
 (async () => {
   try {
-    console.log(`[INFO] Started reloading ${commands.length} application commands`);
+    console.log(`[${chalk.green('INFO')}] Started reloading ${commands.length} application commands`);
 
     const data = await rest.put(
       Routes.applicationCommands(clientId, guildId),
       { body: commands },
     );
 
-    console.log(`[INFO] Successfully reloaded ${data.length} application commands`);
+    console.log(`[${chalk.green('INFO')}] Successfully reloaded ${data.length} application commands`);
   }
-  catch (error) {
-    console.error(`[ERR!] ${error}`);
+  catch (e) {
+    console.error(`[${chalk.red('ERR!')}] ${e}`);
   }
 })();

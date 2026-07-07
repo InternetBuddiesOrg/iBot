@@ -1,4 +1,4 @@
-// Stats command by Vyxtella! 
+// Stats command by Vyxtella!
 // This is to display game statistics for users that have played iBot games.
 
 import {
