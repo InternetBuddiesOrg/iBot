@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -14,7 +15,7 @@ export default async function seedPOR() {
     {
       name: 'Spinarak',
       id: 'POR001',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '001/088',
       rarity: `${emojis.CC} Common`,
       hp: 60,
@@ -33,7 +34,7 @@ export default async function seedPOR() {
     {
       name: 'Ariados',
       id: 'POR002',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '002/088',
       rarity: `${emojis.CC} Common`,
       hp: 110,
@@ -52,7 +53,7 @@ export default async function seedPOR() {
     {
       name: 'Shaymin',
       id: 'POR003',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '003/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 70,
@@ -71,7 +72,7 @@ export default async function seedPOR() {
     {
       name: 'Snivy',
       id: 'POR004',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '004/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -91,7 +92,7 @@ export default async function seedPOR() {
     {
       name: 'Servine',
       id: 'POR005',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '005/088',
       rarity: `${emojis.CC} Common`,
       hp: 100,
@@ -111,7 +112,7 @@ export default async function seedPOR() {
     {
       name: 'Serperior',
       id: 'POR006',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '006/088',
       rarity: `${emojis.RR} Rare`,
       hp: 160,
@@ -131,7 +132,7 @@ export default async function seedPOR() {
     {
       name: 'Scatterbug',
       id: 'POR007',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '007/088',
       rarity: `${emojis.CC} Common`,
       hp: 40,
@@ -150,7 +151,7 @@ export default async function seedPOR() {
     {
       name: 'Spewpa',
       id: 'POR008',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '008/088',
       rarity: `${emojis.CC} Common`,
       hp: 80,
@@ -170,7 +171,7 @@ export default async function seedPOR() {
     {
       name: 'Vivillon',
       id: 'POR009',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '009/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 120,
@@ -190,7 +191,7 @@ export default async function seedPOR() {
     {
       name: 'Rowlet',
       id: 'POR010',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '010/088',
       rarity: `${emojis.CC} Common`,
       hp: 80,
@@ -210,7 +211,7 @@ export default async function seedPOR() {
     {
       name: 'Dartrix',
       id: 'POR011',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '011/088',
       rarity: `${emojis.CC} Common`,
       hp: 100,
@@ -229,7 +230,7 @@ export default async function seedPOR() {
     {
       name: 'Decidueye ex',
       id: 'POR012',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '012/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 320,
@@ -247,7 +248,7 @@ export default async function seedPOR() {
     {
       name: 'Fletchinder',
       id: 'POR013',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '013/088',
       rarity: `${emojis.CC} Common`,
       hp: 90,
@@ -266,7 +267,7 @@ export default async function seedPOR() {
     {
       name: 'Talonflame',
       id: 'POR014',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '014/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 150,
@@ -285,7 +286,7 @@ export default async function seedPOR() {
     {
       name: 'Salandit',
       id: 'POR015',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '015/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -305,7 +306,7 @@ export default async function seedPOR() {
     {
       name: 'Salazzle ex',
       id: 'POR016',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '016/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 260,
@@ -323,7 +324,7 @@ export default async function seedPOR() {
     {
       name: 'Turtonator',
       id: 'POR017',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '017/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 120,
@@ -343,7 +344,7 @@ export default async function seedPOR() {
     {
       name: 'Seel',
       id: 'POR018',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '018/088',
       rarity: `${emojis.CC} Common`,
       hp: 80,
@@ -363,7 +364,7 @@ export default async function seedPOR() {
     {
       name: 'Dewgong',
       id: 'POR019',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '019/088',
       rarity: `${emojis.RR} Rare`,
       hp: 130,
@@ -382,7 +383,7 @@ export default async function seedPOR() {
     {
       name: 'Staryu',
       id: 'POR020',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '020/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -401,7 +402,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Starmie ex',
       id: 'POR021',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '021/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 330,
@@ -419,7 +420,7 @@ export default async function seedPOR() {
     {
       name: 'Lapras ex',
       id: 'POR022',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '022/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 210,
@@ -437,7 +438,7 @@ export default async function seedPOR() {
     {
       name: 'Amaura',
       id: 'POR023',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '023/088',
       rarity: `${emojis.CC} Common`,
       hp: 100,
@@ -456,7 +457,7 @@ export default async function seedPOR() {
     {
       name: 'Aurorus',
       id: 'POR024',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '024/088',
       rarity: `${emojis.RR} Rare`,
       hp: 170,
@@ -476,7 +477,7 @@ export default async function seedPOR() {
     {
       name: 'Volcanion',
       id: 'POR025',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '025/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 130,
@@ -496,7 +497,7 @@ export default async function seedPOR() {
     {
       name: 'Shinx',
       id: 'POR026',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '026/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -515,7 +516,7 @@ export default async function seedPOR() {
     {
       name: 'Luxio',
       id: 'POR027',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '027/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 90,
@@ -534,7 +535,7 @@ export default async function seedPOR() {
     {
       name: 'Luxray',
       id: 'POR028',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '028/088',
       rarity: `${emojis.RR} Rare`,
       hp: 150,
@@ -553,7 +554,7 @@ export default async function seedPOR() {
     {
       name: 'Dedenne',
       id: 'POR029',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '029/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -573,7 +574,7 @@ export default async function seedPOR() {
     {
       name: 'Clefairy',
       id: 'POR030',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '030/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -592,7 +593,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Clefable ex',
       id: 'POR031',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '031/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 320,
@@ -610,7 +611,7 @@ export default async function seedPOR() {
     {
       name: 'Mawile',
       id: 'POR032',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '032/088',
       rarity: `${emojis.CC} Common`,
       hp: 110,
@@ -629,7 +630,7 @@ export default async function seedPOR() {
     {
       name: 'Espurr',
       id: 'POR033',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '033/088',
       rarity: `${emojis.CC} Common`,
       hp: 60,
@@ -648,7 +649,7 @@ export default async function seedPOR() {
     {
       name: 'Meowstic',
       id: 'POR034',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '034/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 100,
@@ -668,7 +669,7 @@ export default async function seedPOR() {
     {
       name: 'Spritzee',
       id: 'POR035',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '035/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -688,7 +689,7 @@ export default async function seedPOR() {
     {
       name: 'Aromatisse',
       id: 'POR036',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '036/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 120,
@@ -708,7 +709,7 @@ export default async function seedPOR() {
     {
       name: 'Nosepass',
       id: 'POR037',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '037/088',
       rarity: `${emojis.CC} Common`,
       hp: 90,
@@ -728,7 +729,7 @@ export default async function seedPOR() {
     {
       name: 'Probopass',
       id: 'POR038',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '038/088',
       rarity: `${emojis.CC} Common`,
       hp: 140,
@@ -748,7 +749,7 @@ export default async function seedPOR() {
     {
       name: 'Hippopotas',
       id: 'POR039',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '039/088',
       rarity: `${emojis.CC} Common`,
       hp: 100,
@@ -767,7 +768,7 @@ export default async function seedPOR() {
     {
       name: 'Hippowdon',
       id: 'POR040',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '040/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 150,
@@ -786,7 +787,7 @@ export default async function seedPOR() {
     {
       name: 'Landorus',
       id: 'POR041',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '041/088',
       rarity: `${emojis.RR} Rare`,
       hp: 120,
@@ -805,7 +806,7 @@ export default async function seedPOR() {
     {
       name: 'Binacle',
       id: 'POR042',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '042/088',
       rarity: `${emojis.CC} Common`,
       hp: 80,
@@ -824,7 +825,7 @@ export default async function seedPOR() {
     {
       name: 'Barbaracle',
       id: 'POR043',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '043/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 130,
@@ -844,7 +845,7 @@ export default async function seedPOR() {
     {
       name: 'Tyrunt',
       id: 'POR044',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '044/088',
       rarity: `${emojis.CC} Common`,
       hp: 100,
@@ -864,7 +865,7 @@ export default async function seedPOR() {
     {
       name: 'Tyrantrum',
       id: 'POR045',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '045/088',
       rarity: `${emojis.RR} Rare`,
       hp: 180,
@@ -884,7 +885,7 @@ export default async function seedPOR() {
     {
       name: 'Hawlucha',
       id: 'POR046',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '046/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -904,7 +905,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Zygarde ex',
       id: 'POR047',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '047/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 310,
@@ -922,7 +923,7 @@ export default async function seedPOR() {
     {
       name: 'Gastly',
       id: 'POR048',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '048/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -941,7 +942,7 @@ export default async function seedPOR() {
     {
       name: 'Haunter',
       id: 'POR049',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '049/088',
       rarity: `${emojis.CC} Common`,
       hp: 100,
@@ -961,7 +962,7 @@ export default async function seedPOR() {
     {
       name: 'Gengar',
       id: 'POR050',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '050/088',
       rarity: `${emojis.RR} Rare`,
       hp: 130,
@@ -981,7 +982,7 @@ export default async function seedPOR() {
     {
       name: 'Skorupi',
       id: 'POR051',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '051/088',
       rarity: `${emojis.CC} Common`,
       hp: 80,
@@ -1001,7 +1002,7 @@ export default async function seedPOR() {
     {
       name: 'Drapion',
       id: 'POR052',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '052/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 140,
@@ -1021,7 +1022,7 @@ export default async function seedPOR() {
     {
       name: 'Yveltal ex',
       id: 'POR053',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '053/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 210,
@@ -1039,7 +1040,7 @@ export default async function seedPOR() {
     {
       name: 'Chien-Pao',
       id: 'POR054',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '054/088',
       rarity: `${emojis.RR} Rare`,
       hp: 120,
@@ -1059,7 +1060,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Skarmory ex',
       id: 'POR055',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '055/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 260,
@@ -1077,7 +1078,7 @@ export default async function seedPOR() {
     {
       name: 'Honedge',
       id: 'POR056',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '056/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -1097,7 +1098,7 @@ export default async function seedPOR() {
     {
       name: 'Doublade',
       id: 'POR057',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '057/088',
       rarity: `${emojis.CC} Common`,
       hp: 100,
@@ -1117,7 +1118,7 @@ export default async function seedPOR() {
     {
       name: 'Aegislash',
       id: 'POR058',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '058/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 150,
@@ -1137,7 +1138,7 @@ export default async function seedPOR() {
     {
       name: 'Klefki',
       id: 'POR059',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '059/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -1156,7 +1157,7 @@ export default async function seedPOR() {
     {
       name: 'Rattata',
       id: 'POR060',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '060/088',
       rarity: `${emojis.CC} Common`,
       hp: 40,
@@ -1176,7 +1177,7 @@ export default async function seedPOR() {
     {
       name: 'Raticate',
       id: 'POR061',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '061/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 90,
@@ -1196,7 +1197,7 @@ export default async function seedPOR() {
     {
       name: 'Meowth ex',
       id: 'POR062',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '062/088',
       rarity: `${emojis.DR} Double Rare`,
       hp: 170,
@@ -1214,7 +1215,7 @@ export default async function seedPOR() {
     {
       name: 'Snorlax',
       id: 'POR063',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '063/088',
       rarity: `${emojis.CC} Common`,
       hp: 160,
@@ -1234,7 +1235,7 @@ export default async function seedPOR() {
     {
       name: 'Bunnelby',
       id: 'POR064',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '064/088',
       rarity: `${emojis.CC} Common`,
       hp: 70,
@@ -1253,7 +1254,7 @@ export default async function seedPOR() {
     {
       name: 'Diggersby',
       id: 'POR065',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '065/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 150,
@@ -1273,7 +1274,7 @@ export default async function seedPOR() {
     {
       name: 'Fletchling',
       id: 'POR066',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '066/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: 60,
@@ -1292,7 +1293,7 @@ export default async function seedPOR() {
     {
       name: 'Furfrou',
       id: 'POR067',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '067/088',
       rarity: `${emojis.CC} Common`,
       hp: 90,
@@ -1311,7 +1312,7 @@ export default async function seedPOR() {
     {
       name: 'Antique Jaw Fossil',
       id: 'POR068',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '068/088',
       rarity: `${emojis.CC} Common`,
       hp: 60,
@@ -1329,7 +1330,7 @@ export default async function seedPOR() {
     {
       name: 'Antique Sail Fossil',
       id: 'POR069',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '069/088',
       rarity: `${emojis.CC} Common`,
       hp: 60,
@@ -1347,7 +1348,7 @@ export default async function seedPOR() {
     {
       name: 'Core Memory',
       id: 'POR070',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '070/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1365,7 +1366,7 @@ export default async function seedPOR() {
     {
       name: 'Crushing Hammer',
       id: 'POR071',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '071/088',
       rarity: `${emojis.CC} Common`,
       hp: null,
@@ -1383,7 +1384,7 @@ export default async function seedPOR() {
     {
       name: 'Energy Search',
       id: 'POR072',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '072/088',
       rarity: `${emojis.CC} Common`,
       hp: null,
@@ -1401,7 +1402,7 @@ export default async function seedPOR() {
     {
       name: 'Energy Swatter',
       id: 'POR073',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '073/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1419,7 +1420,7 @@ export default async function seedPOR() {
     {
       name: 'Hole-Digging Shovel',
       id: 'POR074',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '074/088',
       rarity: `${emojis.CC} Common`,
       hp: null,
@@ -1437,7 +1438,7 @@ export default async function seedPOR() {
     {
       name: 'Jacinthe',
       id: 'POR075',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '075/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1455,7 +1456,7 @@ export default async function seedPOR() {
     {
       name: 'Judge',
       id: 'POR076',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '076/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1473,7 +1474,7 @@ export default async function seedPOR() {
     {
       name: 'Lumiose City',
       id: 'POR077',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '077/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1491,7 +1492,7 @@ export default async function seedPOR() {
     {
       name: 'Lumiose Galette',
       id: 'POR078',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '078/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1509,7 +1510,7 @@ export default async function seedPOR() {
     {
       name: 'Naveen',
       id: 'POR079',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '079/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1527,7 +1528,7 @@ export default async function seedPOR() {
     {
       name: 'Poké Ball',
       id: 'POR080',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '080/088',
       rarity: `${emojis.CC} Common`,
       hp: null,
@@ -1545,7 +1546,7 @@ export default async function seedPOR() {
     {
       name: 'Poké Pad',
       id: 'POR081',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '081/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1563,7 +1564,7 @@ export default async function seedPOR() {
     {
       name: 'Pokémon Catcher',
       id: 'POR082',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '082/088',
       rarity: `${emojis.CC} Common`,
       hp: null,
@@ -1581,7 +1582,7 @@ export default async function seedPOR() {
     {
       name: 'Potion',
       id: 'POR083',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '083/088',
       rarity: `${emojis.CC} Common`,
       hp: null,
@@ -1599,7 +1600,7 @@ export default async function seedPOR() {
     {
       name: 'Rosa\'s Encouragement',
       id: 'POR084',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '084/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1617,7 +1618,7 @@ export default async function seedPOR() {
     {
       name: 'Tarragon',
       id: 'POR085',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '085/088',
       rarity: `${emojis.UC} Uncommon`,
       hp: null,
@@ -1635,7 +1636,7 @@ export default async function seedPOR() {
     {
       name: `Growing ${emojis.grass} Energy`,
       id: 'POR086',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '086/088',
       rarity: `${emojis.RR} Rare`,
       hp: null,
@@ -1653,7 +1654,7 @@ export default async function seedPOR() {
     {
       name: `Rocky ${emojis.fighting} Energy`,
       id: 'POR087',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '087/088',
       rarity: `${emojis.RR} Rare`,
       hp: null,
@@ -1671,7 +1672,7 @@ export default async function seedPOR() {
     {
       name: `Telepathic ${emojis.psychic} Energy`,
       id: 'POR088',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '088/088',
       rarity: `${emojis.RR} Rare`,
       hp: null,
@@ -1689,7 +1690,7 @@ export default async function seedPOR() {
     {
       name: 'Spewpa',
       id: 'POR089',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '089/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 80,
@@ -1709,7 +1710,7 @@ export default async function seedPOR() {
     {
       name: 'Rowlet',
       id: 'POR090',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '090/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 80,
@@ -1729,7 +1730,7 @@ export default async function seedPOR() {
     {
       name: 'Talonflame',
       id: 'POR091',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '091/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 150,
@@ -1748,7 +1749,7 @@ export default async function seedPOR() {
     {
       name: 'Aurorus',
       id: 'POR092',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '092/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 170,
@@ -1768,7 +1769,7 @@ export default async function seedPOR() {
     {
       name: 'Dedenne',
       id: 'POR093',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '093/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 70,
@@ -1788,7 +1789,7 @@ export default async function seedPOR() {
     {
       name: 'Clefairy',
       id: 'POR094',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '094/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 70,
@@ -1807,7 +1808,7 @@ export default async function seedPOR() {
     {
       name: 'Espurr',
       id: 'POR095',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '095/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 60,
@@ -1826,7 +1827,7 @@ export default async function seedPOR() {
     {
       name: 'Probopass',
       id: 'POR096',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '096/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 140,
@@ -1846,7 +1847,7 @@ export default async function seedPOR() {
     {
       name: 'Drapion',
       id: 'POR097',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '097/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 140,
@@ -1866,7 +1867,7 @@ export default async function seedPOR() {
     {
       name: 'Doublade',
       id: 'POR098',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '098/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 100,
@@ -1886,7 +1887,7 @@ export default async function seedPOR() {
     {
       name: 'Raticate',
       id: 'POR099',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '099/088',
       rarity: `${emojis.IR} Illustration Rare`,
       hp: 90,
@@ -1906,7 +1907,7 @@ export default async function seedPOR() {
     {
       name: 'Decidueye ex',
       id: 'POR100',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '100/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 320,
@@ -1924,7 +1925,7 @@ export default async function seedPOR() {
     {
       name: 'Salazzle ex',
       id: 'POR101',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '101/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 260,
@@ -1942,7 +1943,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Starmie ex',
       id: 'POR102',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '102/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 330,
@@ -1960,7 +1961,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Clefable ex',
       id: 'POR103',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '103/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 320,
@@ -1978,7 +1979,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Zygarde ex',
       id: 'POR104',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '104/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 310,
@@ -1996,7 +1997,7 @@ export default async function seedPOR() {
     {
       name: 'Yveltal ex',
       id: 'POR105',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '105/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 210,
@@ -2014,7 +2015,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Skarmory ex',
       id: 'POR106',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '106/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 260,
@@ -2032,7 +2033,7 @@ export default async function seedPOR() {
     {
       name: 'Meowth',
       id: 'POR107',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '107/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: 170,
@@ -2050,7 +2051,7 @@ export default async function seedPOR() {
     {
       name: 'Energy Recycler',
       id: 'POR108',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '108/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2068,7 +2069,7 @@ export default async function seedPOR() {
     {
       name: 'Forest of Vitality',
       id: 'POR109',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '109/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2086,7 +2087,7 @@ export default async function seedPOR() {
     {
       name: 'Jacinthe',
       id: 'POR110',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '110/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2104,7 +2105,7 @@ export default async function seedPOR() {
     {
       name: 'Lumiose City',
       id: 'POR111',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '111/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2122,7 +2123,7 @@ export default async function seedPOR() {
     {
       name: 'Naveen',
       id: 'POR112',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '112/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2140,7 +2141,7 @@ export default async function seedPOR() {
     {
       name: 'Poké Pad',
       id: 'POR113',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '113/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2158,7 +2159,7 @@ export default async function seedPOR() {
     {
       name: 'Rosa\'s Encouragement',
       id: 'POR114',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '114/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2176,7 +2177,7 @@ export default async function seedPOR() {
     {
       name: 'Sacred Ash',
       id: 'POR115',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '115/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2194,7 +2195,7 @@ export default async function seedPOR() {
     {
       name: 'Tarragon',
       id: 'POR116',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '116/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2212,7 +2213,7 @@ export default async function seedPOR() {
     {
       name: 'Wonderous Patch',
       id: 'POR117',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '117/088',
       rarity: `${emojis.UR} Ultra Rare`,
       hp: null,
@@ -2230,7 +2231,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Starmie ex',
       id: 'POR118',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '118/088',
       rarity: `${emojis.SIR} Special Illustration Rare`,
       hp: 330,
@@ -2248,7 +2249,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Clefable ex',
       id: 'POR119',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '119/088',
       rarity: `${emojis.SIR} Special Illustration Rare`,
       hp: 320,
@@ -2266,7 +2267,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Zygarde ex',
       id: 'POR120',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '120/088',
       rarity: `${emojis.SIR} Special Illustration Rare`,
       hp: 310,
@@ -2284,7 +2285,7 @@ export default async function seedPOR() {
     {
       name: 'Meowth ex',
       id: 'POR121',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '121/088',
       rarity: `${emojis.SIR} Special Illustration Rare`,
       hp: 170,
@@ -2302,7 +2303,7 @@ export default async function seedPOR() {
     {
       name: 'Jacinthe',
       id: 'POR122',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '122/088',
       rarity: `${emojis.SIR} Special Illustration Rare`,
       hp: null,
@@ -2320,7 +2321,7 @@ export default async function seedPOR() {
     {
       name: 'Rosa\'s Encouragement',
       id: 'POR123',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '123/088',
       rarity: `${emojis.CC} Special Illustration Rare`,
       hp: null,
@@ -2338,7 +2339,7 @@ export default async function seedPOR() {
     {
       name: 'Mega Zygarde ex',
       id: 'POR124',
-      set: 'Perfect Order',
+      expansion: 'Perfect Order',
       number: '124/088',
       rarity: `${emojis.MHR} Mega Hyper Rare`,
       hp: 310,
@@ -2356,5 +2357,5 @@ export default async function seedPOR() {
   ], {
     ignoreDuplicates: true,
   });
-  console.log('[INFO] POR seeded.');
+  console.log(`[${chalk.green('INFO')}]  POR seeded.`);
 }

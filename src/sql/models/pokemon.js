@@ -11,7 +11,7 @@ const Pokemon = sequelize.define('pokemon', {
     type: STRING,
     unique: true,
   },
-  set: {
+  expansion: {
     type: STRING,
   },
   number: {
