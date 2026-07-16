@@ -28,5 +28,5 @@ export async function execute(interaction) {
     }
   }
 
-  console.log(`[${chalk.green('INFO')}]  Recieved interaction from @${interaction.user.username}: ${interaction}`);
+  console.log(`[${chalk.green('INFO')}] Recieved interaction from @${interaction.user.username}: ${interaction}`);
 }
