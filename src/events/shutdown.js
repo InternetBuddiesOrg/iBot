@@ -27,7 +27,7 @@ export async function execute(client) {
     if (isShuttingDown) return;
     isShuttingDown = true;
 
-    console.log(`[${chalk.green('INFO')}] iBot has shut down. Killed by: ${reason}`);
+    console.log(`[${chalk.green('INFO')}] iBot has shut down. Killed via: ${reason}`);
     try {
       const devChannel = client.channels.cache.get('1099564476698726401');
       const embed = new EmbedBuilder()
@@ -36,7 +36,7 @@ export async function execute(client) {
         .setTimestamp()
         .setDescription(
           `**Status:** ${emojis.offline}\n` +
-          `**Killed by:** ${reason}`,
+          `**Killed via:** ${reason}`,
         );
 
       await devChannel.send({
