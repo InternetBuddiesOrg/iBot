@@ -15,6 +15,4 @@ start.zsh
 # Source code directory
 
 src/commands/utility/statusLatest.json
-src/commands/utility/totdLatest.json
-src/events/totdLatest.json
 src/sql/appData.sqlite

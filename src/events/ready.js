@@ -127,14 +127,16 @@ export async function execute(client) {
 
   // * ... and in console
   console.log(
+    ' \n' +
     ' ██                                ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
     '     ██                ██            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
     ' ██  ██████  ██████  ██████            ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
     ' ██  ██  ██  ██  ██   ██                 ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n' +
-    ' ██  ██████  ██████    ████    v 0.1       ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████',
+    ` ██  ██████  ██████    ████     v${iBotVersion}       ██  ██    ██████  ██  ██  ██    ██████  ██████  ██████\n` +
+    ' ',
   );
-  console.log(`[${chalk.green('INFO')}]  iBot is online and ready to go! Use 'CTRL + C' to STOP current instance.`);
-  console.log(`[${chalk.green('INFO')}]  Enter 'pm2 <start/stop> iBot' to start/stop an ongoing instance.`);
+  console.log(`[${chalk.green('INFO')}] iBot is online and ready to go! Use 'CTRL + C' to STOP current instance.`);
+  console.log(`[${chalk.green('INFO')}] Enter 'pm2 <start/stop> iBot' to start/stop an ongoing instance.`);
 
 
   // * Changelog
