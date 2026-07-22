@@ -307,51 +307,31 @@ export async function execute(client) {
 
 
       // * Send Discord messages
+
       // Channel IDs
       // & #development:
       // const sendChannel = client.channels.cache.get('1099564476698726401');
-
       // ^ #trending:
       const sendChannel = client.channels.cache.get('1149549485928747120');
 
       // Main WotD Message(s)
       for (const accStr of accumulatedArray) { // Use a for...of loop instead of forEach() to maintain asynchronicity
-        const i = accumulatedArray.indexOf(accStr);
 
         // Use a Text Display Component for a 4000-character limit...
         // ...rather than the 2000-char limit on regular message contents.
         const textDisplayComponent = new TextDisplayBuilder()
           .setContent(accStr);
 
-
-        if (i === 0) {
-          await sendChannel.send({
-            flags: [
-              MessageFlags.IsComponentsV2,
-            ],
-            components: [textDisplayComponent],
-          });
-        }
-        // Silence Main Message follow-ups, so notifications don't get spammed
-        else {
-          await sendChannel.send({
-            flags: [
-              MessageFlags.IsComponentsV2,
-              MessageFlags.SuppressNotifications,
-            ],
-            components: [textDisplayComponent],
-          });
-        }
+        await sendChannel.send({
+          flags: [MessageFlags.IsComponentsV2],
+          components: [textDisplayComponent],
+        });
       }
 
       // WotD Footer Message
       await sendChannel.send({
-        flags: [
-          MessageFlags.IsComponentsV2,
-          // Silence Footer Message follow-up, so notifications don't get spammed
-          MessageFlags.SuppressNotifications,
-        ],
-        components: footerComponents,
+        flags: [MessageFlags.IsComponentsV2],
+        components: [footerComponents],
       });
     }
     catch (e) {

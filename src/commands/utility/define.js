@@ -278,20 +278,14 @@ export async function execute(interaction) {
       // Make sure first element completes the interaction by replying...
       if (i === 0) {
         await interaction.reply({
-          flags: [
-            MessageFlags.IsComponentsV2,
-          ],
+          flags: [MessageFlags.IsComponentsV2],
           components: [textDisplayComponent],
         });
       }
       // ...then any other elements can just be sent to the channel as normal
       else {
         await interaction.channel.send({
-          flags: [
-            MessageFlags.IsComponentsV2,
-            // Silence Main Message follow-ups, so notifications don't get spammed
-            MessageFlags.SuppressNotifications,
-          ],
+          flags: [MessageFlags.IsComponentsV2],
           components: [textDisplayComponent],
         });
       }
@@ -300,11 +294,7 @@ export async function execute(interaction) {
     // Action Row Message
     // (yes i know it does not have to be its own message but i dont wanna figure that out rn)
     await interaction.channel.send({
-      flags: [
-        MessageFlags.IsComponentsV2,
-        // Silence Footer Message follow-up, so notifications don't get spammed
-        MessageFlags.SuppressNotifications,
-      ],
+      flags: [MessageFlags.IsComponentsV2],
       components: [arComponent],
     });
   }
