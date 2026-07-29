@@ -331,7 +331,7 @@ export async function execute(client) {
       // WotD Footer Message
       await sendChannel.send({
         flags: [MessageFlags.IsComponentsV2],
-        components: [footerComponents],
+        components: footerComponents,
       });
     }
     catch (e) {
