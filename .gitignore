@@ -9,6 +9,7 @@ WIP/
 ._.DS_Store
 .DS_Store
 DEVNOTES.txt
+ecosystem.config.js
 jsconfig.json
 start.zsh
 
