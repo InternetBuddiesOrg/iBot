@@ -20,7 +20,7 @@ export const data = new SlashCommandBuilder()
   .setDescription('Get the definition of any word (capitalization matters!)')
   .addStringOption(option => option
     .setName('word')
-    .setDescription('The word to look up (capitalization matters!')
+    .setDescription('The word to look up (capitalization matters!)')
     .setRequired(true),
   );
 

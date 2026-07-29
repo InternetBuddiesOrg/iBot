@@ -29,21 +29,21 @@ export const data = new SlashCommandBuilder()
   // /pokémon
   .setName('pokémon')
   .setDescription('Pokémon TCG commands')
-  .addSubcommandGroup(new SlashCommandSubcommandGroupBuilder()
-    // /pokémon collection
-    .setName('collection')
-    .setDescription('Manage your Pokémon TCG collection')
-    .addSubcommand(new SlashCommandSubcommandBuilder()
-      // /pokémon collection add <card>
-      .setName('add')
-      .setDescription('Add a card to your Pokémon TCG collection'),
-    )
-    .addSubcommand(new SlashCommandSubcommandBuilder()
-      // /pokémon collection remove <card>
-      .setName('remove')
-      .setDescription('Remove a card from your Pokémon TCG collection'),
-    ),
-  )
+  // .addSubcommandGroup(new SlashCommandSubcommandGroupBuilder()
+  //   // /pokémon collection
+  //   .setName('collection')
+  //   .setDescription('Manage your Pokémon TCG collection')
+  //   .addSubcommand(new SlashCommandSubcommandBuilder()
+  //     // /pokémon collection add <card>
+  //     .setName('add')
+  //     .setDescription('Add a card to your Pokémon TCG collection'),
+  //   )
+  //   .addSubcommand(new SlashCommandSubcommandBuilder()
+  //     // /pokémon collection remove <card>
+  //     .setName('remove')
+  //     .setDescription('Remove a card from your Pokémon TCG collection'),
+  //   ),
+  // )
   .addSubcommand(new SlashCommandSubcommandBuilder()
     // /pokémon view <expansion>
     .setName('view')

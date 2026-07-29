@@ -27,7 +27,7 @@ for (const folder of commandFolders) {
       commands.push(command.data.toJSON());
     }
     else {
-      console.warn(`[${chalk.yellow('WARN')}]  The command at ${filePath} is missing a required 'data' or 'execute' property`);
+      console.warn(`[${chalk.yellow('WARN')}] The command at ${filePath} is missing a required 'data' or 'execute' property`);
     }
   }
 }
@@ -38,8 +38,9 @@ const rest = new REST().setToken(token);
   try {
     console.log(`[${chalk.green('INFO')}] Started reloading ${commands.length} application commands`);
 
+    // ^ Deploys as Guild Commands for now until iBot maybe goes public someday
     const data = await rest.put(
-      Routes.applicationCommands(clientId, guildId),
+      Routes.applicationGuildCommands(clientId, guildId),
       { body: commands },
     );
 

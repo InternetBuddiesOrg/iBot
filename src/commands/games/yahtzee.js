@@ -1,5 +1,5 @@
 // Gyattzee Game by Vyxtella & Mr. Cologne!
-// Play the classic dice game using iBot! 
+// Play the classic dice game using iBot!
 // ! Multiplayer Coming Soon
 
 import {
@@ -20,16 +20,16 @@ export const data = new SlashCommandBuilder()
   .addSubcommand(sub => sub
     .setName('solo')
     .setDescription('Singleplayer Gyatt dice'),
-  )
-  .addSubcommand(sub => sub
-    .setName('multi')
-    .setDescription('Multiplayer Gyatt dice')
-    .addUserOption(option => option
-      .setName('opponent-1')
-      .setDescription('Select an opponent')
-      .setRequired(true),
-    ),
   );
+  // .addSubcommand(sub => sub
+  //   .setName('multi')
+  //   .setDescription('Multiplayer Gyatt dice')
+  //   .addUserOption(option => option
+  //     .setName('opponent-1')
+  //     .setDescription('Select an opponent')
+  //     .setRequired(true),
+  //   ),
+  // );
 export async function execute(interaction) {
   const guildMember = interaction.guild.members.cache.get(interaction.user.id);
   //* Dice emoji arrays

@@ -35,7 +35,7 @@ for (const folder of commandFolders) {
       client.commands.set(command.data.name, command);
     }
     else {
-      console.warn(`[${chalk.yellow('WARN')}]  The command at ${filePath} is missing a required 'data' or 'execute' property`);
+      console.warn(`[${chalk.yellow('WARN')}] The command at ${filePath} is missing a required 'data' or 'execute' property`);
     }
   }
 }
