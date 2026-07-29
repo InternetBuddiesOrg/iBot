@@ -1,6 +1,6 @@
 {
   "name": "ibot",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Discord bot for iBo",
   "main": "src/index.js",
   "type": "module",
