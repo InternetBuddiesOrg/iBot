@@ -266,7 +266,6 @@ export async function execute(interaction) {
 
     // * Send Discord messages
 
-    // Main Definition Message(s)
     for (const accStr of accumulatedArray) { // Use a for...of loop instead of forEach() to maintain asynchronicity
       const i = accumulatedArray.indexOf(accStr);
 
@@ -282,6 +281,16 @@ export async function execute(interaction) {
           components: [textDisplayComponent],
         });
       }
+      // ...and make sure the last message contains the Action Row...
+      else if (i === accumulatedArray.length - 1) {
+        await interaction.channel.send({
+          flags: [MessageFlags.IsComponentsV2],
+          components: [
+            textDisplayComponent,
+            arComponent,
+          ],
+        });
+      }
       // ...then any other elements can just be sent to the channel as normal
       else {
         await interaction.channel.send({
@@ -293,10 +302,10 @@ export async function execute(interaction) {
 
     // Action Row Message
     // (yes i know it does not have to be its own message but i dont wanna figure that out rn)
-    await interaction.channel.send({
-      flags: [MessageFlags.IsComponentsV2],
-      components: [arComponent],
-    });
+    // await interaction.channel.send({
+    //   flags: [MessageFlags.IsComponentsV2],
+    //   components: [arComponent],
+    // });
   }
   catch (e) {
     if (e.status === 404) {
